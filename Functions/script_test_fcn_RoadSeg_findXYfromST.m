@@ -7,13 +7,13 @@ E = 1; N = 2;
 
 % Load an example file with just one arc road segment and some objects
 % along the road
-ODRStruct = fcn_RoadSeg_parseXODR('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_150m_double_curve_barrels.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_150m_double_curve_barrels.xodr');
 
 % Plot the road segment
 fcn_RoadSeg_plotODRRoadGeometry(ODRStruct);
 
 % Get the road segment information (specific to this roadway)
-currentRoad = ODRStruct.OpenDRIVE.road;
+currentRoad = ODRStruct.OpenDRIVE.road{1};
 
 % Create a segment table
 segTable = nan(length(currentRoad.planView.geometry),1);
@@ -39,7 +39,7 @@ for objInd = 1:Nobj
   segIdx(objInd) = find(segTable < sPts(objInd),1,'last');
 end
 
-%% Run the function to find the XY points of each of the objects
+%% Run the function to find the XY points of each of the objects and plot
 
 for objInd = 1:Nobj
   geomElement = currentRoad.planView.geometry{segIdx(objInd)};

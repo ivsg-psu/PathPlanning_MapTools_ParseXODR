@@ -23,17 +23,7 @@ switch geomType
       K0 = varargin{1};
     end
     
-    % Compute the varying heading along the path
-    %heading = K0*(s(:)-s0) + h0;
-    % Add together the contribution to the x position of the initial x,y
-    % coordinate, the travel down the road arc, and the offset from the
-    % centerline of the arc (defined as the heading + pi/2) given the s,t
-    % coordinate system
-    %x =  (sin(heading) - sin(h0))/K0 + t(:).*cos(heading+pi/2) + x0;
-    %y = -(cos(heading) - cos(h0))/K0 + t(:).*sin(heading+pi/2) + y0;
     [x,y] = fcn_RoadSeg_findXYfromXODRArc(s(:)-s0,h0,x0,y0,K0);
-%     x = x + t(:).*cos(K0*(s(:)-s0) + h0 + pi/2);
-%     y = y + t(:).*sin(K0*(s(:)-s0) + h0 + pi/2);
 
   case 'spiral'
     if nargin < 9
@@ -45,8 +35,6 @@ switch geomType
       KF = varargin{2};
       
       [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s(:)-s0,h0,x0,y0,K0,KF);
-      %x = x + t(:).*cos((KF-K0)/(s(end)-s0)*(s(:)-s0).^2/2 + K0*(s(:)-s0) + h0 + pi/2);
-      %y = y + t(:).*sin((KF-K0)/(s(end)-s0)*(s(:)-s0).^2/2 + K0*(s(:)-s0) + h0 + pi/2);
     end
 end
 

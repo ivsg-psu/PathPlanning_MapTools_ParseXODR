@@ -112,7 +112,10 @@ fprintf(1,'   Geometry segment consistency check complete.\n');
 
 fprintf(1,'3) Checking ODR bounding box values...\n');
 % Define min and max values for both the East and North directions
-west = 0; east = 0; south = 0; north = 0;
+west = str2double(ODRStruct.OpenDRIVE.header.Attributes.west);
+east = str2double(ODRStruct.OpenDRIVE.header.Attributes.east);
+south = str2double(ODRStruct.OpenDRIVE.header.Attributes.south);
+north = str2double(ODRStruct.OpenDRIVE.header.Attributes.north);
 for roadInd = 1:Nroads
   for geomInd = 1:NgeomElems(roadInd)
     % Gather the segment geometry data for the "next" segment
@@ -216,10 +219,10 @@ for roadInd = 1:Nroads
         candSValuesY = [candSValuesY; lC];
       end
       % Find the X,Y points associated with the min and max s values
-      if ~isempty(candSValuesX)
+      if ~isempty(candSValuesX(candSValuesX <= lC & candSValuesX > 0))
         [xMinMax,~] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesX(candSValuesX <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
       end
-      if ~isempty(canSValuesY)
+      if ~isempty(candSValuesY(candSValuesY <= lC & candSValuesX > 0))
         [~,yMinMax] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesY(candSValuesY <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
       end
     else
@@ -243,8 +246,21 @@ for roadInd = 1:Nroads
   end
 end
 % Write the bounding box info back to the header substructure
-ODRStruct.OpenDRIVE.header.Attributes.east = num2str(east);
-ODRStruct.OpenDRIVE.header.Attributes.west = num2str(west);
-ODRStruct.OpenDRIVE.header.Attributes.south = num2str(south);
-ODRStruct.OpenDRIVE.header.Attributes.north = num2str(north);
+bbTol = 0.001; % m
+if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.east) - east) > bbTol
+  fprintf(1,'   East bounds incorrect. Updating bounding box on east edge.\n');
+  ODRStruct.OpenDRIVE.header.Attributes.east = num2str(east);
+end
+if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.west) - west) > bbTol
+  fprintf(1,'   West bounds incorrect. Updating bounding box on west edge.\n');
+  ODRStruct.OpenDRIVE.header.Attributes.west = num2str(west);
+end
+if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.south) - south) > bbTol
+  fprintf(1,'   South bounds incorrect. Updating bounding box on south edge.\n');
+  ODRStruct.OpenDRIVE.header.Attributes.south = num2str(south);
+end
+if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.north) - north) > bbTol
+  fprintf(1,'   North bounds incorrect. Updating bounding box on north edge.\n');
+  ODRStruct.OpenDRIVE.header.Attributes.north = num2str(north);
+end
 fprintf(1,'   Bounding box check complete.\n');
