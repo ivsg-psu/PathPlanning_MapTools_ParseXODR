@@ -56,7 +56,8 @@ for roadInd = 1:Nroads
         ODRStruct.OpenDRIVE.road{roadInd}.objects = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.objects,'object');
         ODRStruct.OpenDRIVE.road{roadInd}.objects.object{1} = temp;
       end
-      for objInd = 1:Nobjects
+      objInd = 1;
+      while objInd <= Nobjects
         % Check for object repeats
         if isfield(ODRStruct.OpenDRIVE.road{1}.objects.object{objInd},'repeat')
           % Object is actually a repeated object definition and needs to be
@@ -184,6 +185,7 @@ for roadInd = 1:Nroads
             end
           end
         end
+        objInd = objInd + 1;
       end
     else
       fprintf(1,'Error in XODR file. Objects group exists, but there are no object structures within it.\n');
