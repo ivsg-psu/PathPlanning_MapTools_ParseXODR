@@ -1,4 +1,4 @@
-function [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s,h0,x0,y0,K0,KF,varargin)
+function [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s,l0,h0,x0,y0,K0,KF,varargin)
 % Script to determine the X,Y coordinates along a segment of a road defined
 % as a "spiral" segment in the XODR standard. The spiral is plotted if a
 % figure handle is provided
@@ -13,14 +13,14 @@ function [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s,h0,x0,y0,K0,KF,varargin)
 % vectorized implementation of the calculations is formed, though the
 % solution does depend on a numerical evaluation of the Fresnel integrals.
 
-sF = s(end);
+sF = l0;
 z1 = (KF-K0)/(sF*2);
 x = x0 + (sqrt(pi/2)*(cos(K0^2/(4*z1) - h0)*(fresnelc((K0 + 2*z1*s(:))/(sqrt(z1)*sqrt(2*pi))) - fresnelc(K0/(sqrt(z1)*sqrt(2*pi)))) + sin(K0^2/(4*z1) - h0)*(fresnels((K0 + 2*z1*s(:))/(sqrt(z1)*sqrt(2*pi))) - fresnels(K0/(sqrt(z1)*sqrt(2*pi))))))/sqrt(z1);
 y = y0 + (sqrt(pi/2)*(sin(K0^2/(4*z1) - h0)*(fresnelc(K0/(sqrt(z1)*sqrt(2*pi))) - fresnelc((K0 + 2*z1*s(:))/(sqrt(z1)*sqrt(2*pi)))) + cos(K0^2/(4*z1) - h0)*(fresnels((K0 + 2*z1*s(:))/(sqrt(z1)*sqrt(2*pi))) - fresnels(K0/(sqrt(z1)*sqrt(2*pi))))))/sqrt(z1);
 
 % Check to see if the user has provided a figure handle to plot into. If
 % so, add the X,Y points to the plot
-if 7 == nargin && isgraphics(varargin{1})
+if 8 == nargin && isgraphics(varargin{1})
   figure(varargin{1})
   % Determine the hold state of the figure
   holdState = ishold;

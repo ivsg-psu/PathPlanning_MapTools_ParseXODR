@@ -144,8 +144,6 @@ for roadInd = 1:Nroads
           % Make room for the repeated objects by shifting any following
           % objects further along in the array
           if objInd < Nobjects
-            % CEB: This line doesn't work to transfer multiple cell array
-            % objects to other spaces in the cell array
             ODRStruct.OpenDRIVE.road{roadInd}.objects.object(objInd+Nrepeats:objInd+Nrepeats+(Nobjects-objInd)-1) = ...
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object(objInd+1:Nobjects);
             % Update the number of objects (repeating includes the original
