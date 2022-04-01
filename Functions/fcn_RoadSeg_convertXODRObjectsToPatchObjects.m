@@ -1,4 +1,4 @@
-function objectPatches = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,minPtSpacing)
+function objectPatches = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxPtSpacing)
 % A function to export XODR descriptions of objects into an array of patch
 % structures
 
@@ -42,7 +42,7 @@ for roadInd = 1:Nroads
       segType{i} = 'undef';
     end
   end
-
+  
   % Iterate through all of the objects
   for objInd = 1:Nobjects(roadInd)
     % Index into the array of objects, which goes in order by road and then
@@ -61,27 +61,60 @@ for roadInd = 1:Nroads
     % Assign all objects to be blaze orange (for now)
     objectPatches(objArrayInd).color = [1 0.4 0];
     % Determine within which road geometry segment the object is located
-    segIdx = find(segTable < str2num(currentObject.Attributes.s),1,'last');
+    segIdx = find(segTable < str2double(currentObject.Attributes.s),1,'last');
+    
+    % Get the geometry information for the geometry segment within
+    % which the object is located
+    geomElement = ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{segIdx};
+    % Determine the origin of the object in E,N coordinates
+    objSCoord = str2double(currentObject.Attributes.s);
+    objTCoord = str2double(currentObject.Attributes.t);
+    [xo,yo,ho] = fcn_RoadSeg_findXYfromSTandSegment(geomElement,objSCoord,objTCoord);
+    
     % Create a flag to determine whether an outline of the object is
     % determined successfully or whether the object should be defined by
     % the bounding box geometry
     flag_outline_defined = 0;
-    if isfield(currentObject.Attributes,'outlines')
-      if isfield(currentObject.Attributes,'outline')
-        if isfield(currentObject.Attributes,'cornerRoad')
+    if isfield(currentObject,'outlines')
+      if isfield(currentObject.outlines,'outline')
+        if isfield(currentObject.outlines.outline,'cornerRoad')
           fprintf(1,'   Handling object %d using the cornerRoad vertices.\n',objInd)
-          % Extract the coordinates of the object vertices in (s,t) coordinates
+          Nvertices = length(currentObject.outlines.outline.cornerRoad);
+          objSCoord = nan(Nvertices,1);
+          objTCoord = nan(Nvertices,1);
+          for vertexInd = 1:Nvertices
+            % Extract the coordinates of the object vertices in (s,t) coordinates
+            objSCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerRoad{vertexInd}.Attributes.s);
+            objTCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerRoad{vertexInd}.Attributes.t);
+          end
           % Convert the vertex coordinates to (E,N) space
+          [xPts,yPts] = fcn_RoadSeg_findXYfromSTandSegment(geomElement,objSCoord,objTCoord);
           % Add the vertex coordinates to the patch object
+          objectPatches(objArrayInd).pointsX = xPts;
+          objectPatches(objArrayInd).pointsY = yPts;
           % Set the flag to confirm that an outline has been extracted
           flag_outline_defined = 1;
-        elseif isfield(currentObject.Attributes,'cornerLocal')
+        elseif isfield(currentObject.outlines.outline,'cornerLocal')
           fprintf(1,'   Handling object %d using the cornerLocal vertices.\n',objInd)
           % Extract the coordinates of the object vertices in (u,v)
           % coordinates
-          % Determine the (E,N) position and heading of the (u,v) origin
-          % Convert the vertex coordinates to (E,N) space
+          Nvertices = length(currentObject.outlines.outline.cornerLocal);
+          objUCoord = nan(Nvertices,1);
+          objVCoord = nan(Nvertices,1);
+          % Extract the heading of the object coordinate u-axis relative to
+          % the E,N coordinate system 
+          objUVheading = str2double(currentObject.Attributes.hdg) + ho;
+          for vertexInd = 1:Nvertices
+            % Extract the coordinates of the object vertices in (u,v) coordinates
+            objUCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerLocal{vertexInd}.Attributes.u);
+            objVCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerLocal{vertexInd}.Attributes.v);
+          end
+          % Convert the vertex coordinates to projected space
+          xPts = objUCoord*cos(objUVheading) - objVCoord*sin(objUVheading) + xo;
+          yPts = objUCoord*sin(objUVheading) + objVCoord*cos(objUVheading) + yo;
           % Add the vertex coordinates to the patch object
+          objectPatches(objArrayInd).pointsX = xPts;
+          objectPatches(objArrayInd).pointsY = yPts;
           % Set the flag to confirm that an outline has been extracted
           flag_outline_defined = 1;
         else
@@ -97,33 +130,44 @@ for roadInd = 1:Nroads
         % Obtain the (s,t) coordinates of the center of the object
         objSCoord = str2double(currentObject.Attributes.s);
         objTCoord = str2double(currentObject.Attributes.t);
-        % Get the geometry information for the geometry segment within
-        % which the object is located
-        geomElement = ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{segIdx};
-        p0 = [str2double(geomElement.Attributes.x), str2double(geomElement.Attributes.y)];
-        h0 = str2double(geomElement.Attributes.hdg);
-        l0 = str2double(geomElement.Attributes.length);
-        s0 = str2double(geomElement.Attributes.s);
-        % Determine the center point of the object in E,N coordinates
-        if strcmp(segType{segIdx},'line')
-          [xc,yc] = fcn_RoadSeg_findXYfromST('line',p0(E),p0(N),h0,s0,l0,objSCoord,objTCoord);
-        elseif strcmp(segType{segIdx},'arc')
-          K0 = str2double(geomElement.arc.Attributes.curvature);
-          [xc,yc] = fcn_RoadSeg_findXYfromST('arc',p0(E),p0(N),h0,s0,l0,objSCoord,objTCoord,K0);
-        elseif strcmp(segType{segIdx},'spiral')
-          K0 = str2double(geomElement.spiral.Attributes.curvStart);
-          KF = str2double(geomElement.spiral.Attributes.curvEnd);
-          [xc,yc] = fcn_RoadSeg_findXYfromST('spiral',p0(E),p0(N),h0,s0,l0,objSCoord,objTCoord,K0,KF);
-        end
         % Obtain the radius of the object bounding box
         objRadius = str2double(currentObject.Attributes.radius);
         % Define a series of angles over which to create bounding points
-        objAngles = (0:minPtSpacing/objRadius:2*pi)';
+        objAngles = (0:maxPtSpacing/objRadius:2*pi)';
         % Calculate and write the points into the the object structure
-        objectPatches(objArrayInd).pointsX = objRadius*cos(objAngles)+xc;
-        objectPatches(objArrayInd).pointsY = objRadius*sin(objAngles)+yc;
+        objectPatches(objArrayInd).pointsX = objRadius*cos(objAngles)+xo;
+        objectPatches(objArrayInd).pointsY = objRadius*sin(objAngles)+yo;
       elseif isfield(currentObject.Attributes,'length') && ...
           isfield(currentObject.Attributes,'width')
+        % Extract the heading of the object coordinate u-axis relative to
+        % the E,N coordinate system
+        objUVheading = str2double(currentObject.Attributes.hdg) + ho;
+        % Extract the length and width of the object
+        objLength = str2double(currentObject.Attributes.length);
+        objWidth = str2double(currentObject.Attributes.width);
+        % Create a box in the u,v space that represents the object, taking
+        % into account the maximum spacing between adjacent boundary points
+        NptsLength = ceil(objLength/maxPtSpacing);
+        objUCoord = linspace(-objLength/2,objLength/2,NptsLength)';
+        NptsWidth = ceil(objWidth/maxPtSpacing);
+        objVCoord = linspace(-objWidth/2,objWidth/2,NptsWidth)';
+        % Compose a complete boundary of the object, starting from the
+        % (+,+) corner in u,v coordinates. We drop the duplicate corner
+        % points from the verticals (the second and fourth sub-vectors in
+        % the overall coordinate vectors) to make sure the patch plots
+        % properly
+        objUCoord = [flip(objUCoord); -objLength/2*ones(NptsWidth-2,1); ...
+          objUCoord; objLength/2*ones(NptsWidth-2,1)];
+        objVCoord = [objWidth/2*ones(NptsLength,1); flipud(objVCoord(2:end-1)); ...
+          -objWidth/2*ones(NptsLength,1); objVCoord(2:end-1)];
+        
+        % Convert the vertex coordinates to projected space
+        xPts = objUCoord*cos(objUVheading) - objVCoord*sin(objUVheading) + xo;
+        yPts = objUCoord*sin(objUVheading) + objVCoord*cos(objUVheading) + yo;
+        % Add the vertex coordinates to the patch object
+        objectPatches(objArrayInd).pointsX = xPts;
+        objectPatches(objArrayInd).pointsY = yPts;
+        % Communicate that an outline has been extracted
         fprintf(1,'   Handling object %d using the length/width bounding box.\n',objInd)
       else
         fprintf(1,'   No geometry specified for object %d, leaving unpopulated.\n',objInd);

@@ -1,4 +1,4 @@
-function [x,y] = fcn_RoadSeg_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,varargin)
+function [x,y,h] = fcn_RoadSeg_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,varargin)
 
 
 switch geomType
@@ -13,6 +13,7 @@ switch geomType
     % coordinate system
     x = (s(:)-s0).*cos(h0) + t(:).*cos(h0+pi/2) + x0;
     y = (s(:)-s0).*sin(h0) + t(:).*sin(h0+pi/2) + y0;
+    h = h0*ones(length(s),1);
     
   case 'arc'
     if nargin < 9
@@ -29,8 +30,8 @@ switch geomType
     h = K0*(s(:)-s0) + h0;
     % Offset the x and y coordinates by the projection along t (which is
     % aligned at the heading plus pi/2)
-    x = x + t(:)*cos(h+pi/2);
-    y = y + t(:)*sin(h+pi/2);
+    x = x + t(:).*cos(h+pi/2);
+    y = y + t(:).*sin(h+pi/2);
     
   case 'spiral'
     if nargin < 10
@@ -47,8 +48,8 @@ switch geomType
       h = (KF-K0)/l0*(s(:)-s0).^2/2 + K0*s + h0;
       % Offset the x and y coordinates by the projection along t (which is
       % aligned at the heading plus pi/2)
-      x = x + t(:)*cos(h+pi/2);
-      y = y + t(:)*sin(h+pi/2);
+      x = x + t(:).*cos(h+pi/2);
+      y = y + t(:).*sin(h+pi/2);
     
     end
 end
