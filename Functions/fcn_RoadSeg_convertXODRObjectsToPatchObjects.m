@@ -1,12 +1,77 @@
 function objectPatches = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxPtSpacing)
+% fcn_RoadSeg_convertXODRObjectsToPatchObjects
 % A function to export XODR descriptions of objects into an array of patch
 % structures
+%
+% FORMAT:
+%
+%       objectPatches = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxPtSpacing)
+%
+% INPUTS:
+%
+%       ODRStruct: a nested structure containing the XDOR map elements
+%       maxPtSpacing: a scalar parameter defining the maximum gap between
+%         points on the produced boundaries of the patch objects
+%
+% OUTPUTS:
+%
+%       objectPatches: an array containing patch structures with the
+%         properties of the objects defined in the XODR file
+%
+% DEPENDENCIES:
+%
+%      fcn_RoadSeg_findXYfromSTandSegment
+%
+% EXAMPLES:
+%
+%       See the script: script_test_fcn_RoadSeg_parsingProcess.m for
+%       a full test suite.
+%
+% This function was written by C. Beal
+% Questions or comments? cbeal@bucknell.edu
 
-% Enumerate some constants for later convenience and code readability
-E = 1; N = 2;
+% Revision history:
+%     2022_03_20
+%     -- wrote the code
 
-% Set a flag to enable some debugging functionality
-flag_do_debug = 1;
+flag_do_debug = 0; % Flag to plot the results for debugging
+flag_check_inputs = 1; % Flag to perform input checking
+
+if flag_do_debug
+  st = dbstack; %#ok<*UNRCH>
+  fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+end
+
+
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |
+%              |_|
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if flag_check_inputs == 1
+  if nargin < 2
+    error('Incorrect number of input arguments');
+  end
+end
+
+%% Main code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
+%  | |  | | (_| | | | | |
+%  |_|  |_|\__,_|_|_| |_|
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Check for out of order segments (by station) and reorder properly
 if flag_do_debug
@@ -29,6 +94,9 @@ for roadInd = 1:Nroads
   % Create a segment table for the road to locate the objects against the
   % geometry segments of different types (lines, arcs, spirals)
   segTable = nan(length(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry),1);
+  
+  % Also capture the segment type so that it is not necessary to pull it
+  % out of the XODR structure on each loop iteration
   segType = cell(length(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry),1);
   for i = 1:length(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry)
     segTable(i,1) = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{i}.Attributes.s);
@@ -75,13 +143,21 @@ for roadInd = 1:Nroads
     % determined successfully or whether the object should be defined by
     % the bounding box geometry
     flag_outline_defined = 0;
+    % Check to see if there is an XODR element with nested elements:
+    % outlines and outline to define the shape of the object
     if isfield(currentObject,'outlines')
       if isfield(currentObject.outlines,'outline')
+        % Determine whether the outline is defined by cornerRoad vertices
         if isfield(currentObject.outlines.outline,'cornerRoad')
           fprintf(1,'   Handling object %d using the cornerRoad vertices.\n',objInd)
+          % Determine the number of vertices
           Nvertices = length(currentObject.outlines.outline.cornerRoad);
+          % Preallocate vectors to store the s and t coordinates of the
+          % vertices
           objSCoord = nan(Nvertices,1);
           objTCoord = nan(Nvertices,1);
+          % Iterate through the vertices and fill the vectors from the XODR
+          % file
           for vertexInd = 1:Nvertices
             % Extract the coordinates of the object vertices in (s,t) coordinates
             objSCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerRoad{vertexInd}.Attributes.s);
@@ -96,14 +172,16 @@ for roadInd = 1:Nroads
           flag_outline_defined = 1;
         elseif isfield(currentObject.outlines.outline,'cornerLocal')
           fprintf(1,'   Handling object %d using the cornerLocal vertices.\n',objInd)
-          % Extract the coordinates of the object vertices in (u,v)
-          % coordinates
           Nvertices = length(currentObject.outlines.outline.cornerLocal);
+          % Preallocate vectors to store the u and v coordinates of the
+          % vertices
           objUCoord = nan(Nvertices,1);
           objVCoord = nan(Nvertices,1);
           % Extract the heading of the object coordinate u-axis relative to
           % the E,N coordinate system 
           objUVheading = str2double(currentObject.Attributes.hdg) + ho;
+          % Iterate through the vertices and fill the vectors from the XODR
+          % file
           for vertexInd = 1:Nvertices
             % Extract the coordinates of the object vertices in (u,v) coordinates
             objUCoord(vertexInd) = str2double(currentObject.outlines.outline.cornerLocal{vertexInd}.Attributes.u);
@@ -127,9 +205,6 @@ for roadInd = 1:Nroads
     if ~flag_outline_defined
       if isfield(currentObject.Attributes,'radius')
         fprintf(1,'   Handling object %d using the radius bounding box.\n',objInd)
-        % Obtain the (s,t) coordinates of the center of the object
-        objSCoord = str2double(currentObject.Attributes.s);
-        objTCoord = str2double(currentObject.Attributes.t);
         % Obtain the radius of the object bounding box
         objRadius = str2double(currentObject.Attributes.radius);
         % Define a series of angles over which to create bounding points

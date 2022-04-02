@@ -1,17 +1,86 @@
 function [ODRStruct,fullPath] = fcn_RoadSeg_convertXODRtoMATLABStruct(varargin)
+% fcn_RoadSeg_convertXODRtoMATLABStruct 
+% A function to convert XODR descriptions of a road system and associated
+% objects into a nested MATLAB structure
+%
+% FORMAT:
+%
+%       [ODRStruct,fullPath] = fcn_RoadSeg_convertXODRtoMATLABStruct({fullPath})
+%
+% INPUTS:
+%
+%       fullPath: a string containing a complete file path to an XODR map
+%
+% OUTPUTS:
+%
+%       ODRStruct: a nested structure containing the XDOR map elements
+%       fullPath: a string containing a complete file path to an XODR map
+%
+%
+% DEPENDENCIES:
+%
+%      xml2struct_fex28518
+%
+% EXAMPLES:
+%
+%       See the script: script_test_fcn_RoadSeg_parsingProcess.m for
+%       a full test suite.
+%
+% This function was written by C. Beal
+% Questions or comments? cbeal@bucknell.edu
+
+% Revision history:
+%     2022_03_20
+%     -- wrote the code
+
+flag_do_debug = 0; % Flag to plot the results for debugging
+flag_check_inputs = 1; % Flag to perform input checking
+
+if flag_do_debug
+  st = dbstack; %#ok<*UNRCH>
+  fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+end
+
+
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |
+%              |_|
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if nargin > 0
+  if ~ischar(varargin{1})
+    error('Input argument is not a string.');
+  else
+    fullPath = varargin{1};
+  end
+else
+  [filename,pathname] = uigetfile('.xodr','Choose an ASAM OpenDrive XML file to parse.');
+  fullPath = fullfile(pathname,filename);
+end
+
+%% Main code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
+%  | |  | | (_| | | | | |
+%  |_|  |_|\__,_|_|_| |_|
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Make sure that the xml to structure dependency file is available
 addpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Functions/dependencies/xml2struct/')
 if ~exist('xml2struct_fex28518','file')
   addpath(uigetdir('.','Provide missing path to xml2struct_fex28518'));
-end
-
-% Get a path to the xodr file to be parsed
-if nargin > 0
-  fullPath = varargin{1};
-else
-  [filename,pathname] = uigetfile('.xodr','Choose an ASAM OpenDrive XML file to parse.');
-  fullPath = fullfile(pathname,filename);
 end
 
 % Use the xml2struct utility to create a nested structure of the XODR
@@ -67,15 +136,15 @@ for roadInd = 1:Nroads
           % grab the s coordinate of the first instance from the repeat
           % structure (if it exists) or the root object structure
           if isfield(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat,'s')
-            sStart = str2num(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.s);
+            sStart = str2double(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.s);
           else
-            sStart = str2num(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.Attributes.s);
+            sStart = str2double(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.Attributes.s);
           end
           % The interval is defined by the repeat field distance
-          sInterval = str2num(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.Attributes.distance);
+          sInterval = str2double(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.Attributes.distance);
           % The end of the s range of the objects is defined by the field
           % length
-          sEnd = str2num(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.Attributes.length);
+          sEnd = str2double(ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd}.repeat.Attributes.length);
           % Define the array of instances of the objects by s coordinate
           sArray = sStart:sInterval:sEnd+sStart;
           % Determine the number of objects defined by the repeat

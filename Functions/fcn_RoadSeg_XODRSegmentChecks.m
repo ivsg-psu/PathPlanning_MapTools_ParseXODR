@@ -1,9 +1,79 @@
 function ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct)
+% fcn_RoadSeg_XODRSegmentChecks
 % A function to check a structure imported from XODR into MATLAB to make
 % sure that segments are in order by station, that beginning and end points
 % of segments match up, and that the map bounding values are correct
+% Plots a visual representation of the road geometry defined in an XODR
+% file
+%
+% FORMAT: 
+%
+%       ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct))
+%
+% INPUTS:
+%
+%      ODRStruct: a nested structure containing the XDOR map elements
+%
+% OUTPUTS:
+%
+%      ODRStruct: a nested structure containing the XDOR map elements, with
+%         the proper characteristics confirmed
+%
+% DEPENDENCIES:
+%
+%      None
+%
+% EXAMPLES:
+%      
+%       See the script: script_test_fcn_RoadSeg_parsingProcess.m for a
+%       full test suite.
+%
+% This function was written by C. Beal
+% Questions or comments? cbeal@bucknell.edu 
 
-flag_do_debug = 1;
+% Revision history:
+%     2022_03_20
+%     -- wrote the code
+
+flag_do_debug = 0; % Flag to plot the results for debugging
+flag_check_inputs = 1; % Flag to perform input checking
+
+if flag_do_debug
+    st = dbstack; %#ok<*UNRCH>
+    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+end
+
+
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _       
+%  |_   _|                 | |      
+%    | |  _ __  _ __  _   _| |_ ___ 
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |                  
+%              |_| 
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if flag_check_inputs == 1
+    % Are there the right number of inputs?
+    if nargin > 1
+        error('Incorrect number of input arguments')
+    end
+end
+
+%% Main code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   __  __       _       
+%  |  \/  |     (_)      
+%  | \  / | __ _ _ _ __  
+%  | |\/| |/ _` | | '_ \ 
+%  | |  | | (_| | | | | |
+%  |_|  |_|\__,_|_|_| |_|
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Check for out of order segments (by station) and reorder properly
 if flag_do_debug
