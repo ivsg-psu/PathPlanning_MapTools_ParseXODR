@@ -302,10 +302,10 @@ for roadInd = 1:Nroads
       end
       % Find the X,Y points associated with the min and max s values
       if ~isempty(candSValuesX(candSValuesX <= lC & candSValuesX > 0))
-        [xMinMax,~] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesX(candSValuesX <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
+        [xMinMax,~] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesX(candSValuesX <= lC & candSValuesX > 0),lC,hC,xC,yC,KCstart,KCend);
       end
-      if ~isempty(candSValuesY(candSValuesY <= lC & candSValuesX > 0))
-        [~,yMinMax] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesY(candSValuesY <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
+      if ~isempty(candSValuesY(candSValuesY <= lC & candSValuesY > 0))
+        [~,yMinMax] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesY(candSValuesY <= lC & candSValuesY > 0),lC,hC,xC,yC,KCstart,KCend);
       end
     else
       if flag_do_debug

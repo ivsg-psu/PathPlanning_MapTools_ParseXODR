@@ -80,13 +80,25 @@ end
 % Determine the number of roads in the map
 Nroads = length(ODRStruct.OpenDRIVE.road);
 
-% Iterate through all of the roads
+% Initialize the number of objects to zero
+Nobjects = 0;
+% Iterate through all of the roads to determine how many total objects
+% there are
 for roadInd = 1:Nroads
-  % Determine the number of objects defined in the active road
-  Nobjects = length(ODRStruct.OpenDRIVE.road{roadInd}.objects.object);
+  if isfield(ODRStruct.OpenDRIVE.road{roadInd},'objects')
+    if isfield(ODRStruct.OpenDRIVE.road{roadInd},'object')
+      % Determine the number of objects defined in the active road
+      Nobjects = length(ODRStruct.OpenDRIVE.road{roadInd}.objects.object);
+    end
+  end
 end
 % Create the empty scalar structure for the patches
 objectPatches = struct('id',{},'color',{},'primitive',{},'primparams',{},'aabb',{},'pointsX',{},'pointsY',{});
+if Nobjects <= 0
+  fprintf(1,'No objects to convert in this file, returning empty structure\n');
+  objectPatches = [];
+  return;
+end
 
 % Iterate through all of the roads
 for roadInd = 1:Nroads
@@ -111,7 +123,6 @@ for roadInd = 1:Nroads
     end
   end
   
-  % Iterate through all of the objects
   for objInd = 1:Nobjects(roadInd)
     % Index into the array of objects, which goes in order by road and then
     % by object index
@@ -149,7 +160,9 @@ for roadInd = 1:Nroads
       if isfield(currentObject.outlines,'outline')
         % Determine whether the outline is defined by cornerRoad vertices
         if isfield(currentObject.outlines.outline,'cornerRoad')
-          fprintf(1,'   Handling object %d using the cornerRoad vertices.\n',objInd)
+          if flag_do_debug
+            fprintf(1,'   Handling object %d using the cornerRoad vertices.\n',objInd)
+          end
           % Determine the number of vertices
           Nvertices = length(currentObject.outlines.outline.cornerRoad);
           % Preallocate vectors to store the s and t coordinates of the
@@ -171,14 +184,16 @@ for roadInd = 1:Nroads
           % Set the flag to confirm that an outline has been extracted
           flag_outline_defined = 1;
         elseif isfield(currentObject.outlines.outline,'cornerLocal')
-          fprintf(1,'   Handling object %d using the cornerLocal vertices.\n',objInd)
+          if flag_do_debug
+            fprintf(1,'   Handling object %d using the cornerLocal vertices.\n',objInd)
+          end
           Nvertices = length(currentObject.outlines.outline.cornerLocal);
           % Preallocate vectors to store the u and v coordinates of the
           % vertices
           objUCoord = nan(Nvertices,1);
           objVCoord = nan(Nvertices,1);
           % Extract the heading of the object coordinate u-axis relative to
-          % the E,N coordinate system 
+          % the E,N coordinate system
           objUVheading = str2double(currentObject.Attributes.hdg) + ho;
           % Iterate through the vertices and fill the vectors from the XODR
           % file
@@ -196,15 +211,21 @@ for roadInd = 1:Nroads
           % Set the flag to confirm that an outline has been extracted
           flag_outline_defined = 1;
         else
-          fprintf(1,'   Object %d has outlines and outline elements, but no cornerRoad or cornerLocal elements defined\n',objInd);
+          if flag_do_debug
+            fprintf(1,'   Object %d has outlines and outline elements, but no cornerRoad or cornerLocal elements defined\n',objInd);
+          end
         end
       else
-        fprintf(1,'   Object %d has an outlines element, but no outline elements defined\n',objInd);
+        if flag_do_debug
+          fprintf(1,'   Object %d has an outlines element, but no outline elements defined\n',objInd);
+        end
       end
     end
     if ~flag_outline_defined
       if isfield(currentObject.Attributes,'radius')
-        fprintf(1,'   Handling object %d using the radius bounding box.\n',objInd)
+        if flag_do_debug
+          fprintf(1,'   Handling object %d using the radius bounding box.\n',objInd);
+        end
         % Obtain the radius of the object bounding box
         objRadius = str2double(currentObject.Attributes.radius);
         % Define a series of angles over which to create bounding points
@@ -243,9 +264,13 @@ for roadInd = 1:Nroads
         objectPatches(objArrayInd).pointsX = xPts;
         objectPatches(objArrayInd).pointsY = yPts;
         % Communicate that an outline has been extracted
-        fprintf(1,'   Handling object %d using the length/width bounding box.\n',objInd)
+        if flag_do_debug
+          fprintf(1,'   Handling object %d using the length/width bounding box.\n',objInd)
+        end
       else
-        fprintf(1,'   No geometry specified for object %d, leaving unpopulated.\n',objInd);
+        if flag_do_debug
+          fprintf(1,'   No geometry specified for object %d, leaving unpopulated.\n',objInd);
+        end
       end
     end
   end
