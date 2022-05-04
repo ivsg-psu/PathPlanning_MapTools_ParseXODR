@@ -114,6 +114,18 @@ for roadInd = 1:Nroads
     ODRStruct.OpenDRIVE.road{roadInd}.planView = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.planView,'geometry');
     ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1} = temp;
   end
+  % Check for a single lane offset element in the road structure
+  if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneOffset')
+    NlaneOffsets = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset);
+    if 1 == NlaneOffsets
+      % If there is only a single geometry element, fix the structure by
+      % creating a temporary copy and then adding it back to the structure as
+      % the only element in a cell array in the original field.
+      temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset;
+      ODRStruct.OpenDRIVE.road{roadInd}.lanes = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneOffset');
+      ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset{1} = temp;
+    end
+  end
   % Check for a single lane segment element in the road structure
   NlaneSegs = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection);
   if 1 == NlaneSegs
