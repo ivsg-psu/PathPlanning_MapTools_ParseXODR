@@ -1,0 +1,245 @@
+<?xml version="1.0" standalone="yes"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="7" name="" version="1.00" date="Fri Oct 25 10:52:16 2019" north="0.0000000000000000e+00" south="0.0000000000000000e+00" east="0.0000000000000000e+00" west="0.0000000000000000e+00">
+    </header>
+    <road rule="RHT" name="" length="1.0000000000000000e+02" id="1" junction="-1">
+        <link>
+        </link>
+        <planView>
+            <geometry s="0.0000000000000000e+00" x="0.0000000000000000e+00" y="0.0000000000000000e+00" hdg="0.0000000000000000e+00" length="1.0000000000000000e+02">
+                <line/>
+            </geometry>
+        </planView>
+        <lateralProfile>
+        </lateralProfile>
+        <lanes>
+            <laneOffset s="0.000000000000000e+00" a="0.0000000000000000e+00" b="0.0000000000000000e+00" c="0" d="0"/>
+            <laneOffset s="2.000000000000000e+01" a="0.0000000000000000e+00" b="0.0000000000000000e+00" c="2.0625e-02" d="-6.875e-04"/>
+            <laneOffset s="4.000000000000000e+01" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="0" d="0"/>
+            <laneOffset s="6.000000000000000e+01" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="-2.0625e-02" d="6.875e-04"/>
+            <laneOffset s="8.000000000000000e+01" a="0.0000000000000000e+00" b="0.0000000000000000e+00" c="0" d="0"/>
+            <!-- Prior to construction zone, section A -->
+            <laneSection s="0.0000000000000000e+00">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="driving" level="false">
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </right>
+            </laneSection>
+            <!-- Sway for construction zone, section B -->
+            <laneSection s="2.0000000000000000e+01">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <link>
+                            <predecessor id="2"/>
+                            <successor id="1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="-2.0625e-02" d="6.875e-04"/>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="driving" level="false">
+                        <link>
+                        </link>
+                        <roadMark sOffset="0.0000000000000000e+00" type="broken" weight="standard" color="standard" width="1.2000000000000000e-01" laneChange="both" height="1.9999999552965164e-02">
+                            <type name="broken" width="1.2000000000000000e-01">
+                                <line length="3.0000000000000000e+00" space="6.0000000000000000e+00" tOffset="0.0000000000000000e+00" sOffset="0.0000000000000000e+00" rule="caution" width="1.2000000000000000e-01"/>
+                            </type>
+                        </roadMark>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <link>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="2.0625e-02" d="-6.875e-04"/>
+                    </lane>
+                </right>
+            </laneSection>
+            <!-- Offset for construction zone, section C -->
+            <laneSection s="4.0000000000000000e+01">
+                <left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="driving" level="false">
+                        <roadMark sOffset="0.0000000000000000e+00" type="broken" weight="standard" color="standard" width="1.2000000000000000e-01" laneChange="both" height="1.9999999552965164e-02">
+                            <type name="broken" width="1.2000000000000000e-01">
+                                <line length="3.0000000000000000e+00" space="6.0000000000000000e+00" tOffset="0.0000000000000000e+00" sOffset="0.0000000000000000e+00" rule="caution" width="1.2000000000000000e-01"/>
+                            </type>
+                        </roadMark>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="5.5000000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </right>
+            </laneSection>
+            <!-- Sway back from construction zone, section D -->
+            <laneSection s="6.0000000000000000e+01">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <link>
+                            <predecessor id="1"/>
+                            <successor id="2"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="0.0000000000000000e+00" b="0.0000000000000000e+00" c="2.0625e-02" d="-6.875e-04"/>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="driving" level="false">
+                        <link>
+                        </link>
+                        <roadMark sOffset="0.0000000000000000e+00" type="broken" weight="standard" color="standard" width="1.2000000000000000e-01" laneChange="both" height="1.9999999552965164e-02">
+                            <type name="broken" width="1.2000000000000000e-01">
+                                <line length="3.0000000000000000e+00" space="6.0000000000000000e+00" tOffset="0.0000000000000000e+00" sOffset="0.0000000000000000e+00" rule="caution" width="1.2000000000000000e-01"/>
+                            </type>
+                        </roadMark>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <link>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0000000000000000e+00" a="5.50000000000000e+00" b="0.0000000000000000e+00" c="-2.0625e-02" d="6.875e-04"/>
+                    </lane>
+                </right>
+            </laneSection>
+            <!-- Lead out from construction zone, section E -->
+            <laneSection s="8.0000000000000000e+01">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                        <link>
+                            <predecessor id="2"/>
+                        </link>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="driving" level="false">
+                        <roadMark sOffset="0.0000000000000000e+00" type="broken" weight="standard" color="standard" width="1.2000000000000000e-01" laneChange="both" height="1.9999999552965164e-02">
+                            <type name="broken" width="1.2000000000000000e-01">
+                                <line length="3.0000000000000000e+00" space="6.0000000000000000e+00" tOffset="0.0000000000000000e+00" sOffset="0.0000000000000000e+00" rule="caution" width="1.2000000000000000e-01"/>
+                            </type>
+                        </roadMark>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="3.2500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+00" a="2.7500000000000000e+00" b="0.0000000000000000e+00" c="0.0000000000000000e+00" d="0.0000000000000000e+00"/>
+                        <link>
+                            <predecessor id="-2"/>
+                        </link>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id=" 1" name="TrafficCone01" s="2.0000000000000000e+01" t="-3.2500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 2" name="TrafficCone02" s="2.2000000000000000e+01" t="-3.1800e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 3" name="TrafficCone03" s="2.4000000000000000e+01" t="-2.9900e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 4" name="TrafficCone04" s="2.6000000000000000e+01" t="-2.7100+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 5" name="TrafficCone05" s="2.8000000000000000e+01" t="-2.3700+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 6" name="TrafficCone06" s="3.0000000000000000e+01" t="-2.0000+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 7" name="TrafficCone07" s="3.2000000000000000e+01" t="-1.6300+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 8" name="TrafficCone08" s="3.4000000000000000e+01" t="-1.2900+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id=" 9" name="TrafficCone09" s="3.6000000000000000e+01" t="-1.0100+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="10" name="TrafficCone10" s="3.8000000000000000e+01" t="-0.8200e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="11" name="TrafficCone11" s="4.0000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="12" name="TrafficCone12" s="4.2000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="13" name="TrafficCone13" s="4.4000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="14" name="TrafficCone14" s="4.6000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="15" name="TrafficCone15" s="4.8000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="16" name="TrafficCone11" s="5.0000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="17" name="TrafficCone12" s="5.2000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="18" name="TrafficCone13" s="5.4000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="19" name="TrafficCone14" s="5.6000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="20" name="TrafficCone15" s="5.8000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="21" name="TrafficCone11" s="6.0000000000000000e+01" t="-0.7500e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="22" name="TrafficCone12" s="6.2000000000000000e+01" t="-0.8200e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="23" name="TrafficCone13" s="6.4000000000000000e+01" t="-1.0100e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="24" name="TrafficCone14" s="6.6000000000000000e+01" t="-1.2900e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="25" name="TrafficCone15" s="6.8000000000000000e+01" t="-1.6300e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="26" name="TrafficCone11" s="7.0000000000000000e+01" t="-2.0000e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="27" name="TrafficCone12" s="7.2000000000000000e+01" t="-2.3700e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="28" name="TrafficCone13" s="7.4000000000000000e+01" t="-2.7100+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="29" name="TrafficCone14" s="7.6000000000000000e+01" t="-2.9900e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="30" name="TrafficCone15" s="7.8000000000000000e+01" t="-3.1800e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+            <object id="31" name="TrafficCone15" s="8.0000000000000000e+01" t="-3.25000e+00" zOffset="0.0000e+00" hdg="0.0000e+00" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000e-1" width="2.7500e-1" length="2.7501e-1"/>
+        </objects>
+        <signals>
+        </signals>
+        <surface>
+        </surface>
+    </road>
+</OpenDRIVE>

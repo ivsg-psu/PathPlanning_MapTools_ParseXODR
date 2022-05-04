@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="4" name="" version="1" date="2021-10-24T16:21:04" north="5" south="0" east="10" west="0" vendor="MathWorks">
+        <userData>
+            <vectorScene program="RoadRunner" version="R2020a Update 5 (1.0.5.a99fa872a)"/>
+        </userData>
+    </header>
+    <road name="Road 0" length="5.0000000000000000e+1" id="0" junction="-1">
+        <type s="0.0000000000000000e+0" type="town">
+            <speed max="55" unit="mph"/>
+        </type>
+        <planView>
+            <geometry s="0.0000000000000000e+0" x="0" y="0" hdg="0" length="1.0000000000000000e+1">
+                <line/>
+            </geometry>
+            <geometry s="1.0000000000000000e+1" x="10" y="0" hdg="0" length="4.0000000000000000e+1">
+                <arc curvature="2.0000000000000000e-2"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+        </elevationProfile>
+        <lateralProfile>
+            <superelevation s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+        </lateralProfile>
+        <lanes>
+            <laneOffset s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+            <laneSection s="0.0000000000000000e+0" singleSide="false">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="1.0000000000000000e1" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="none" material="standard" color="white" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{82497341-e591-4a04-b2ff-1429399568fc}" travelDir="undirected"/>
+                        </userData>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="3.5000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="solid" material="standard" color="white" width="1.2500000000000000e-1" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{4e6f43fd-1d44-4e80-b6e7-d0740277473a}" travelDir="backward"/>
+                        </userData>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0000000000000000e+0" type="broken" material="standard" color="yellow" width="1.2500000000000000e-1" laneChange="none"/>
+                        <userData/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="3.5000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="solid" material="standard" color="white" width="1.2500000000000000e-1" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{a65916c0-4a74-44c0-ba6b-43feacf0a4ef}" travelDir="forward"/>
+                        </userData>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="1.0000000000000000e1" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="none" material="standard" color="white" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{fa565562-5b9e-4a4b-9df5-5f3297965ac7}" travelDir="undirected"/>
+                        </userData>
+                    </lane>
+                </right>
+                <userData>
+                    <vectorLaneSection>
+                        <carriageway rightBoundary="-2" leftBoundary="2"/>
+                    </vectorLaneSection>
+                </userData>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id="1" name="radiusBounds"  s="3.5000000000000000e+1" t="-2.0e+0" zOffset="0" hdg="0" type="obstacle" height="5.0e-1" radius="0.35e+0"/>
+            <object id="2" name="rectBounds"  s="3.0000000000000000e+0" t="-2.5e+0" zOffset="0" hdg="0.6" type="obstacle" height="1.0e+0" width="5.0e-1" length="2.0e+0"/>
+            <object id="3" name="cornerLocal" s ="2.50000e+1" t="0.5" zOffset="0" hdg="1.57" type="obstacle" height="1.0e+0" width="0.4" length="0.5">
+                <outlines>    
+                    <outline>    
+                        <cornerLocal u=" 0.2" v=" 0.2"/>
+                        <cornerLocal u="-0.0" v=" 0.3"/>
+                        <cornerLocal u="-0.2" v=" 0.2"/>
+                        <cornerLocal u="-0.2" v="-0.2"/>
+                        <cornerLocal u=" 0.2" v="-0.2"/>
+                    </outline>
+                </outlines>
+            </object>
+            <object id="4" name="cornerLocal" s ="5.00000e+0" t="2.5" zOffset="0" hdg="0" type="obstacle" height="1.0e+1" width="0.6752" length="0.7329">
+                <outlines>    
+                    <outline>    
+                        <cornerLocal u="0.5179" v="0.8679"/>
+                        <cornerLocal u="0.3980" v="0.6547"/>
+                        <cornerLocal u="0.1791" v="0.6547"/>
+                        <cornerLocal u="0.4211" v="0.4796"/>
+                        <cornerLocal u="0.2874" v="0.1350"/>
+                        <cornerLocal u="0.5409" v="0.4095"/>
+                        <cornerLocal u="0.7598" v="0.2226"/>
+                        <cornerLocal u="0.6492" v="0.5292"/>
+                        <cornerLocal u="0.8543" v="0.7190"/>
+                        <cornerLocal u="0.6192" v="0.7336"/>
+                    </outline>
+                </outlines>
+            </object>
+            <object id="5" name="cornerRoad" s ="2.00000e+1" t="-0.6" zOffset="0" hdg="-1.57" type="obstacle" height="1.0e+1">
+                <outlines>    
+                    <outline>    
+                        <cornerRoad s="2.00e+1" t="0.50"/>
+                        <cornerRoad s="2.05e+1" t="-0.00"/>
+                        <cornerRoad s="1.95e+1" t="-0.00"/>
+                    </outline>
+                </outlines>
+            </object>
+         </objects>
+    </road>
+</OpenDRIVE>
