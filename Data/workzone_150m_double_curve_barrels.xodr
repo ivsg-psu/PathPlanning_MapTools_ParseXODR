@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="7" name="" version="1" date="2022-03-19T06:22:00" north="0.4259996613507731e+0" south="0.3999996623044471e+0" east="0.2000519765647391e+0" west="0.0095197652599609e+0">
+    </header>
+    <road name="Road 0" length="1.500000000000e+2" id="0" junction="-1">
+        <type s="0.0000000000000000e+0" type="town">
+            <speed max="55" unit="mph"/>
+        </type>
+        <planView>
+            <geometry s="0.0000000000000000e+0" x="0.00000000000000000e+0" y="0.00000000000000000e+0" hdg="0.0000000000000000e+0" length="5.0000000000000000e+1">
+                <arc curvature="2.0000000000000000e-3"/>
+            </geometry>
+            <geometry s="5.0000000000000000e+1" x="4.99167083234142e+1" y="2.49791736098712e+0" hdg="0.1000000000000000e+0" length="5.0000000000000000e+1">
+                <spiral curvStart="2.0000000000000000e-3" curvEnd="-2.0000000000000000e-3"/>
+            </geometry>
+            <geometry s="1.0000000000000000e+2" x="9.9575436643411e+1" y="8.3178671939918e+0" hdg="0.1000000000000000e+0" length="5.0000000000000000e+1">
+                <arc curvature="-2.0000000000000000e-3"/>
+            </geometry>
+        </planView>
+        <elevationProfile>
+            <elevation s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+        </elevationProfile>
+        <lateralProfile>
+            <superelevation s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+        </lateralProfile>
+        <lanes>
+            <laneOffset s="0.0000000000000000e+0" a="0.0000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+            <laneSection s="0.0000000000000000e+0" singleSide="false">
+                <left>
+                    <lane id="2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="5.0000000000000000e-1" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="none" material="standard" color="white" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{82497341-e591-4a04-b2ff-1429399568fc}" travelDir="undirected"/>
+                        </userData>
+                    </lane>
+                    <lane id="1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="3.5000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="solid" material="standard" color="white" width="1.2500000000000000e-1" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{4e6f43fd-1d44-4e80-b6e7-d0740277473a}" travelDir="backward"/>
+                        </userData>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0000000000000000e+0" type="broken" material="standard" color="yellow" width="1.2500000000000000e-1" laneChange="none"/>
+                        <userData/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="3.5000000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="solid" material="standard" color="white" width="1.2500000000000000e-1" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{a65916c0-4a74-44c0-ba6b-43feacf0a4ef}" travelDir="forward"/>
+                        </userData>
+                    </lane>
+                    <lane id="-2" type="shoulder" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="5.0000000000000000e-1" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                        <roadMark sOffset="0.0000000000000000e+0" type="none" material="standard" color="white" laneChange="none"/>
+                        <speed sOffset="0.0000000000000000e+0" max="5.5000000000000000e+1" unit="mph"/>
+                        <userData>
+                            <vectorLane sOffset="0.0000000000000000e+0" laneId="{fa565562-5b9e-4a4b-9df5-5f3297965ac7}" travelDir="undirected"/>
+                        </userData>
+                    </lane>
+                </right>
+                <userData>
+                    <vectorLaneSection>
+                        <carriageway rightBoundary="-2" leftBoundary="2"/>
+                    </vectorLaneSection>
+                </userData>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id="1"  name="TrafficCone01" s="1.0000000000000000e+1" t="-3.4088122951783073e+0" zOffset="-1.9073486345888568e-8" hdg="-1.1391412019729614e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="2"  name="TrafficCone02" s="2.0000000000000000e+1" t="-2.5439776426007739e+0" zOffset="-2.5879193394362510e-6" hdg="06.3088393211364746e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="3"  name="TrafficCone03" s="3.0000000000000000e+1" t="-1.7824743806784022e+0" zOffset="-4.6320100618724158e-6" hdg="02.8334195613861084e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="4"  name="TrafficCone04" s="4.0000000000000000e+1" t="-1.1247380812639549e+0" zOffset="-6.1511972129779657e-6" hdg="-3.1396613121032715e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="5"  name="TrafficCone05" s="5.0000000000000000e+1" t="-5.7143611197299649e-1" zOffset="-7.1441437921593298e-6" hdg="02.6827452182769775e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="6"  name="TrafficCone06" s="6.0000000000000000e+1" t="-1.2347745840057747e-1" zOffset="-7.6083016496975020e-6" hdg="02.3235349357128143e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="7"  name="TrafficCone07" s="7.0000000000000000e+1" t="-0.0463324094478624e-1" zOffset="-7.3256406071808833e-6" hdg="06.8078732490539551e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="8"  name="TrafficCone08" s="8.0000000000000000e+1" t="-0.0117814779973013e-1" zOffset="-5.8231520221052602e-6" hdg="08.0622345209121704e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="9"  name="TrafficCone09" s="9.0000000000000000e+1" t="-0.0761427238606649e-1" zOffset="-3.6277254270022929e-6" hdg="-9.0559607744216919e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="10" name="TrafficCone10" s="1.0000000000000000e+2" t="-0.0654339365224453e-1" zOffset="-1.3819408012372136e-6" hdg="03.1679520010948181e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="11" name="TrafficCone11" s="1.1000000000000000e+2" t="-4.4199037528726948e-2" zOffset="03.2264952548599624e-7" hdg="-1.9774695634841919e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="12" name="TrafficCone12" s="1.2000000000000000e+2" t="-4.1500174437914172e-1" zOffset="01.7145978825627850e-6" hdg="-2.9022505283355713e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="13" name="TrafficCone13" s="1.3000000000000000e+2" t="-8.5852561692663043e-1" zOffset="03.0357961325888638e-6" hdg="-8.3531427383422852e-1" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="-" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="14" name="TrafficCone14" s="1.4000000000000000e+2" t="-1.3735195476572895e+0" zOffset="04.2865322235074999e-6" hdg="-2.9073493480682373e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+            <object id="15" name="TrafficCone15" s="1.4900000000000000e+2" t="-1.9591443100053865e+0" zOffset="05.4667406014230480e-6" hdg="-1.9261754751205444e+0" roll="0.0000000000000000e+0" pitch="0.0000000000000000e+0" orientation="+" type="obstacle" height="5.0000795364379891e-1" width="2.7508547326748900e-1" length="2.7508553048794271e-1"/>
+        </objects>
+    </road>
+</OpenDRIVE>

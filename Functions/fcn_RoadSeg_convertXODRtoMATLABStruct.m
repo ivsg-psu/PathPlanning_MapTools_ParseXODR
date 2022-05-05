@@ -1,5 +1,5 @@
 function [ODRStruct,fullPath] = fcn_RoadSeg_convertXODRtoMATLABStruct(varargin)
-% fcn_RoadSeg_convertXODRtoMATLABStruct 
+% fcn_RoadSeg_convertXODRtoMATLABStruct
 % A function to convert XODR descriptions of a road system and associated
 % objects into a nested MATLAB structure
 %
@@ -96,12 +96,12 @@ ODRStruct = xml2struct_fex28518(fullPath);
 Nroads = length(ODRStruct.OpenDRIVE.road);
 % Check for a single road in the file
 if 1 == Nroads
-    % If the road is a single one, fix the structure by creating a
-    % temporary copy and then adding it back to the structure as the only
-    % element in a cell array in the original field.
-    temp = ODRStruct.OpenDRIVE.road;
-    ODRStruct.OpenDRIVE = rmfield(ODRStruct.OpenDRIVE,'road');
-    ODRStruct.OpenDRIVE.road{1} = temp;
+  % If the road is a single one, fix the structure by creating a
+  % temporary copy and then adding it back to the structure as the only
+  % element in a cell array in the original field.
+  temp = ODRStruct.OpenDRIVE.road;
+  ODRStruct.OpenDRIVE = rmfield(ODRStruct.OpenDRIVE,'road');
+  ODRStruct.OpenDRIVE.road{1} = temp;
 end
 for roadInd = 1:Nroads
   NgeomElems = length(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry);
@@ -113,6 +113,50 @@ for roadInd = 1:Nroads
     temp = ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry;
     ODRStruct.OpenDRIVE.road{roadInd}.planView = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.planView,'geometry');
     ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1} = temp;
+  end
+  % Check for a single lane offset element in the road structure
+  if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneOffset')
+    NlaneOffsets = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset);
+    if 1 == NlaneOffsets
+      % If there is only a single geometry element, fix the structure by
+      % creating a temporary copy and then adding it back to the structure as
+      % the only element in a cell array in the original field.
+      temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset;
+      ODRStruct.OpenDRIVE.road{roadInd}.lanes = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneOffset');
+      ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset{1} = temp;
+    end
+  end
+  % Check for a single lane segment element in the road structure
+  NlaneSegs = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection);
+  if 1 == NlaneSegs
+    % If there is only a single geometry element, fix the structure by
+    % creating a temporary copy and then adding it back to the structure as
+    % the only element in a cell array in the original field.
+    temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection;
+    ODRStruct.OpenDRIVE.road{roadInd}.lanes = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneSection');
+    ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{1} = temp;
+  end
+  if NlaneSegs > 0
+    for laneSectionInd = 1:NlaneSegs
+      Nleftlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane);
+      if 1 == Nleftlanes
+        % If there is only a single left lane element, fix the structure by
+        % creating a temporary copy and then adding it back to the structure as
+        % the only element in a cell array in the original field.
+        temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane;
+        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left,'lane');
+        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane{1} = temp;
+      end
+      Nrightlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane);
+      if 1 == Nrightlanes
+        % If there is only a single left lane element, fix the structure by
+        % creating a temporary copy and then adding it back to the structure as
+        % the only element in a cell array in the original field.
+        temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane;
+        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right,'lane');
+        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane{1} = temp;
+      end
+    end
   end
   if isfield(ODRStruct.OpenDRIVE.road{roadInd},'objects')
     if isfield(ODRStruct.OpenDRIVE.road{roadInd}.objects,'object')
@@ -228,27 +272,27 @@ for roadInd = 1:Nroads
               num2str(sArray(repInd),'%.16e');
             if exist('hArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.height = ...
-              num2str(hArray(repInd),'%.16e');
+                num2str(hArray(repInd),'%.16e');
             end
             if exist('lArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.length = ...
-              num2str(lArray(repInd),'%.16e');
+                num2str(lArray(repInd),'%.16e');
             end
             if exist('rArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.radius = ...
-              num2str(rArray(repInd),'%.16e');
+                num2str(rArray(repInd),'%.16e');
             end
             if exist('tArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.t = ...
-              num2str(tArray(repInd),'%.16e');
+                num2str(tArray(repInd),'%.16e');
             end
             if exist('wArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.width = ...
-              num2str(wArray(repInd),'%.16e');
+                num2str(wArray(repInd),'%.16e');
             end
             if exist('zArray')
               ODRStruct.OpenDRIVE.road{roadInd}.objects.object{repInd+objInd-1}.Attributes.zOffset = ...
-              num2str(zArray(repInd),'%.16e');
+                num2str(zArray(repInd),'%.16e');
             end
           end
         end

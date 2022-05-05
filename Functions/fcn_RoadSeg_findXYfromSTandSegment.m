@@ -64,15 +64,10 @@ end
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if nargin > 0
-%   if ~ischar(varargin{1})
-%     error('Input argument is not a string.');
-%   else
-%    fullPath = varargin{1};
-%   end
-else
-  [filename,pathname] = uigetfile('.xodr','Choose an ASAM OpenDrive XML file to parse.');
-  fullPath = fullfile(pathname,filename);
+if flag_check_inputs
+  if nargin < 3 || nargin > 3
+    error('Wrong number of input arguments to fcn_RoadSeg_findXYfromSTandSegment.m.');
+  end
 end
 
 %% Main code

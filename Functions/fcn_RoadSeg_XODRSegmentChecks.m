@@ -6,7 +6,7 @@ function ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct)
 % Plots a visual representation of the road geometry defined in an XODR
 % file
 %
-% FORMAT: 
+% FORMAT:
 %
 %       ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct))
 %
@@ -24,55 +24,55 @@ function ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct)
 %      None
 %
 % EXAMPLES:
-%      
+%
 %       See the script: script_test_fcn_RoadSeg_parsingProcess.m for a
 %       full test suite.
 %
 % This function was written by C. Beal
-% Questions or comments? cbeal@bucknell.edu 
+% Questions or comments? cbeal@bucknell.edu
 
 % Revision history:
 %     2022_03_20
 %     -- wrote the code
 
-flag_do_debug = 0; % Flag to plot the results for debugging
+flag_do_debug = 1; % Flag to plot the results for debugging
 flag_check_inputs = 1; % Flag to perform input checking
 
 if flag_do_debug
-    st = dbstack; %#ok<*UNRCH>
-    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+  st = dbstack; %#ok<*UNRCH>
+  fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
 end
 
 
 %% check input arguments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   _____                   _       
-%  |_   _|                 | |      
-%    | |  _ __  _ __  _   _| |_ ___ 
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
 %    | | | '_ \| '_ \| | | | __/ __|
 %   _| |_| | | | |_) | |_| | |_\__ \
 %  |_____|_| |_| .__/ \__,_|\__|___/
-%              | |                  
-%              |_| 
+%              | |
+%              |_|
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if flag_check_inputs == 1
-    % Are there the right number of inputs?
-    if nargin > 1
-        error('Incorrect number of input arguments')
-    end
+  % Are there the right number of inputs?
+  if nargin > 1
+    error('Incorrect number of input arguments')
+  end
 end
 
 %% Main code
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   __  __       _       
-%  |  \/  |     (_)      
-%  | \  / | __ _ _ _ __  
-%  | |\/| |/ _` | | '_ \ 
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
 %  | |  | | (_| | | | | |
 %  |_|  |_|\__,_|_|_| |_|
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Check for out of order segments (by station) and reorder properly
@@ -133,7 +133,9 @@ yN = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1}.Attribute
 lN = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1}.Attributes.length);
 hN = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1}.Attributes.hdg);
 
-fprintf(1,'2) Checking XODR road geometry segments for continuity of start/end point positions and headings...\n');
+if flag_do_debug
+  fprintf(1,'2) Checking XODR road geometry segments for continuity of start/end point positions and headings...\n');
+end
 for roadInd = 1:Nroads
   for geomInd = 1:NgeomElems(roadInd)-1
     % Shift the data from the previous "next" variables into the "current"
@@ -149,7 +151,7 @@ for roadInd = 1:Nroads
       % segment
       xF = xC + lC*cos(hC);
       yF = yC + lC*sin(hC);
-      hF = hC;      
+      hF = hC;
     elseif isfield(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd},'arc')
       KC = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd}.arc.Attributes.curvature);
       [xF,yF] = fcn_RoadSeg_findXYfromXODRArc(lC,hC,xC,yC,KC);
@@ -165,22 +167,32 @@ for roadInd = 1:Nroads
     % Compare the segment endpoint data to the start data for the next
     % segment
     if abs(xF - xN) > positionDiffThreshold
-      fprintf(1,'   X coordinate of road %s, geometry segment %d, does not match the following segment.\n',...
-        ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      if flag_do_debug
+        fprintf(1,'   X coordinate of road %s, geometry segment %d, does not match the following segment.\n',...
+          ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      end
     end
     if abs(yF - yN) > positionDiffThreshold
-      fprintf(1,'   Y coordinate of road %s, geometry segment %d, does not match the following segment.\n',...
-        ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      if flag_do_debug
+        fprintf(1,'   Y coordinate of road %s, geometry segment %d, does not match the following segment.\n',...
+          ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      end
     end
     if abs(hF - hN) > headingDiffThreshold
-      fprintf(1,'   Heading of road %s, geometry segment %d, does not match the following segment.\n',...
-        ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      if flag_do_debug
+        fprintf(1,'   Heading of road %s, geometry segment %d, does not match the following segment.\n',...
+          ODRStruct.OpenDRIVE.road{roadInd}.Attributes.id,geomInd);
+      end
     end
   end
 end
-fprintf(1,'   Geometry segment consistency check complete.\n');
+if flag_do_debug
+  fprintf(1,'   Geometry segment consistency check complete.\n');
+end
 
-fprintf(1,'3) Checking ODR bounding box values...\n');
+if flag_do_debug
+  fprintf(1,'3) Checking ODR bounding box values...\n');
+end
 % Define min and max values for both the East and North directions
 west = str2double(ODRStruct.OpenDRIVE.header.Attributes.west);
 east = str2double(ODRStruct.OpenDRIVE.header.Attributes.east);
@@ -213,17 +225,17 @@ for roadInd = 1:Nroads
       % segment. All other segments will have the endpoint tested as the
       % initial point of the following segment
       %if geomInd == NgeomElems(roadInd)
-        xMinMax = xC + lC*cos(hC);
-        yMinMax = yC + lC*sin(hC);
+      xMinMax = xC + lC*cos(hC);
+      yMinMax = yC + lC*sin(hC);
       %end
       
     elseif isfield(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd},'arc')
       KC = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd}.arc.Attributes.curvature);
-
-      % x = sin(K0*s + h0)/K0 -> dxds = cos(K0*s + h0) -> zero when 
+      
+      % x = sin(K0*s + h0)/K0 -> dxds = cos(K0*s + h0) -> zero when
       % pi/2 = K0*s + h0 -> s = (pi/2 - h0)/K0 or s = (3*pi/2 - h0)/K0
       % Similarly, y is at a max or min at pi or 2*pi
-            
+      
       % Make sure any headings are bounded between 0 and 2*pi to avoid
       % issues with multiple solutions in the following calcs
       while hC > 2*pi
@@ -290,47 +302,59 @@ for roadInd = 1:Nroads
       end
       % Find the X,Y points associated with the min and max s values
       if ~isempty(candSValuesX(candSValuesX <= lC & candSValuesX > 0))
-        [xMinMax,~] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesX(candSValuesX <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
+        [xMinMax,~] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesX(candSValuesX <= lC & candSValuesX > 0),lC,hC,xC,yC,KCstart,KCend);
       end
-      if ~isempty(candSValuesY(candSValuesY <= lC & candSValuesX > 0))
-        [~,yMinMax] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesY(candSValuesY <= lC & candSValuesX > 0),hC,xC,yC,KCstart,KCend);
+      if ~isempty(candSValuesY(candSValuesY <= lC & candSValuesY > 0))
+        [~,yMinMax] = fcn_RoadSeg_findXYfromXODRSpiral(candSValuesY(candSValuesY <= lC & candSValuesY > 0),lC,hC,xC,yC,KCstart,KCend);
       end
     else
-      fprintf(1,'Boundary checks not implemented for polynomial road geometry segments\n');
+      if flag_do_debug
+        fprintf(1,'Boundary checks not implemented for polynomial road geometry segments\n');
+      end
     end
-      % Determine whether the endpoint of the geometry segment expands
-      % the known bounding box of the map in any of the four cardinal
-      % directions
-      if min(xMinMax) < west
-        west = min(xMinMax);
-      end
-      if max(xMinMax) > east
-        east = max(xMinMax);
-      end
-      if min(yMinMax) < south
-        south = min(yMinMax);
-      end
-      if max(yMinMax) > north
-        north = max(yMinMax);
-      end
+    % Determine whether the endpoint of the geometry segment expands
+    % the known bounding box of the map in any of the four cardinal
+    % directions
+    if min(xMinMax) < west
+      west = min(xMinMax);
+    end
+    if max(xMinMax) > east
+      east = max(xMinMax);
+    end
+    if min(yMinMax) < south
+      south = min(yMinMax);
+    end
+    if max(yMinMax) > north
+      north = max(yMinMax);
+    end
   end
 end
 % Write the bounding box info back to the header substructure
 bbTol = 0.001; % m
 if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.east) - east) > bbTol
-  fprintf(1,'   East bounds incorrect. Updating bounding box on east edge.\n');
+  if flag_do_debug
+    fprintf(1,'   East bounds incorrect. Updating bounding box on east edge.\n');
+  end
   ODRStruct.OpenDRIVE.header.Attributes.east = num2str(east);
 end
 if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.west) - west) > bbTol
-  fprintf(1,'   West bounds incorrect. Updating bounding box on west edge.\n');
+  if flag_do_debug
+    fprintf(1,'   West bounds incorrect. Updating bounding box on west edge.\n');
+  end
   ODRStruct.OpenDRIVE.header.Attributes.west = num2str(west);
 end
 if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.south) - south) > bbTol
-  fprintf(1,'   South bounds incorrect. Updating bounding box on south edge.\n');
+  if flag_do_debug
+    fprintf(1,'   South bounds incorrect. Updating bounding box on south edge.\n');
+  end
   ODRStruct.OpenDRIVE.header.Attributes.south = num2str(south);
 end
 if abs(str2double(ODRStruct.OpenDRIVE.header.Attributes.north) - north) > bbTol
-  fprintf(1,'   North bounds incorrect. Updating bounding box on north edge.\n');
+  if flag_do_debug
+    fprintf(1,'   North bounds incorrect. Updating bounding box on north edge.\n');
+  end
   ODRStruct.OpenDRIVE.header.Attributes.north = num2str(north);
 end
-fprintf(1,'   Bounding box check complete.\n');
+if flag_do_debug
+  fprintf(1,'   Bounding box check complete.\n');
+end

@@ -16,10 +16,16 @@ close all
 %ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct;
 
 % Load an example file from a static file path
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_50m_curve_objects.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/ODRViewerEx.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_150m_double_curve_barrels_repeat.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_50m_curve_objects.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/Ex_Simple-LaneOffset.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+% Add the path for the XODR plotting library
+addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/'));
 
 % Define the max gap between plot points on the road, in meters
 maxRoadGap = 0.1; 
@@ -32,6 +38,9 @@ hRoad = gcf;
 maxObjectVertexGap = 0.05;
 % Convert the XODR objects to patch objects in an array
 objectArray = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxObjectVertexGap);
+
+% Add the path for the XODR plotting library
+addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_MapAssoc/'));
 
 % Plot the patch objects on top of the (previously plotted) roadway figure
 fcn_Patch_plotPatch(objectArray,hRoad);
