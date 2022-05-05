@@ -16,12 +16,12 @@ close all
 %ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct;
 
 % Load an example file from a static file path
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/ODRViewerEx.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_150m_double_curve_barrels_repeat.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_50m_curve_objects.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/Ex_Simple_Lane_Offset.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/Ex_Complex_Lane_Offset.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_100m_Lane_Offset.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/ODRViewerEx.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_150m_double_curve_barrels_repeat.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_50m_curve_objects.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Simple_Lane_Offset.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Complex_Lane_Offset.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_100m_Lane_Offset.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
@@ -45,9 +45,11 @@ ylabel('North (m)')
 
 % Convert the path coordinates to obtain the (X,Y) coordinates of each of
 % the calculated lane boundaries
+[xCenter,yCenter] = fcn_RoadSeg_findXYfromST('arc',0,0,0,0,100,sPts,tCenter,1/500);
 for laneIdx = 1:size(tLeft,2)
-  [xCenter,yCenter] = fcn_RoadSeg_findXYfromST('arc',0,0,0,0,100,sPts,tCenter,1/500);
   [xLeft(:,laneIdx),yLeft(:,laneIdx)] = fcn_RoadSeg_findXYfromST('arc',0,0,0,0,100,sPts,tLeft(:,laneIdx),1/500);
+end
+for laneIdx = 1:size(tRight,2)
   [xRight(:,laneIdx),yRight(:,laneIdx)] = fcn_RoadSeg_findXYfromST('arc',0,0,0,0,100,sPts,tRight(:,laneIdx),1/500);
 end
 

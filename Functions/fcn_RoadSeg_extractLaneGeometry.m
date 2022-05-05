@@ -184,9 +184,11 @@ for laneSecIdx = 1:NlaneSegs
       % Initialize a counter for any lanes appearing in this section
       lanesAddedLeft = 0;
       % Iterate through each of the left lanes in the current section
-      for leftLaneIdx = 1:NleftLanes
+      for leftLaneIdx = NleftLanes:-1:1
+        % Grab the current lane ID
+        currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
         % Grab the predecessor lane
-        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx},'link')
+        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link,'predecessor')
           currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link.predecessor.Attributes.id);
         else
           currPred = nan;
@@ -195,13 +197,13 @@ for laneSecIdx = 1:NlaneSegs
         if isnan(currPred)
           lanesAddedLeft = lanesAddedLeft + 1;
           % Shift the previous lanes outward and add one to their index since this is a new lane
-          if 1 == leftLaneIdx
-            laneLinksLeft = [[nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,1:end)]; [leftLaneIdx nan(1,NleftLanes-1)]];
+          if 1 == currLane
+            laneLinksLeft = [[nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,1:end)]; [leftLaneIdx nan(1,NleftLanes+lanesAddedLeft-1)]];
           else
-            laneLinksLeft = [[laneLinksLeft(1:laneSecIdx-1,1:leftLaneIdx-1) nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,leftLaneIdx:end)]; [laneLinksLeft(laneSecIdx,1:leftLaneIdx-1) leftLaneIdx nan(1,NleftLanes-leftLaneIdx)]];
+            laneLinksLeft = [[laneLinksLeft(1:laneSecIdx-1,1:leftLaneIdx-1) nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,leftLaneIdx:end)]; [laneLinksLeft(laneSecIdx,1:leftLaneIdx) currLane nan(1,NleftLanes-leftLaneIdx)]];
           end
         else
-          laneLinksLeft(laneSecIdx,currPred+lanesAddedLeft) = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
+          laneLinksLeft(laneSecIdx,currPred+lanesAddedLeft) = currLane;
         end
       end
     end
