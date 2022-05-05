@@ -43,7 +43,7 @@ function [xPts,yPts,hPts] = fcn_RoadSeg_findXYfromSTandSegment(geomElement,sPts,
 %     -- wrote the code
 
 flag_do_debug = 0; % Flag to plot the results for debugging
-flag_check_inputs = 1; % Flag to perform input checking
+flag_check_inputs = 0; % Flag to perform input checking
 
 if flag_do_debug
   st = dbstack; %#ok<*UNRCH>
@@ -65,11 +65,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if nargin > 0
-  if ~ischar(varargin{1})
-    error('Input argument is not a string.');
-  else
-    fullPath = varargin{1};
-  end
+%   if ~ischar(varargin{1})
+%     error('Input argument is not a string.');
+%   else
+%    fullPath = varargin{1};
+%   end
 else
   [filename,pathname] = uigetfile('.xodr','Choose an ASAM OpenDrive XML file to parse.');
   fullPath = fullfile(pathname,filename);

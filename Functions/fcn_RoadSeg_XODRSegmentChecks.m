@@ -157,7 +157,7 @@ for roadInd = 1:Nroads
     elseif isfield(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd},'spiral')
       KCstart = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd}.spiral.Attributes.curvStart);
       KCend = str2double(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{geomInd}.spiral.Attributes.curvEnd);
-      [xF,yF] = fcn_RoadSeg_findXYfromXODRSpiral(lC,hC,xC,yC,KCstart,KCend);
+      [xF,yF] = fcn_RoadSeg_findXYfromXODRSpiral(lC,lC,hC,xC,yC,KCstart,KCend);
       %hF = (KCend-KCstart)/lC*lC^2/2 + KCstart*lC + hC;
       hF = (KCend-KCstart)*lC/2 + KCstart*lC + hC;
     else
