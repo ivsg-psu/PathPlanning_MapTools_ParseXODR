@@ -1,0 +1,21 @@
+Online XODR Viewer How-To:
+
+XODR files can be viewed online using the freely available viewer provided at https://odrviewer.io/
+
+Loading:
+1) Define or acquire an OpenDRIVE formatted XODR file and save it locally on your computer.
+2) Go to https://odrviewer.io/  A somewhat complex example file will be loaded automatically.
+3) Find the blue button that says "Load .xodr" and click it.
+4) Browse for your XODR file and click the "Open" button in the dialog.
+5) Your XODR file will load in the viewer.
+
+In the viewer:
+1) Click and drag to pan the map.
+2) Control-click and drag to rotate the map.
+3) Scroll to zoom the map.
+
+Notes:
+1) The map does not seem to update if you upload an XODR file with the same name. Refreshing the page will reload the more complicated example map.  Following this, you can re-upload your file to see any changes.  
+2) You can change the level of detail in the map representation of geometry. For example, non-square objects will be represented with more vertices on the bounding primitive, making a more accurate visual geometry.
+3) Objects with cornerRoad or cornerLocal vertices are not accurately represented. Only the bounding boxes are shown. If the bounding box elements are missing, the objects will not appear.
+
