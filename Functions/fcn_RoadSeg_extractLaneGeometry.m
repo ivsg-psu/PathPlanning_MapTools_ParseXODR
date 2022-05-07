@@ -36,8 +36,11 @@ function [sPts,tLeft,tCenter,tRight] = fcn_RoadSeg_extractLaneGeometry(ODRRoad,m
 % Questions or comments? cbeal@bucknell.edu
 
 % Revision history:
-%     2022_05_04
+%     2022-05-04
 %     -- wrote the code
+%     2022-05-07
+%     -- debugged the cumsum approach at the end to take into account the
+%     unsorted lanes that occur when lanes disappear/appear
 
 flag_do_debug = 1; % Flag to plot the results for debugging
 flag_check_inputs = 1; % Flag to perform input checking
@@ -80,10 +83,6 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Determine the number of geometry elements in the reference line of the
-% input road
-NgeomElems = length(ODRRoad.planView.geometry);
-
 % Create a series of points for plotting, taking into account the
 % maximum gap allowed in the series of points. This is the set of station
 % points on the reference line for which the reference line geometry as
@@ -93,7 +92,7 @@ NgeomElems = length(ODRRoad.planView.geometry);
 lRoad = str2double(ODRRoad.Attributes.length);
 Npts = ceil(lRoad/maxPlotGap);
 sPts = linspace(0,lRoad,Npts)';
-tRef = zeros(length(sPts),1);
+
 % Preallocate a t-coordinate vector for the center lane (which is
 % different than the reference line). This will be zero when the center
 % lane is not offset, but offsets may shift it. All other lane positions
@@ -105,20 +104,9 @@ tCenter = zeros(Npts,1);
 tLeft = nan(length(sPts),10);
 tRight = nan(length(sPts),10);
 
-% Iterate through all of the geometry elements to determine the extents
-% of each of the elements
-for geomIndex = 1:NgeomElems
-  % Address the current geometry element.
-  geomElement = ODRRoad.planView.geometry{geomIndex};
-  
-  % Determine the start station and the end station of the element
-  l0 = str2double(geomElement.Attributes.length);
-  s0 = str2double(geomElement.Attributes.s);
-  
-  % Determine the indices of the reference points that are within the
-  % element range
-  elemInds = find(sPts > s0 & sPts < s0+l0);
-end
+% Set up a cell array to store the indices of the station points associated
+% with each lane segment
+stationIndices = {};
 
 if flag_do_debug
   fprintf(1,'Starting lane extraction routine for road %s\n',ODRRoad.Attributes.id);
@@ -192,6 +180,8 @@ for laneSecIdx = 1:NlaneSegs
       % current section
       laneLinksLeft = [laneLinksLeft;...
         nan(laneSecIdx - size(laneLinksLeft,1),size(laneLinksLeft,2))];
+      % Do a double-check to make sure that the right number of NaNs were
+      % added
       if size(laneLinksLeft,1) ~= laneSecIdx
         error('Addition of NaN rows did not produce consistent matrix size');
       end
@@ -314,11 +304,11 @@ for laneSecIdx = 1:NlaneSegs
         end
         % Determine which of the indices in the s-direction are affected by
         % this offset descriptor
-        affectedIdxs = find(sPts >= widthStart & sPts <= widthEnd);
+        stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
         % Now calculate the t coordinate of the left line at each of the
         % affected points
-        ds = sPts(affectedIdxs)-widthStart;
-        tLeft(affectedIdxs,laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
+        ds = sPts(stationIndices{laneSecIdx})-widthStart;
+        tLeft(stationIndices{laneSecIdx},laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
         if flag_do_debug
           fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
         end
@@ -356,11 +346,11 @@ for laneSecIdx = 1:NlaneSegs
         end
         % Determine which of the indices in the s-direction are affected by
         % this offset descriptor
-        affectedIdxs = find(sPts >= widthStart & sPts <= widthEnd);
+        stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
         % Now calculate the t coordinate of the left line at each of the
         % affected points
-        ds = sPts(affectedIdxs)-widthStart;
-        tRight(affectedIdxs,laneDataIndex) = -(a + b*ds + c*ds.^2 + d*ds.^3);% + tRight(affectedIdxs,-laneID-1);
+        ds = sPts(stationIndices{laneSecIdx})-widthStart;
+        tRight(stationIndices{laneSecIdx},laneDataIndex) = -(a + b*ds + c*ds.^2 + d*ds.^3);
         if flag_do_debug
           fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
         end
@@ -383,12 +373,24 @@ tRight = tRight(:,1 == any(~isnan(tRight)));
 % Example, for Ex_Simple-Lane-Offset-Reversed
 % tLeft = [tLeft(:,1) tLeft(:,3) tLeft(:,2)];
 % tRight = [tRight(:,1) tRight(:,4) tRight(:,2) tRight(:,3)];
+for i = 1:length(stationIndices)
+  % This doesn't work, need to correlate the laneLinksLeft with the
+  % affected indices in the tLeft matrix
+  [~,sortInds] = sort(laneLinksLeft(i,:));
+  tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
+  % This doesn't work, need to correlate the laneLinksRight with the
+  % affected indices in the tRight matrix
+  [~,sortInds] = sort(laneLinksRight(i,:));
+  tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
+end
+tLeft = tLeft + tCenter;
+tRight = tRight + tCenter;
 
 % Use a cumulative sum in the outward direction from the center lane to
 % determine the position of the outer lane boundary for each lane, adding
 % on any shift of the center lane
-tLeft = cumsum(tLeft,2,'omitnan') + tCenter;
-tRight = cumsum(tRight,2,'omitnan') + tCenter;
+%tLeft = cumsum(tLeft,2,'omitnan') + tCenter;
+%tRight = cumsum(tRight,2,'omitnan') + tCenter;
 
 % Provide some indication of completion
 if flag_do_debug
