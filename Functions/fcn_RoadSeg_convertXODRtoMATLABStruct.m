@@ -78,7 +78,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Make sure that the xml to structure dependency file is available
-addpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Functions/dependencies/xml2struct/')
+addpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Utilities/dependencies/xml2struct/')
 if ~exist('xml2struct_fex28518','file')
   addpath(uigetdir('.','Provide missing path to xml2struct_fex28518'));
 end
@@ -138,23 +138,27 @@ for roadInd = 1:Nroads
   end
   if NlaneSegs > 0
     for laneSectionInd = 1:NlaneSegs
-      Nleftlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane);
-      if 1 == Nleftlanes
-        % If there is only a single left lane element, fix the structure by
-        % creating a temporary copy and then adding it back to the structure as
-        % the only element in a cell array in the original field.
-        temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane;
-        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left,'lane');
-        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane{1} = temp;
+      if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd},'left')
+        Nleftlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane);
+        if 1 == Nleftlanes
+          % If there is only a single left lane element, fix the structure by
+          % creating a temporary copy and then adding it back to the structure as
+          % the only element in a cell array in the original field.
+          temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane;
+          ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left,'lane');
+          ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane{1} = temp;
+        end
       end
-      Nrightlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane);
-      if 1 == Nrightlanes
-        % If there is only a single left lane element, fix the structure by
-        % creating a temporary copy and then adding it back to the structure as
-        % the only element in a cell array in the original field.
-        temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane;
-        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right,'lane');
-        ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane{1} = temp;
+      if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd},'left')
+        Nrightlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane);
+        if 1 == Nrightlanes
+          % If there is only a single left lane element, fix the structure by
+          % creating a temporary copy and then adding it back to the structure as
+          % the only element in a cell array in the original field.
+          temp = ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane;
+          ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right,'lane');
+          ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane{1} = temp;
+        end
       end
     end
   end

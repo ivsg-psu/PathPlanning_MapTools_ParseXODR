@@ -193,11 +193,38 @@ end
 if flag_do_debug
   fprintf(1,'3) Checking ODR bounding box values...\n');
 end
-% Define min and max values for both the East and North directions
-west = str2double(ODRStruct.OpenDRIVE.header.Attributes.west);
-east = str2double(ODRStruct.OpenDRIVE.header.Attributes.east);
-south = str2double(ODRStruct.OpenDRIVE.header.Attributes.south);
-north = str2double(ODRStruct.OpenDRIVE.header.Attributes.north);
+% Pull the min and max values for both the East and North directions. If
+% the header attribute does not exist, add the bounding box elements to the
+% header structure with zeros and output a warning
+if isfield(ODRStruct.OpenDRIVE.header.Attributes,'west')
+  west = str2double(ODRStruct.OpenDRIVE.header.Attributes.west);
+else
+  west = 0;
+  ODRStruct.OpenDRIVE.header.Attributes.west = num2str(west);
+  warning('Non-compliant XODR file, missing west bounding box value in header');
+end
+if isfield(ODRStruct.OpenDRIVE.header.Attributes,'east')
+  east = str2double(ODRStruct.OpenDRIVE.header.Attributes.east);
+else
+  east = 0;
+  ODRStruct.OpenDRIVE.header.Attributes.east = num2str(east);
+  warning('Non-compliant XODR file, missing east bounding box value in header');
+end
+if isfield(ODRStruct.OpenDRIVE.header.Attributes,'south')
+  south = str2double(ODRStruct.OpenDRIVE.header.Attributes.south);
+else
+  south = 0;
+  ODRStruct.OpenDRIVE.header.Attributes.south = num2str(south);
+  warning('Non-compliant XODR file, missing south bounding box value in header');
+end
+if isfield(ODRStruct.OpenDRIVE.header.Attributes,'north')
+  north = str2double(ODRStruct.OpenDRIVE.header.Attributes.north);
+else
+  north = 0;
+  ODRStruct.OpenDRIVE.header.Attributes.north = num2str(north);
+  warning('Non-compliant XODR file, missing north bounding box value in header');
+end
+
 for roadInd = 1:Nroads
   for geomInd = 1:NgeomElems(roadInd)
     % Gather the segment geometry data for the "next" segment

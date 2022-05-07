@@ -163,47 +163,55 @@ end
 % Determine the number of lane sections in the current road (there should
 % always be at least one)
 NlaneSegs = length(ODRRoad.lanes.laneSection);
-% Initialize matrices to store the lane linkage information
-laneLinksLeft = [nan];
-laneLinksRight = [nan];
+% Initialize a flag to determine when the first definition of a left lane
+% has been reached
+leftLanesStarted = 0;
+% Initialize a flag to determine when the first definition of a right lane
+% has been reached
+rightLanesStarted = 0;
 % Iterate through all of the lane sections to gather the lane linkage
 % information
 for laneSecIdx = 1:NlaneSegs
   if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
     % Determine the number of left lanes there are in the current section
     NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
-    % Initialize the current row of the laneSecIdx matrix with nans
-    if 1 == laneSecIdx
-      laneLinksLeft = cumsum(ones(1,NleftLanes));
+    % Initialize the current row of the laneSecIdx matrix with
+    % incrementally counting lane IDs
+    if ~leftLanesStarted
+      leftLanesStarted = 1;
+      % Initialize first with NaNs for all of the sections where there were
+      % no left lane definitions
+      laneLinksLeft = nan(laneSecIdx,NleftLanes);
+      % Initialize the current section with incrementally increasing lane
+      % IDs, working from smallest to largest (from center lane outward)
+      laneLinksLeft(laneSecIdx,:) = 1:NleftLanes;
+      % Code to run only for lane segments following the first definition of
+      % left lanes
     else
-      % CEB: this might break if there are no left lanes at the start?
-      laneLinksLeft = [laneLinksLeft; nan(1,length(laneLinksLeft(laneSecIdx-1,:)))];
-    end
-    % Code to run only for lane segments 2 and up
-    if laneSecIdx >= 2
-      % Initialize a counter for any lanes appearing in this section
-      lanesAddedLeft = 0;
-      % Iterate through each of the left lanes in the current section
-      for leftLaneIdx = NleftLanes:-1:1
+      % Initialize any new rows with NaN values, including the one for the
+      % current section
+      laneLinksLeft = [laneLinksLeft;...
+        nan(laneSecIdx - size(laneLinksLeft,1),size(laneLinksLeft,2))];
+      if size(laneLinksLeft,1) ~= laneSecIdx
+        error('Addition of NaN rows did not produce consistent matrix size');
+      end
+      % Iterate through each of the left lanes in the current section,
+      for leftLaneIdx = 1:NleftLanes
         % Grab the current lane ID
         currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
-        % Grab the predecessor lane
+        % Check to see if this lane has a predecessor
         if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link,'predecessor')
+          % Get the predecessor of the current lane
           currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link.predecessor.Attributes.id);
+          % Insert the current lane ID into the column matching that of its
+          % predecessor
+          laneLinksLeft(laneSecIdx,currPred == laneLinksLeft(laneSecIdx-1,:)) = currLane;
         else
-          currPred = nan;
-        end
-        % Check to see if this is a new lane starting
-        if isnan(currPred)
-          lanesAddedLeft = lanesAddedLeft + 1;
-          % Shift the previous lanes outward and add one to their index since this is a new lane
-          if 1 == currLane
-            laneLinksLeft = [[nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,1:end)]; [leftLaneIdx nan(1,NleftLanes+lanesAddedLeft-1)]];
-          else
-            laneLinksLeft = [[laneLinksLeft(1:laneSecIdx-1,1:leftLaneIdx-1) nan(laneSecIdx-1,1) laneLinksLeft(1:laneSecIdx-1,leftLaneIdx:end)]; [laneLinksLeft(laneSecIdx,1:leftLaneIdx) currLane nan(1,NleftLanes-leftLaneIdx)]];
-          end
-        else
-          laneLinksLeft(laneSecIdx,currPred+lanesAddedLeft) = currLane;
+          % This is a new lane starting, so handle as such by adding a new
+          % column on the end of the matrix and adding the current lane ID
+          % as the first entry, starting in the current row
+          laneLinksLeft = [laneLinksLeft nan(laneSecIdx,1)];
+          laneLinksLeft(end,end) = currLane;
         end
       end
     end
@@ -211,38 +219,43 @@ for laneSecIdx = 1:NlaneSegs
   if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
     % Determine the number of right lanes there are in the current section
     NrightLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane);
-    % Initialize the current row of the laneSecIdx matrix with nans
-    if 1 == laneSecIdx
-      laneLinksRight = cumsum(ones(1,NrightLanes));
+    % Initialize the current row of the laneSecIdx matrix with
+    % incrementally counting lane IDs
+    if ~rightLanesStarted
+      rightLanesStarted = 1;
+      % Initialize first with NaNs for all of the sections where there were
+      % no right lane definitions
+      laneLinksRight = nan(laneSecIdx,NrightLanes);
+      % Initialize the current section with incrementally increasing lane
+      % IDs, working from smallest to largest (from center lane outward)
+      laneLinksRight(laneSecIdx,:) = 1:NrightLanes;
+      % Code to run only for lane segments following the first definition of
+      % right lanes
     else
-      % CEB: this might break if there are no right lanes at the start?
-      laneLinksRight = [laneLinksRight; nan(1,length(laneLinksRight(laneSecIdx-1,:)))];
-    end
-    % Code to run only for lane segments 2 and up
-    if laneSecIdx >= 2
-      % Initialize a counter for any lanes appearing in this section
-      lanesAddedRight = 0;
-      % Iterate through each of the right lanes in the current section
+      % Initialize any new rows with NaN values, including the one for the
+      % current section
+      laneLinksRight = [laneLinksRight;...
+        nan(laneSecIdx - size(laneLinksRight,1),size(laneLinksRight,2))];
+      if size(laneLinksRight,1) ~= laneSecIdx
+        error('Addition of NaN rows did not produce consistent matrix size');
+      end
+      % Iterate through each of the right lanes in the current section,
       for rightLaneIdx = 1:NrightLanes
-        % Grab the predecessor lane
-        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx},'link') && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link,'predecessor')
-          % Negate the current predecessor value since lanes on the right
-          % have negative values and we want to turn into an index
-          currPred = -str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link.predecessor.Attributes.id);
+        % Grab the current lane ID
+        currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
+        % Check to see if this lane has a predecessor
+        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link,'predecessor')
+          % Get the predecessor of the current lane
+          currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link.predecessor.Attributes.id);
+          % Insert the current lane ID into the column matching that of its
+          % predecessor
+          laneLinksRight(laneSecIdx,-currPred == laneLinksRight(laneSecIdx-1,:)) = -currLane;  % negative due to right lane ID convention
         else
-          currPred = nan;
-        end
-        % Check to see if this is a new lane starting
-        if isnan(currPred)
-          lanesAddedRight = lanesAddedRight + 1;
-          % Shift the previous lanes outward and add one to their index since this is a new lane
-          if 1 == rightLaneIdx
-            laneLinksRight = [[nan(laneSecIdx-1,1) laneLinksRight(1:laneSecIdx-1,1:end)]; [rightLaneIdx nan(1,NrightLanes-1)]];
-          else
-            laneLinksRight = [[laneLinksRight(1:laneSecIdx-1,1:rightLaneIdx-1) nan(laneSecIdx-1,1) laneLinksRight(1:laneSecIdx-1,rightLaneIdx:end)]; [laneLinksRight(laneSecIdx,1:rightLaneIdx-1) rightLaneIdx nan(1,NrightLanes-rightLaneIdx)]];
-          end
-        else
-          laneLinksRight(laneSecIdx,currPred+lanesAddedRight) = -str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
+          % This is a new lane starting, so handle as such by adding a new
+          % column on the end of the matrix and adding the current lane ID
+          % as the first entry, starting in the current row
+          laneLinksRight = [laneLinksRight nan(laneSecIdx,1)];
+          laneLinksRight(end,end) = -currLane; % negative due to right lane ID convention
         end
       end
     end
@@ -269,14 +282,7 @@ for laneSecIdx = 1:NlaneSegs
         ODRRoad.Attributes.id,laneSecIdx)
     end
   end
-  % CEB: Nothing should need to be done for the center lane
-  %     % Handle any offset of the center lane
-  %     if isfield(currentRoad.lanes.laneSection{laneSecIdx},'center')
-  %         if flag_do_debug
-  %           fprintf(1,'   Processing center lane in lane section %d\n',laneSecIdx);
-  %         end
-  %       end
-  %     end
+
   if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
     % Iterate through all of the left lane elements
     NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
@@ -284,6 +290,9 @@ for laneSecIdx = 1:NlaneSegs
       % Get the lane index from the XODR structure
       laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
       laneDataIndex = find(laneLinksLeft(laneSecIdx,:) == laneID);
+      if isempty(laneDataIndex)
+        error('Lane index not found');
+      end
       if flag_do_debug
         fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
       end
@@ -309,7 +318,7 @@ for laneSecIdx = 1:NlaneSegs
         % Now calculate the t coordinate of the left line at each of the
         % affected points
         ds = sPts(affectedIdxs)-widthStart;
-        tLeft(affectedIdxs,laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;% + tLeft(affectedIdxs,laneID-1);
+        tLeft(affectedIdxs,laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
         if flag_do_debug
           fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
         end
@@ -323,6 +332,9 @@ for laneSecIdx = 1:NlaneSegs
       % Get the lane index from the XODR structure
       laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
       laneDataIndex = find(laneLinksRight(laneSecIdx,:) == -laneID); % negative here due to the sign of the lanes on the right
+      if isempty(laneDataIndex)
+        error('Lane index not found');
+      end
       if flag_do_debug
         fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
       end
@@ -361,6 +373,16 @@ end
 % geometry at all
 tLeft = tLeft(:,1 == any(~isnan(tLeft)));
 tRight = tRight(:,1 == any(~isnan(tRight)));
+
+% Sort so that columns always increase in number by swapping columns (is
+% there any case where this breaks?)
+% OR
+% Do the cumulative sum in the columns, but not by left to right but by
+% numerical order
+
+% Example, for Ex_Simple-Lane-Offset-Reversed
+% tLeft = [tLeft(:,1) tLeft(:,3) tLeft(:,2)];
+% tRight = [tRight(:,1) tRight(:,4) tRight(:,2) tRight(:,3)];
 
 % Use a cumulative sum in the outward direction from the center lane to
 % determine the position of the outer lane boundary for each lane, adding

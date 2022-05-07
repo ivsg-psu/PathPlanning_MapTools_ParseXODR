@@ -7,7 +7,7 @@
         </link>
         <planView>
             <geometry s="0.0000000000000000e+00" x="0.0000000000000000e+00" y="0.0000000000000000e+00" hdg="0.0000000000000000e+00" length="1.0000000000000000e+02">
-                <line/>
+                <arc curvature="2e-03"/>
             </geometry>
         </planView>
         <lateralProfile>
