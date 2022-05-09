@@ -21,9 +21,9 @@ close all
 % Ex_Simple_Lane_Offset_Reversed
 % ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Simple_Lane_Offset_Reversed.xodr');
 % Ex_Complex_Lane_Offset
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Complex_Lane_Offset.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Complex_Lane_Offset.xodr');
 % workzone_100m_Lane_Offset
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_100m_Lane_Offset.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_100m_Lane_Offset.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
@@ -73,10 +73,16 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 % Use the PSU path traversals plotting utility to plot the lane boundaries
-fcn_Path_plotTraversalsXY(roadRef,1);
-fcn_Path_plotTraversalsXY(laneDataCenter,1);
-fcn_Path_plotTraversalsXY(laneDataLeft,1);
-fcn_Path_plotTraversalsXY(laneDataRight,1);
+hRef = fcn_Path_plotTraversalsXY(roadRef,1);
+hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,1);
+hLeft = fcn_Path_plotTraversalsXY(laneDataLeft,1);
+hRight = fcn_Path_plotTraversalsXY(laneDataRight,1);
+
+% Set the line properties of the various lines
+set(hRef,'linewidth',2,'linestyle',':','marker','none','color',[0.6 0.6 0.6]);
+set(hCenter,'linewidth',2,'linestyle','-.','marker','none','color','k');
+set(hLeft,'linewidth',1,'linestyle','-','marker','.');
+set(hRight,'linewidth',1,'linestyle','-','marker','.');
 
 % Plot the lane lines in (s,t) coordinates for illustrative/debugging
 % purposes
