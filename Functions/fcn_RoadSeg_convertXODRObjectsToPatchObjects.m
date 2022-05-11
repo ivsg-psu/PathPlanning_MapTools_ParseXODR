@@ -86,7 +86,7 @@ Nobjects = 0;
 % there are
 for roadInd = 1:Nroads
   if isfield(ODRStruct.OpenDRIVE.road{roadInd},'objects')
-    if isfield(ODRStruct.OpenDRIVE.road{roadInd},'object')
+    if isfield(ODRStruct.OpenDRIVE.road{roadInd}.objects,'object')
       % Determine the number of objects defined in the active road
       Nobjects = length(ODRStruct.OpenDRIVE.road{roadInd}.objects.object);
     end
