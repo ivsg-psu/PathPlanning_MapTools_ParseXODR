@@ -146,7 +146,7 @@ switch geomType
     % Find the point along the path with t = 0
     [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s(:)-s0,l0,h0,x0,y0,K0,KF);
     % Compute the heading at the specified points
-    h = (KF-K0)/l0*(s(:)-s0).^2/2 + K0*s + h0;
+    h = (KF-K0)/l0*(s(:)-s0).^2/2 + K0*(s(:)-s0) + h0;
     % Offset the x and y coordinates by the projection along t (which is
     % aligned at the heading plus pi/2)
     x = x + t(:).*cos(h+pi/2);
