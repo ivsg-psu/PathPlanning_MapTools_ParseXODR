@@ -166,18 +166,13 @@ for laneSecIdx = 1:NlaneSegs
   if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
     % Determine the number of left lanes there are in the current section
     NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
-    % Initialize the current row of the laneSecIdx matrix with
-    % incrementally counting lane IDs
     if ~leftLanesStarted
       leftLanesStarted = 1;
-      % Initialize first with NaNs for all of the sections where there were
-      % no left lane definitions
-      laneLinksLeft = nan(laneSecIdx,NleftLanes);
       % Initialize the current section with incrementally increasing lane
       % IDs, working from smallest to largest (from center lane outward)
       laneLinksLeft(laneSecIdx,:) = 1:NleftLanes;
-      % Code to run only for lane segments following the first definition of
-      % left lanes
+    % Code to run only for lane segments following the first definition of
+    % left lanes
     else
       % Initialize any new rows with NaN values, including the one for the
       % current section
@@ -208,6 +203,14 @@ for laneSecIdx = 1:NlaneSegs
         end
       end
     end
+  else
+    % This lane section does not contain any left lanes, so fill the
+    % laneLinksLeft variable with nans for this lane section
+    if 1 == laneSecIdx
+      laneLinksLeft = nan;
+    else
+      laneLinksLeft(laneSecIdx,:) = nan(1,size(laneLinksLeft(laneSecIdx-1,:)));
+    end
   end
   if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
     % Determine the number of right lanes there are in the current section
@@ -216,9 +219,6 @@ for laneSecIdx = 1:NlaneSegs
     % incrementally counting lane IDs
     if ~rightLanesStarted
       rightLanesStarted = 1;
-      % Initialize first with NaNs for all of the sections where there were
-      % no right lane definitions
-      laneLinksRight = nan(laneSecIdx,NrightLanes);
       % Initialize the current section with incrementally increasing lane
       % IDs, working from smallest to largest (from center lane outward)
       laneLinksRight(laneSecIdx,:) = 1:NrightLanes;
@@ -251,6 +251,14 @@ for laneSecIdx = 1:NlaneSegs
           laneLinksRight(end,end) = -currLane; % negative due to right lane ID convention
         end
       end
+    end
+    else
+    % This lane section does not contain any left lanes, so fill the
+    % laneLinksLeft variable with nans for this lane section
+    if 1 == laneSecIdx
+      laneLinksRight = nan;
+    else
+      laneLinksRight(laneSecIdx,:) = nan(1,size(laneLinksRight(laneSecIdx-1,:)));
     end
   end
 end
@@ -372,9 +380,13 @@ tRight = tRight(:,any(~isnan(tRight)));
 % the temporary vector that is being summed anyway)
 for i = 1:length(stationIndices)
   [~,sortInds] = sort(laneLinksLeft(i,:));
-  tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
+  if ~isempty(tLeft)
+    tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
+  end
   [~,sortInds] = sort(laneLinksRight(i,:));
-  tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
+  if ~isempty(tRight)
+    tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
+  end
 end
 % Add any centerline offset that exists for the lanes
 tLeft = tLeft + tCenter;

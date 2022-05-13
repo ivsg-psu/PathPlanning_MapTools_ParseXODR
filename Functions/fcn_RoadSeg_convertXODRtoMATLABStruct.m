@@ -149,7 +149,7 @@ for roadInd = 1:Nroads
           ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.left.lane{1} = temp;
         end
       end
-      if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd},'left')
+      if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd},'right')
         Nrightlanes = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneSection{laneSectionInd}.right.lane);
         if 1 == Nrightlanes
           % If there is only a single left lane element, fix the structure by
