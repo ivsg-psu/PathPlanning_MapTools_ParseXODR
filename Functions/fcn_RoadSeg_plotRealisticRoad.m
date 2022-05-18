@@ -34,7 +34,8 @@ rightExtents = min(tRight,[],2,'omitnan');
 [eLeftExtents,nLeftExtents] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,sPts,leftExtents);
 [eRightExtents,nRightExtents] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,sPts,rightExtents);
 % Plot a dark gray patch to represent the road surface
-patch([eLeftExtents; flipud(eRightExtents)],[nLeftExtents; flipud(nRightExtents)],[0.2 0.2 0.2]);
+patch([eLeftExtents; flipud(eRightExtents)],...
+  [nLeftExtents; flipud(nRightExtents)],[0.2 0.2 0.2]);
 
 % Now, plot the center lane as a double-yellow line, by offsetting the
 % center lane by 10 cm each direction from the center lane definition

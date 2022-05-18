@@ -97,9 +97,10 @@ for segIdx = 1:Nsegments
   
   % Determine the indices of the lane station points that lie within each
   % road geometry segment
-  sInds = find(sPts > segStart & sPts <= segEnd);
-  if segIdx == 1 && sInds(1) ~= 1
-    sInds = [1; sInds];
+  if segIdx == Nsegments
+    sInds = find(sPts >= segStart & sPts <= segEnd);
+  else
+    sInds = find(sPts >= segStart & sPts < segEnd);
   end
   
   % Convert the path coordinates to obtain the (X,Y) coordinates of each of
