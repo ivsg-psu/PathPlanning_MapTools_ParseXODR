@@ -25,7 +25,8 @@ end
 Nroads = length(ODRStruct.OpenDRIVE.road);
 
 % Iterate through each of the roads in the XODR file and obtain all of the
-% geometry for plotting
+% geometry for plotting. Once acquired, plot a dark gray patch for the road
+% extents. 
 for roadInd = 1:Nroads
   % Grab a current road object to make it simpler to address it
   ODRRoad = ODRStruct.OpenDRIVE.road{roadInd};
@@ -54,8 +55,10 @@ for roadInd = 1:Nroads
     [nLeftExtents; flipud(nRightExtents)],[0.2 0.2 0.2],'edgecolor',[0.2 0.2 0.2]);
 end
 
-% Iterate through each of the roads in the XODR file and obtain all of the
-% geometry for plotting
+% Iterate through each of the roads in the XODR file again and obtain all
+% of the geometry for plotting the lane markers. Iterating through all of
+% the roads like this is a bit inefficient, but saves on memory usage and
+% the need to build a large data structure.
 for roadInd = 1:Nroads
   % Grab a current road object to make it simpler to address it
   ODRRoad = ODRStruct.OpenDRIVE.road{roadInd};
