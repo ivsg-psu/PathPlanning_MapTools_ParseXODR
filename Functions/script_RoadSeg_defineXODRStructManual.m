@@ -407,6 +407,10 @@ ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{4}.right.lane{3}.link.predecessor.
 ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{5} = ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{1};
 ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{5}.Attributes.s = '240';
 
+% Run a function to check the structure to make sure it is built properly
+% and correct any errors that can be easily corrected
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
 % Now check all of the work by calling the plotting utility on the
 % structure created to this point
 figure(1)
@@ -420,9 +424,18 @@ ylabel('North (m)')
 % Plot the realistic looking road on the figure
 fcn_RoadSeg_plotRealisticRoad(ODRStruct.OpenDRIVE.road{1},0.5,1);
 
-% Run a function to check the structure to make sure it is built properly
-% and correct any errors that can be easily corrected
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+% Use the axis bounding box to find the extents of the data (this can be
+% replaced by more specific code since this could theoretically miss a
+% point on a curve in between plot points that has a slightly larger value
+% in one of the cardinal directions)
+axis tight
+axlims = axis;
+ODRStruct.OpenDRIVE.header.Attributes.west = num2str(axlims(1));
+ODRStruct.OpenDRIVE.header.Attributes.east = num2str(axlims(2));
+ODRStruct.OpenDRIVE.header.Attributes.south = num2str(axlims(3));
+ODRStruct.OpenDRIVE.header.Attributes.north = num2str(axlims(4));
+% Restore the proportionality of the axes
+axis equal
 
 % Run a function to return the various segment boundaries for the road geometry
 [RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.road{1});

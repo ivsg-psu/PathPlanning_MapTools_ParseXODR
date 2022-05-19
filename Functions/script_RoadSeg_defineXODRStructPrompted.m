@@ -2,6 +2,10 @@
 % interface
 clearvars
 
+% Set this flag to write to an XODR file when done, leave clear to end the
+% script before writing to a file (e.g. while building the geometry)
+flag_write_XODR_file = 0;
+
 % Start a figure in order to plot the geometry as the user enters it
 figure(1)
 clf
@@ -11,36 +15,31 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 
-% Add the path
-addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR'));
-
-% Start an XODR structure to capture the road geometry that is entered
-%ODRStruct = struct;
-
+% Start an XODR structure with the static header information
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
 ODRStruct.OpenDRIVE.header.Attributes.revMinor = '7';
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
-
+% Start the road portion of the XODR structure at a station of zero and
+% with a static ID (can be chosen freely)
 ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0';
 ODRStruct.OpenDRIVE.road{1}.Attributes.id = '1';
 ODRStruct.OpenDRIVE.road{1}.planView = struct;
 ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1);
 
-
-%startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
-%    'Enter Road Start Coordinates',[1 20; 1 20; 1 20],{'0'; '0'; '0'});
-%uiwait(startCoords)
-startCoords = [0, 0, 0];
+% Query the user for the starting coordinates and heading of the road
+startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
+    'Enter Road Start Coordinates',[1 20; 1 20; 1 20],{'0'; '0'; '0'});
 
 % Create a variable to track the cumulative length of the road as entered
 % by the user
 roadLength = 0;
 
 % Create variables to keep track of the end of each segment (x,y,heading)
-segEndX = startCoords(1);
-segEndY = startCoords(2);
-segEndH = startCoords(3);
+% for use in parameterizing the following segment
+segEndX = str2double(startCoords{1});
+segEndY = str2double(startCoords{2});
+segEndH = str2double(startCoords{3});
 
 % Continue to add road geometry segments until the user indicates that they
 % are done adding geometry, adding a new segment each time
@@ -270,6 +269,73 @@ while ~doneFlag
   end
 end
 
+% Query the user for the lane linkage predecessor elements
+for laneSecInd = 2:length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection)
+  % Determine the number of left lanes in the previous section
+  NLeftLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane);
+  % Print the previous section number and the number of lanes
+  fprintf(1,'Preceding section %u has %u lanes with section start widths:',laneSecInd-1,NLeftLanes);
+  % Iterate through the lanes and print the lane IDs and widths
+  for leftLaneInd = 1:NLeftLanes
+    fprintf(1,'\t%d for ID %s',...
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.Attributes.id);
+  end
+  fprintf(1,'\n');
+  % Update the number of left lanes to the current section
+  NLeftLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane);
+  fprintf(1,'The current lane section has %u lanes with section start widths:',NLeftLanes);
+  % Iterate through the lanes and print the lane IDs and widths
+  for leftLaneInd = 1:NLeftLanes
+    fprintf(1,'\t%d for ID %s',...
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
+  end
+  fprintf(1,'\n');
+  % Iterate again through the lanes, asking the user for the predecessor
+  for leftLaneInd = 1:NLeftLanes
+    inputPrompt = sprintf('Enter the predecessor lane for lane %s or NaN if there is none: ',...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
+    % This could use some guard conditions
+    predID = input(inputPrompt);
+    if isnumeric(predID) && ~isnan(predID)
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.link.predecessor.Attributes.id = num2str(predID);
+    end
+  end
+  
+  % Determine the number of right lanes in the previous section
+  NRightLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane);
+  % Print the previous section number and the number of lanes
+  fprintf(1,'Preceding section %u has %u lanes with section start widths:',laneSecInd-1,NRightLanes);
+  % Iterate through the lanes and print the lane IDs and widths
+  for rightLaneInd = 1:NRightLanes
+    fprintf(1,'\t%d for ID %s',...
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.Attributes.id);
+  end
+  fprintf(1,'\n');
+  % Update the number of right lanes to the current section
+  NRightLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane);
+  fprintf(1,'The current lane section has %u lanes with section start widths:',NRightLanes);
+  % Iterate through the lanes and print the lane IDs and widths
+  for rightLaneInd = 1:NRightLanes
+    fprintf(1,'\t%d for ID %s',...
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
+  end
+  fprintf(1,'\n');
+  % Iterate again through the lanes, asking the user for the predecessor
+  for rightLaneInd = 1:NRightLanes
+    inputPrompt = sprintf('Enter the predecessor lane for lane %s or NaN if there is none: ',...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
+    % This could use some guard conditions
+    predID = input(inputPrompt);
+    if isnumeric(predID) && ~isnan(predID)
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.link.predecessor.Attributes.id = num2str(predID);
+    end
+  end
+end
+
 
 %% 
 figure(2)
@@ -281,15 +347,7 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 % Plot the realistic looking road on the figure
-fcn_RoadSeg_plotRealisticRoad(ODRStruct.OpenDRIVE.road{1},0.5,2);
-% Plot the lane section dividers
-
-% Add lane numbers for each section
-
-% % Query the user for the predecessors for each lane
-% for laneSectionInd = 1:laneSectionCounter
-%   fprintf(
-% end
+fcn_RoadSeg_plotRealisticRoad(ODRStruct,0.5,2);
 
 % Use the axis bounding box to find the extents of the data (this can be
 % replaced by more specific code since this could theoretically miss a
@@ -304,7 +362,36 @@ ODRStruct.OpenDRIVE.header.Attributes.north = num2str(axlims(4));
 % Restore the proportionality of the axes
 axis equal
 
-% Write the XODR structure to an XML formatted file
-myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
-struct2xml(ODRStruct,myFilename)
-movefile([myFilename '.xml'],[myFilename '.xodr'])
+% Run a function to return the various segment boundaries for the road geometry
+[RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.road{1});
+
+% Iterate through the road geometry element boundaries, and plot a red line
+% across the road at each boundary
+for i = 1:length(RoadSegmentStations)
+  [xRoadSeg,yRoadSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},RoadSegmentStations(i)*[1; 1],[-20; 20]);
+  hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
+end
+% Iterate through the lane offset boundaries, and plot a green line across
+% the road at each boundary
+for i = 1:length(LaneOffsetStations)
+  [xOffsetSeg,yOffsetSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneOffsetStations(i)*[1; 1],[-15; 15]);
+  hOffsetSegs = plot(xOffsetSeg,yOffsetSeg,'--','linewidth',2,'color',[0.1 0.6 0]);
+end
+% Iterate through the lane section boundaries, and plot a blue line across
+% the road at each boundary
+for i = 1:length(LaneSectionStations)
+  [xLaneSeg,yLaneSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneSectionStations(i)*[1; 1],[-10; 10]);
+  hLaneSegs = plot(xLaneSeg,yLaneSeg,':','linewidth',2,'color',[0.1 0 0.6]);
+end
+% Label the boundary types in the legend
+legend([hRoadSegs(1) hOffsetSegs(1) hLaneSegs(1)],...
+  {'Road Geometry Element Boundaries','Lane Offset Boundaries','Lane Section Boundaries'})
+
+if flag_write_XODR_file
+  % Define a filename based on the time to avoid accidentally overwriting previous files
+  myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
+  % Write the XODR structure to an XML formatted file
+  struct2xml(ODRStruct,myFilename)
+  % Move the output file so that it has an XODR file extension
+  movefile([myFilename '.xml'],[myFilename '.xodr'])
+end
