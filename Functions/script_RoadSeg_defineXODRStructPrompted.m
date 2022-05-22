@@ -29,7 +29,7 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1);
 
 % Query the user for the starting coordinates and heading of the road
 startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
-    'Enter Road Start Coordinates',[1 20; 1 20; 1 20],{'0'; '0'; '0'});
+    'Enter Road Start Coordinates',[1 80; 1 80; 1 80],{'0'; '0'; '0'});
 
 % Create a variable to track the cumulative length of the road as entered
 % by the user
@@ -190,7 +190,7 @@ while ~doneFlag
   % that would calculate a, b, c, and d from a lane shift in s and t
   % coordinates assuming dt/ds = 0 at each end point
   offsetParams = inputdlg({'a','b','c','d'},'Enter Lane Offset Parameters',...
-    [1 20; 1 20; 1 20; 1 20],{'0'; '0'; '0'; '0'});
+    [1 80; 1 80; 1 80; 1 80],{'0'; '0'; '0'; '0'});
   ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.a = offsetParams{1};
   ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.b = offsetParams{2};
   ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.c = offsetParams{3};
@@ -228,8 +228,13 @@ while ~doneFlag
     % natural extension of this would be to include a secondary set of fields
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
-    laneParams = inputdlg({'a','b','c','d','type'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
-      [1 20; 1 20; 1 20; 1 20; 1 20],{'0'; '0'; '0'; '0'; 'driving'});
+    if leftLaneInd == numLeftLanes
+      laneParams = inputdlg({'a','b','c','d','type'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder'});
+    else
+      laneParams = inputdlg({'a','b','c','d','type'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
+    end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.id = num2str(leftLaneInd);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.a = laneParams{1};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.b = laneParams{2};
@@ -251,8 +256,13 @@ while ~doneFlag
     % natural extension of this would be to include a secondary set of fields
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
-    laneParams = inputdlg({'a','b','c','d','type'},['Enter Right Lane ' num2str(rightLaneInd) ' Parameters'],...
-      [1 20; 1 20; 1 20; 1 20; 1 20],{'0'; '0'; '0'; '0'; 'driving'});
+    if rightLaneInd == numRightLanes
+      laneParams = inputdlg({'a','b','c','d','type'},['Enter Right Lane ' num2str(rightLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder'});
+    else
+      laneParams = inputdlg({'a','b','c','d','type'},['Enter Right Lane ' num2str(rightLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
+    end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.id = num2str(-rightLaneInd);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.a = laneParams{1};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.b = laneParams{2};

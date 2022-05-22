@@ -127,8 +127,8 @@ for roadInd = 1:Nroads
     % Index into the array of objects, which goes in order by road and then
     % by object index
     objArrayInd = sum(Nobjects(1:roadInd-1)) + objInd;
-    % Create a copy of the current object to reduce the amount of indexing
-    % and structure addressing
+    % Create a copy of the current object portion of the structure to
+    % reduce the amount of indexing and structure addressing
     currentObject = ODRStruct.OpenDRIVE.road{roadInd}.objects.object{objInd};
     % Grab the object ID, if it exists. Otherwise, just use the index
     % within this XODR map file
