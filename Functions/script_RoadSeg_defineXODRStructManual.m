@@ -422,7 +422,7 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 % Plot the realistic looking road on the figure
-fcn_RoadSeg_plotRealisticRoad(ODRStruct.OpenDRIVE.road{1},0.5,1);
+fcn_RoadSeg_plotRealisticRoad(ODRStruct,0.5,1);
 
 % Use the axis bounding box to find the extents of the data (this can be
 % replaced by more specific code since this could theoretically miss a
