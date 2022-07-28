@@ -4,7 +4,7 @@ clearvars
 
 % Set this flag to write to an XODR file when done, leave clear to end the
 % script before writing to a file (e.g. while building the geometry)
-flag_write_XODR_file = 1;
+flag_write_XODR_file = 0;
 
 % Start a figure in order to plot the geometry as the user enters it
 figure(1)
@@ -17,15 +17,15 @@ ylabel('North (m)')
 
 % Start an XODR structure with the static header information
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
-ODRStruct.OpenDRIVE.header.Attributes.revMinor = '7'; % RR supported 6 need to change it to 6 but before it was 7
+ODRStruct.OpenDRIVE.header.Attributes.revMinor = '7';
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 % Start the road portion of the XODR structure at a station of zero and
 % with a static ID (can be chosen freely)
-ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; % cannot find s element in road tag maybe needs to be in <type> under road tag
+ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; 
 ODRStruct.OpenDRIVE.road{1}.Attributes.id = '1'; 
-ODRStruct.OpenDRIVE.road{1}.planView = struct;  % not so sure what this is 
-ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1); % need to arrange in order s x y hdg length 
+ODRStruct.OpenDRIVE.road{1}.planView = struct; 
+ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1); 
 
 % Query the user for the starting coordinates and heading of the road
 startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
