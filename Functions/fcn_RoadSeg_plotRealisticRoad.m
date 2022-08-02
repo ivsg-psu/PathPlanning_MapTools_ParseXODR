@@ -22,14 +22,14 @@ else
 end
 
 % Determine how many roads are defined in the XODR file
-Nroads = length(ODRStruct.OpenDRIVE.header.road);
+Nroads = length(ODRStruct.OpenDRIVE.road);
 
 % Iterate through each of the roads in the XODR file and obtain all of the
 % geometry for plotting. Once acquired, plot a dark gray patch for the road
 % extents. 
 for roadInd = 1:Nroads
   % Grab a current road object to make it simpler to address it
-  ODRRoad = ODRStruct.OpenDRIVE.header.road{roadInd};
+  ODRRoad = ODRStruct.OpenDRIVE.road{roadInd};
   % First, extract the lane geometry in order to determine the extents of
   % the road
   [sPts,tLeft,tCenter,tRight] = fcn_RoadSeg_extractLaneGeometry(ODRRoad,minPlotGap);
@@ -61,7 +61,7 @@ end
 % the need to build a large data structure.
 for roadInd = 1:Nroads
   % Grab a current road object to make it simpler to address it
-  ODRRoad = ODRStruct.OpenDRIVE.header.road{roadInd};
+  ODRRoad = ODRStruct.OpenDRIVE.road{roadInd};
   % First, extract the lane geometry in order to determine the extents of
   % the road
   [sPts,tLeft,tCenter,tRight] = fcn_RoadSeg_extractLaneGeometry(ODRRoad,minPlotGap);
