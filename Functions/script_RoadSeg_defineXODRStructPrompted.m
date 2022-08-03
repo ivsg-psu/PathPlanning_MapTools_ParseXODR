@@ -20,18 +20,38 @@ ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
 ODRStruct.OpenDRIVE.header.Attributes.revMinor = '6'; % RR supported 6 need to change it to 6 but before it was 7
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
+ODRStruct.OpenDRIVE.header.userData.vectorScene.Attributes.program = 'RoadRunner'; % copied from RR
+ODRStruct.OpenDRIVE.header.userData.vectorScene.Attributes.version = 'R2022a Update 1 (1.4.1.c40ee10fc8)'; % copied from RR
 % Start the road portion of the XODR structure at a station of zero and
 % with a static ID (can be chosen freely)
+
+  typeRoad = input('Enter type of the road: ','s');
+  speedLimit = '';
+  while ~isnumeric(speedLimit)
+      speedLimit = input('Enter speed limit of the road: ');
+  end
+  unitLimit = '';
+  unitLimit = input('Enter unit of the speed limit: ','s');
+
+  %type tag referred to RR xodr
+ODRStruct.OpenDRIVE.road{1}.type.Attributes.s = '0.0000000000000000e+0';
+ODRStruct.OpenDRIVE.road{1}.type.Attributes.type = typeRoad;
+ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.max = speedLimit;
+ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.unit = unitLimit;
 %ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; % cannot find s element in road tag maybe needs to be in <type> under road tag
-ODRStruct.OpenDRIVE.header.road{1}.Attributes.id = '0'; % just change to 0 to match the roadrunner xodr 
-ODRStruct.OpenDRIVE.header.road{1}.Attributes.name= 'Road 0';
-ODRStruct.OpenDRIVE.header.road{1}.planView = struct;  % not so sure what this is 
-ODRStruct.OpenDRIVE.header.road{1}.planView.geometry = cell(1); % need to arrange in order s x y hdg length 
+ODRStruct.OpenDRIVE.road{1}.Attributes.id = '0'; % just change to 0 to match the roadrunner xodr 
+ODRStruct.OpenDRIVE.road{1}.Attributes.name= 'Road 0';
+ODRStruct.OpenDRIVE.road{1}.planView = struct;  % not so sure what this is 
+ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1); % need to arrange in order s x y hdg length 
+ODRStruct.OpenDRIVE.road{1}.Attributes.junction= '-1'; % RR xodr has it
 
 % Query the user for the starting coordinates and heading of the road
 startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
     'Enter Road Start Coordinates',[1 80; 1 80; 1 80],{'0'; '0'; '0'});
 
+
+% format variable for displaying decimal places
+formatSpec = '%e';
 % Create a variable to track the cumulative length of the road as entered
 % by the user
 roadLength = 0;
@@ -62,20 +82,34 @@ while ~doneFlag
   while ~isnumeric(segLength)
     segLength = input('Enter road length along reference line, in meters: ');
   end
-  
+
+%elevationProfile need to double check what it is 
+%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.s = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.x = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.y = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.hdg = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.length = '0.0000000000000000e+0';
+
+%lateralProfile need to double check what it is
+%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.s = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.a = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.b = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.c = '0.0000000000000000e+0';
+%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.d = '0.0000000000000000e+0';
+
   % If the segment type is a line segment, all of the required
   % information is already available, so write it into the structure
   if segTypeChar == 'l'
     % Create the line field (no additional properties are necessary)
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.line = struct;
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.line = struct;
     % Copy over the length of the segment into the structure
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength,formatSpec);
     % Use the end position and heading of the last segment as the start
     % of this segment
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH,formatSpec);
     % Plot the resulting segment
     plot([segEndX segEndX + segLength*cos(segEndH)],...
       [segEndY segEndY + segLength*sin(segEndH)],'o-','linewidth',1);
@@ -90,16 +124,16 @@ while ~doneFlag
       segCurvature = input('Enter arc curvature, in 1/meters: ');
     end
     % Create the arc field
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.arc.Attributes.curvature = ...
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.arc.Attributes.curvature = ...
       num2str(segCurvature);
     % Copy over the length of the segment into the structure
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength,formatSpec);
     % Use the end position and heading of the last segment as the start
     % of this segment
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH,formatSpec);
     % Calculate points along the arc, including the start and end
     s = (roadLength:0.1:roadLength+segLength)';
     % Make sure that the last point is indeed the station coordinate of
@@ -128,16 +162,16 @@ while ~doneFlag
       segCurvEnd = input('Enter spiral curvature at the end, in 1/meters: ');
     end
     % Create the spiral fields
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.spiral.Attributes.curvStart = num2str(segCurvStart);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.spiral.Attributes.curvEnd = num2str(segCurvEnd);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.spiral.Attributes.curvStart = num2str(segCurvStart,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.spiral.Attributes.curvEnd = num2str(segCurvEnd,formatSpec);
     % Copy over the length of the segment into the structure
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength);
+    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength,formatSpec);
     % Use the end position and heading of the last segment as the start
     % of this segment
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY);
-    ODRStruct.OpenDRIVE.header.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH,formatSpec);
     % Calculate points along the arc, including the start and end
     s = (roadLength:0.1:roadLength+segLength)';
     if s(end) ~= roadLength+segLength
@@ -163,7 +197,7 @@ while ~doneFlag
   end
 end
 % Record the final road centerline length
-ODRStruct.OpenDRIVE.header.road{1}.Attributes.length = num2str(roadLength);
+ODRStruct.OpenDRIVE.road{1}.Attributes.length = num2str(roadLength,formatSpec);
 
 % Query whether the user would like to enter any lane offsets in the file
 doneString = input('Are there any lane offset sections? Y/N [N]: ','s');
@@ -183,8 +217,8 @@ while ~doneFlag
   while ~isnumeric(laneOffsetStart)
     laneOffsetStart = input('Enter lane offset start station, in meters: ');
   end
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.s = ...
-    num2str(laneOffsetStart);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.s = ...
+    num2str(laneOffsetStart,formatSpec);
   
   % Request the offset cubic parameters (a, b, c, d) from the user. A
   % natural extension of this would be to include a secondary set of fields
@@ -192,10 +226,10 @@ while ~doneFlag
   % coordinates assuming dt/ds = 0 at each end point
   offsetParams = inputdlg({'a','b','c','d'},'Enter Lane Offset Parameters',...
     [1 80; 1 80; 1 80; 1 80],{'0'; '0'; '0'; '0'});
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.a = offsetParams{1};
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.b = offsetParams{2};
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.c = offsetParams{3};
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.d = offsetParams{4};
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.a = num2str(str2double(offsetParams{1}),formatSpec);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.b = num2srt(str2double(offsetParams{2}),formatSpec);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.c = num2str(str2double(offsetParams{3}),formatSpec);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{laneOffsetCounter}.Attributes.d = num2str(str2dobule(offsetParams{4}),formatSpec);
   
   % Check to see if the user would like to add additional lane offset
   % sections
@@ -203,6 +237,13 @@ while ~doneFlag
   if ~strcmp(doneString,'Y') && ~strcmp(doneString,'y')
     doneFlag = 1;
   end
+end
+if laneOffsetCounter == 0
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{1}.Attributes.s = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{1}.Attributes.a = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{1}.Attributes.b = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{1}.Attributes.c = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneOffset{1}.Attributes.d = num2str(0,formatSpec);
 end
 
 % Reset the done flag
@@ -218,36 +259,64 @@ while ~doneFlag
   while ~isnumeric(laneSectionStart)
     laneSectionStart = input('Enter lane section start station, in meters: ');
   end
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.Attributes.s = num2str(laneSectionStart);
-  
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.Attributes.s = num2str(laneSectionStart,formatSpec);
+
+  singleSide = '';
+  while ~strcmp(singleSide,'true') && ~strcmp(singleSide,'false')
+    singleSide = input('single side? [true/false]: ','s');
+  end
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.Attributes.singleSide = singleSide;
   numLeftLanes = '';
   while ~isnumeric(numLeftLanes)
     numLeftLanes = input('Enter the number of left lanes in this section: ');
   end
+  leftParam = [];
   for leftLaneInd = 1:numLeftLanes
+    id = numLeftLanes-leftLaneInd+1;
     % Request the lane width cubic parameters (a, b, c, d) from the user. A
     % natural extension of this would be to include a secondary set of fields
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
-    if leftLaneInd == numLeftLanes
-      laneParams = inputdlg({'a','b','c','d','type'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder'});
+    if leftLaneInd ~= numLeftLanes
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none'});
     else
-      laneParams = inputdlg({'a','b','c','d','type'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none'});
     end
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.id = num2str(leftLaneInd);
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.a = laneParams{1};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.b = laneParams{2};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.c = laneParams{3};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.d = laneParams{4};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.sOffset = '0';
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.id = num2str(id);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.a = num2str(str2double(laneParams{1}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.b = num2str(str2double(laneParams{2}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.c = num2str(str2double(laneParams{3}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.d = num2str(str2double(laneParams{4}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.type = laneParams{5};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.level = laneParams{6};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.material = 'standard'; % RR
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.speed.Attributes.max = num2str(speedLimit,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.speed.Attributes.unit = 'mph'; %RR
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.speed.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.color = laneParams{7};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.laneChange = laneParams{8};
+    if strcmp(laneParams{5},'driving')
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.type = 'solid';
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.width = num2str(0.125,formatSpec);
+    else
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.type = 'none';
+    end
   end
   
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.id = '0';
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.level = 'false';
-  ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.type = 'none';
-  
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.id = '0';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.level = 'false';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.type = 'none';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.sOffset = num2str(0,formatSpec);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.type = 'solid solid';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.material = 'standard';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.color = 'yellow';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.width = num2str(0.125,formatSpec);
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.laneChange = 'none';
   numRightLanes = '';
   while ~isnumeric(numRightLanes)
     numRightLanes = input('Enter the number of right lanes in this section: ');
@@ -258,19 +327,33 @@ while ~doneFlag
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
     if rightLaneInd == numRightLanes
-      laneParams = inputdlg({'a','b','c','d','type'},['Enter Right Lane ' num2str(rightLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none'});
     else
-      laneParams = inputdlg({'a','b','c','d','type'},['Enter Right Lane ' num2str(rightLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none'});
     end
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.id = num2str(-rightLaneInd);
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.a = laneParams{1};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.b = laneParams{2};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.c = laneParams{3};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.d = laneParams{4};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.type = laneParams{5};
-    ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.sOffset = '0';
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.id = num2str(-rightLaneInd);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.a = num2str(str2double(laneParams{1}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.b = num2str(str2double(laneParams{2}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.c = num2str(str2double(laneParams{3}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.d = num2str(str2double(laneParams{4}),formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.type = laneParams{5};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.level = laneParams{6};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.material = 'standard'; % RR
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.speed.Attributes.unit = 'mph'; %RR
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.speed.Attributes.max = num2str(speedLimit,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.color = laneParams{7};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.laneChange = laneParams{8};
+    if strcmp(laneParams{5},'driving')
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.type = 'solid';
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.width = num2str(0.125,formatSpec);
+    else
+        ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.type = 'none';
+    end
   end
   
   % Check to see if the user would like to add additional lane sections
@@ -281,68 +364,68 @@ while ~doneFlag
 end
 
 % Query the user for the lane linkage predecessor elements
-for laneSecInd = 2:length(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection)
+for laneSecInd = 2:length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection)
   % Determine the number of left lanes in the previous section
-  NLeftLanes = length(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.left.lane);
+  NLeftLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane);
   % Print the previous section number and the number of lanes
   fprintf(1,'Preceding section %u has %u lanes with section start widths:',laneSecInd-1,NLeftLanes);
   % Iterate through the lanes and print the lane IDs and widths
   for leftLaneInd = 1:NLeftLanes
     fprintf(1,'\t%d for ID %s',...
-      str2double(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.width.Attributes.a),...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.Attributes.id);
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.left.lane{leftLaneInd}.Attributes.id);
   end
   fprintf(1,'\n');
   % Update the number of left lanes to the current section
-  NLeftLanes = length(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.left.lane);
+  NLeftLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane);
   fprintf(1,'The current lane section has %u lanes with section start widths:',NLeftLanes);
   % Iterate through the lanes and print the lane IDs and widths
   for leftLaneInd = 1:NLeftLanes
     fprintf(1,'\t%d for ID %s',...
-      str2double(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.width.Attributes.a),...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
   end
   fprintf(1,'\n');
   % Iterate again through the lanes, asking the user for the predecessor
   for leftLaneInd = 1:NLeftLanes
     inputPrompt = sprintf('Enter the predecessor lane for lane %s or NaN if there is none: ',...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.Attributes.id);
     % This could use some guard conditions
     predID = input(inputPrompt);
     if isnumeric(predID) && ~isnan(predID)
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.link.predecessor.Attributes.id = num2str(predID);
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.left.lane{leftLaneInd}.link.predecessor.Attributes.id = num2str(predID);
     end
   end
   
   % Determine the number of right lanes in the previous section
-  NRightLanes = length(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.right.lane);
+  NRightLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane);
   % Print the previous section number and the number of lanes
   fprintf(1,'Preceding section %u has %u lanes with section start widths:',laneSecInd-1,NRightLanes);
   % Iterate through the lanes and print the lane IDs and widths
   for rightLaneInd = 1:NRightLanes
     fprintf(1,'\t%d for ID %s',...
-      str2double(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.width.Attributes.a),...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.Attributes.id);
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd-1}.right.lane{rightLaneInd}.Attributes.id);
   end
   fprintf(1,'\n');
   % Update the number of right lanes to the current section
-  NRightLanes = length(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.right.lane);
+  NRightLanes = length(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane);
   fprintf(1,'The current lane section has %u lanes with section start widths:',NRightLanes);
   % Iterate through the lanes and print the lane IDs and widths
   for rightLaneInd = 1:NRightLanes
     fprintf(1,'\t%d for ID %s',...
-      str2double(ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.width.Attributes.a),...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
+      str2double(ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.width.Attributes.a),...
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
   end
   fprintf(1,'\n');
   % Iterate again through the lanes, asking the user for the predecessor
   for rightLaneInd = 1:NRightLanes
     inputPrompt = sprintf('Enter the predecessor lane for lane %s or NaN if there is none: ',...
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.Attributes.id);
     % This could use some guard conditions
     predID = input(inputPrompt);
     if isnumeric(predID) && ~isnan(predID)
-      ODRStruct.OpenDRIVE.header.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.link.predecessor.Attributes.id = num2str(predID);
+      ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSecInd}.right.lane{rightLaneInd}.link.predecessor.Attributes.id = num2str(predID);
     end
   end
 end
@@ -366,32 +449,32 @@ fcn_RoadSeg_plotRealisticRoad(ODRStruct,0.5,2);
 % in one of the cardinal directions)
 axis tight
 axlims = axis;
-ODRStruct.OpenDRIVE.header.Attributes.west = num2str(axlims(1));
-ODRStruct.OpenDRIVE.header.Attributes.east = num2str(axlims(2));
-ODRStruct.OpenDRIVE.header.Attributes.south = num2str(axlims(3));
-ODRStruct.OpenDRIVE.header.Attributes.north = num2str(axlims(4));
+ODRStruct.OpenDRIVE.header.Attributes.west = num2str(axlims(1),formatSpec);
+ODRStruct.OpenDRIVE.header.Attributes.east = num2str(axlims(2),formatSpec);
+ODRStruct.OpenDRIVE.header.Attributes.south = num2str(axlims(3),formatSpec);
+ODRStruct.OpenDRIVE.header.Attributes.north = num2str(axlims(4),formatSpec);
 % Restore the proportionality of the axes
 axis equal
 
 % Run a function to return the various segment boundaries for the road geometry
-[RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.header.road{1});
+[RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.road{1});
 
 % Iterate through the road geometry element boundaries, and plot a red line
 % across the road at each boundary
 for i = 1:length(RoadSegmentStations)
-  [xRoadSeg,yRoadSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.header.road{1},RoadSegmentStations(i)*[1; 1],[-20; 20]);
+  [xRoadSeg,yRoadSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},RoadSegmentStations(i)*[1; 1],[-20; 20]);
   hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
 end
 % Iterate through the lane offset boundaries, and plot a green line across
 % the road at each boundary
 for i = 1:length(LaneOffsetStations)
-  [xOffsetSeg,yOffsetSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.header.road{1},LaneOffsetStations(i)*[1; 1],[-15; 15]);
+  [xOffsetSeg,yOffsetSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneOffsetStations(i)*[1; 1],[-15; 15]);
   hOffsetSegs = plot(xOffsetSeg,yOffsetSeg,'--','linewidth',2,'color',[0.1 0.6 0]);
 end
 % Iterate through the lane section boundaries, and plot a blue line across
 % the road at each boundary
 for i = 1:length(LaneSectionStations)
-  [xLaneSeg,yLaneSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.header.road{1},LaneSectionStations(i)*[1; 1],[-10; 10]);
+  [xLaneSeg,yLaneSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneSectionStations(i)*[1; 1],[-10; 10]);
   hLaneSegs = plot(xLaneSeg,yLaneSeg,':','linewidth',2,'color',[0.1 0 0.6]);
 end
 % Label the boundary types in the legend
