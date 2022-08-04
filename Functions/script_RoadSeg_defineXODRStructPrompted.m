@@ -15,7 +15,7 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 
-% Start an XODR structure with the static header information
+% Start an XODR structure with the static header information 
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
 ODRStruct.OpenDRIVE.header.Attributes.revMinor = '6'; % RR supported 6 need to change it to 6 but before it was 7
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
@@ -84,18 +84,18 @@ while ~doneFlag
   end
 
 %elevationProfile need to double check what it is 
-%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.s = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.x = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.y = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.hdg = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.length = '0.0000000000000000e+0';
+ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.s = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.a = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.b = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.c = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.d = num2str(0,formatSpec);
 
 %lateralProfile need to double check what it is
-%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.s = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.a = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.b = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.c = '0.0000000000000000e+0';
-%ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.d = '0.0000000000000000e+0';
+ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.s = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.a = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.b = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.c = num2str(0,formatSpec);
+ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.d = num2str(0,formatSpec);
 
   % If the segment type is a line segment, all of the required
   % information is already available, so write it into the structure
@@ -278,11 +278,11 @@ while ~doneFlag
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
     if leftLaneInd ~= numLeftLanes
-      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange','travelDir'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none';'undirected'});
     else
-      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange','travelDir'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none';'backward'});
     end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.id = num2str(id);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.a = num2str(str2double(laneParams{1}),formatSpec);
@@ -300,6 +300,8 @@ while ~doneFlag
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.color = laneParams{7};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.laneChange = laneParams{8};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.userData.vectorLane.Attributes.travelDir = laneParams{9};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.userData.vectorLane.Attributes.sOffset = num2str(0,formatSpec);
     if strcmp(laneParams{5},'driving')
         ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.type = 'solid';
         ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.width = num2str(0.125,formatSpec);
@@ -327,11 +329,11 @@ while ~doneFlag
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
     if rightLaneInd == numRightLanes
-      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange','travelDir'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none';'undirected'});
     else
-      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
-        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none'});
+      laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange','travelDir'},['Enter Right Lane ' num2str(rightLaneInd,formatSpec) ' Parameters'],...
+        [1 80; 1 80; 1 80; 1 80; 1 80; 1 80;1 80;1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving';'false';'white';'none';'forward'});
     end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.id = num2str(-rightLaneInd);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.a = num2str(str2double(laneParams{1}),formatSpec);
@@ -345,9 +347,12 @@ while ~doneFlag
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.speed.Attributes.unit = 'mph'; %RR
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.speed.Attributes.max = num2str(speedLimit,formatSpec);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.speed.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.color = laneParams{7};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.laneChange = laneParams{8};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.userData.vectorLane.Attributes.travelDir = laneParams{9};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.userData.vectorLane.Attributes.sOffset = num2str(0,formatSpec);
     if strcmp(laneParams{5},'driving')
         ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.type = 'solid';
         ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.width = num2str(0.125,formatSpec);
