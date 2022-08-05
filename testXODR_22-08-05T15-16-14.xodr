@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenDRIVE>
+   <header date="2022-08-05T15:15:45" east="1.000000e+01" north="4.750000e+00"
+           revMajor="1"
+           revMinor="6"
+           south="-4.750000e+00"
+           vendor="PSU-IVSG"
+           west="-2.908536e-16">
+      <userData>
+         <vectorScene program="RoadRunner" version="R2022a Update 1 (1.4.1.c40ee10fc8)"/>
+      </userData>
+   </header>
+   <road id="0" junction="-1" length="1.000000e+01" name="Road 0">
+      <type s="0.000000e+00" type="town">
+         <speed max="55" unit="mph"/>
+      </type>
+      <planView>
+         <geometry hdg="0.000000e+00" length="1.000000e+01" s="0.000000e+00" x="0.000000e+00"
+                   y="0.000000e+00">
+            <line/>
+         </geometry>
+      </planView>
+      <elevationProfile>
+         <elevation a="0.000000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                    s="0.000000e+00"/>
+      </elevationProfile>
+      <lateralProfile>
+         <superelevation a="0.000000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                         s="0.000000e+00"/>
+      </lateralProfile>
+      <lanes>
+         <laneOffset a="0.000000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                     s="0.000000e+00"/>
+         <laneSection s="0.000000e+00" singleSide="false">
+            <left>
+               <lane id="2" level="false" type="shoulder">
+                  <width a="1.500000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                         sOffset="0.000000e+00"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0.000000e+00"
+                            type="none"/>
+                  <speed max="5.500000e+01" sOffset="0.000000e+00" unit="mph"/>
+                  <userData>
+                     <vectorLane sOffset="0.000000e+00" travelDir="undirected"/>
+                  </userData>
+               </lane>
+               <lane id="1" level="false" type="driving">
+                  <width a="3.250000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                         sOffset="0.000000e+00"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0.000000e+00"
+                            type="solid"
+                            width="1.250000e-01"/>
+                  <speed max="5.500000e+01" sOffset="0.000000e+00" unit="mph"/>
+                  <userData>
+                     <vectorLane sOffset="0.000000e+00" travelDir="backward"/>
+                  </userData>
+               </lane>
+            </left>
+            <center>
+               <lane id="0" level="false" type="none">
+                  <roadMark color="yellow" laneChange="none" material="standard" sOffset="0.000000e+00"
+                            type="solid solid"
+                            width="1.250000e-01"/>
+               </lane>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                  <width a="3.250000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                         sOffset="0.000000e+00"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0.000000e+00"
+                            type="solid"
+                            width="1.250000e-01"/>
+                  <speed max="5.500000e+01" sOffset="0.000000e+00" unit="mph"/>
+                  <userData>
+                     <vectorLane sOffset="0.000000e+00" travelDir="forward"/>
+                  </userData>
+               </lane>
+               <lane id="-2" level="false" type="shoulder">
+                  <width a="1.500000e+00" b="0.000000e+00" c="0.000000e+00" d="0.000000e+00"
+                         sOffset="0.000000e+00"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0.000000e+00"
+                            type="none"/>
+                  <speed max="5.500000e+01" sOffset="0.000000e+00" unit="mph"/>
+                  <userData>
+                     <vectorLane sOffset="0.000000e+00" travelDir="undirected"/>
+                  </userData>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+</OpenDRIVE>

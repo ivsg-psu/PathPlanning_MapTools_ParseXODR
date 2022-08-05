@@ -40,7 +40,7 @@ function varargout = struct2xml( s, varargin )
         file = varargin{1};
 
         if (isempty(file))
-            error('Filename can not be empty');
+            error('Filename can not be empty');file
         end
 
         if (isempty(strfind(file,'.xml')))
