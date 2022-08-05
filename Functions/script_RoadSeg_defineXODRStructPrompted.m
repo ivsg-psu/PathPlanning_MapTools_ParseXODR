@@ -15,6 +15,9 @@ axis equal
 xlabel('East (m)')
 ylabel('North (m)')
 
+% format variable for displaying decimal places
+formatSpec = '%e';
+
 % Start an XODR structure with the static header information 
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
 ODRStruct.OpenDRIVE.header.Attributes.revMinor = '6'; % RR supported 6 need to change it to 6 but before it was 7
@@ -34,24 +37,21 @@ ODRStruct.OpenDRIVE.header.userData.vectorScene.Attributes.version = 'R2022a Upd
   unitLimit = input('Enter unit of the speed limit: ','s');
 
   %type tag referred to RR xodr
-ODRStruct.OpenDRIVE.road{1}.type.Attributes.s = '0.0000000000000000e+0';
-ODRStruct.OpenDRIVE.road{1}.type.Attributes.type = typeRoad;
-ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.max = speedLimit;
-ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.unit = unitLimit;
+ODRStruct.OpenDRIVE.road{1}.type.Attributes.s = num2str(0,formatSpec); % 0 according to RR xodr
+ODRStruct.OpenDRIVE.road{1}.type.Attributes.type = typeRoad; % input type as the user enter
+ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.max = speedLimit; % input speed limit as the user enter
+ODRStruct.OpenDRIVE.road{1}.type.speed.Attributes.unit = unitLimit; % input unit of the speed limit
 %ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; % cannot find s element in road tag maybe needs to be in <type> under road tag
 ODRStruct.OpenDRIVE.road{1}.Attributes.id = '0'; % just change to 0 to match the roadrunner xodr 
-ODRStruct.OpenDRIVE.road{1}.Attributes.name= 'Road 0';
+ODRStruct.OpenDRIVE.road{1}.Attributes.name= 'Road 0'; % road 0 
 ODRStruct.OpenDRIVE.road{1}.planView = struct;  % not so sure what this is 
 ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1); % need to arrange in order s x y hdg length 
-ODRStruct.OpenDRIVE.road{1}.Attributes.junction= '-1'; % RR xodr has it
+ODRStruct.OpenDRIVE.road{1}.Attributes.junction= '-1'; % RR xodr has it so I put it here
 
 % Query the user for the starting coordinates and heading of the road
 startCoords = inputdlg({'E Coordinate (m)','N Coordinate (m)','Heading (rad)'},...
     'Enter Road Start Coordinates',[1 80; 1 80; 1 80],{'0'; '0'; '0'});
 
-
-% format variable for displaying decimal places
-formatSpec = '%e';
 % Create a variable to track the cumulative length of the road as entered
 % by the user
 roadLength = 0;
@@ -83,19 +83,21 @@ while ~doneFlag
     segLength = input('Enter road length along reference line, in meters: ');
   end
 
-%elevationProfile need to double check what it is 
+%elevationProfile value according to RR xodr
 ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.s = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.a = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.b = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.c = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.elevationProfile.elevation.Attributes.d = num2str(0,formatSpec);
 
-%lateralProfile need to double check what it is
+%lateralProfile value according to RR xodr
 ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.s = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.a = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.b = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.c = num2str(0,formatSpec);
 ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.d = num2str(0,formatSpec);
+%there are shape tag inside lateralProfile but I'm not sure what value to
+%put so I leave it blank
 
   % If the segment type is a line segment, all of the required
   % information is already available, so write it into the structure
@@ -277,6 +279,8 @@ while ~doneFlag
     % natural extension of this would be to include a secondary set of fields
     % that would calculate a, b, c, and d from a lane shift in s and t
     % coordinates assuming dt/ds = 0 at each end point
+    % also request more info from user as we need that for creating xodr
+    % file. added level, color, laneChange and travelDir
     if leftLaneInd ~= numLeftLanes
       laneParams = inputdlg({'a','b','c','d','type','level','color','laneChange','travelDir'},['Enter Left Lane ' num2str(leftLaneInd) ' Parameters'],...
         [1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80; 1 80],{'1.5'; '0'; '0'; '0'; 'shoulder';'false';'white';'none';'undirected'});
@@ -290,6 +294,7 @@ while ~doneFlag
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.c = num2str(str2double(laneParams{3}),formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.d = num2str(str2double(laneParams{4}),formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.type = laneParams{5};
+    % add more tags according to RR xodr
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.level = laneParams{6};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.roadMark.Attributes.material = 'standard'; % RR
@@ -314,9 +319,9 @@ while ~doneFlag
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.level = 'false';
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.type = 'none';
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.sOffset = num2str(0,formatSpec);
-  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.type = 'solid solid';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.type = 'solid solid'; % center lane is double solid
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.material = 'standard';
-  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.color = 'yellow';
+  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.color = 'yellow'; % center lane color is yellow
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.width = num2str(0.125,formatSpec);
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.roadMark.Attributes.laneChange = 'none';
   numRightLanes = '';
@@ -341,6 +346,7 @@ while ~doneFlag
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.c = num2str(str2double(laneParams{3}),formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.d = num2str(str2double(laneParams{4}),formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.type = laneParams{5};
+    % add more tags according to RR xodr
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.level = laneParams{6};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.sOffset = num2str(0,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.roadMark.Attributes.material = 'standard'; % RR
@@ -485,6 +491,8 @@ end
 % Label the boundary types in the legend
 legend([hRoadSegs(1) hOffsetSegs(1) hLaneSegs(1)],...
   {'Road Geometry Element Boundaries','Lane Offset Boundaries','Lane Section Boundaries'})
+
+
 
 if flag_write_XODR_file
   % Define a filename based on the time to avoid accidentally overwriting previous files
