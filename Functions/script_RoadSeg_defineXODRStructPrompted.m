@@ -104,14 +104,22 @@ ODRStruct.OpenDRIVE.road{1}.lateralProfile.superelevation.Attributes.d = num2str
   if segTypeChar == 'l'
     % Create the line field (no additional properties are necessary)
     ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.line = struct;
-    % Copy over the length of the segment into the structure
-    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength,formatSpec);
     % Use the end position and heading of the last segment as the start
     % of this segment
     ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.s = num2str(roadLength,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.x = num2str(segEndX,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.y = num2str(segEndY,formatSpec);
     ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.hdg = num2str(segEndH,formatSpec);
+    % Copy over the length of the segment into the structure
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes.length = num2str(segLength,formatSpec);
+
+
+    % Reorder the structure so that it matches, exactly, the XODR
+    % specification
+    attribute_template_struture = struct('s', {}, 'x', {}, 'y',{}, 'hdg',{},'length',{}); % This is the specification
+    ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes = ...
+        orderfields(ODRStruct.OpenDRIVE.road{1}.planView.geometry{segmentCounter}.Attributes,attribute_template_struture);
+
     % Plot the resulting segment
     plot([segEndX segEndX + segLength*cos(segEndH)],...
       [segEndY segEndY + segLength*sin(segEndH)],'o-','linewidth',1);
