@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <OpenDRIVE>
-   <header date="2022-08-05T15:18:28" east="1.000000e+01" north="4.750000e+00"
+   <header date="2022-08-05T14:35:05" east="1.000000e+01" north="4.750000e+00"
            revMajor="1"
            revMinor="6"
            south="-4.750000e+00"
@@ -85,6 +85,11 @@
                   </userData>
                </lane>
             </right>
+            <userData>
+               <vectorLaneSection>
+                  <carriageway leftBoundary="2" rightBoundary="-2"/>
+               </vectorLaneSection>
+            </userData>
          </laneSection>
       </lanes>
    </road>

@@ -380,10 +380,6 @@ while ~doneFlag
   if ~strcmp(doneString,'Y') && ~strcmp(doneString,'y')
     doneFlag = 1;
   end
-
-  %userData tag and vectorLaneSection tag at the end
-  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.userData.vectorLaneSection.carriageway.Attributes.rightBoundary = num2str(-numRightLanes);
-  ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.userData.vectorLaneSection.carriageway.Attributes.leftBoundary = num2str(numLeftLanes);
 end
 
 % Query the user for the lane linkage predecessor elements
