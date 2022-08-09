@@ -20,11 +20,12 @@ formatSpec = '%e';
 
 % Start an XODR structure with the static header information 
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
-ODRStruct.OpenDRIVE.header.Attributes.revMinor = '6'; % RR supported 6 need to change it to 6 but before it was 7
+ODRStruct.OpenDRIVE.header.Attributes.revMinor = '4'; % RR supported 4 need to change it to 4 but before it was 7
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 ODRStruct.OpenDRIVE.header.userData.vectorScene.Attributes.program = 'RoadRunner'; % copied from RR
 ODRStruct.OpenDRIVE.header.userData.vectorScene.Attributes.version = 'R2022a Update 1 (1.4.1.c40ee10fc8)'; % copied from RR
+ODRStruct.OpenDRIVE.header.Attributes.name = "";
 % Start the road portion of the XODR structure at a station of zero and
 % with a static ID (can be chosen freely)
 
