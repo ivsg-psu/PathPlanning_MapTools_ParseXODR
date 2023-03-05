@@ -8,7 +8,7 @@ function fHand = fcn_RoadSeg_plotRealisticRoad(ODRStruct,minPlotGap,varargin)
 %     2022_05_11
 %     -- wrote the code
 
-if nargin > 1
+if nargin > 2
   fHand = figure(varargin{1})
 else
   % Create a blank figure in which to plot the roads

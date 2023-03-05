@@ -4,11 +4,12 @@ function [sPts,tLeft,tCenter,tRight] = fcn_RoadSeg_extractLaneGeometry(ODRRoad,m
 %
 % FORMAT:
 %
-%       fcn_RoadSeg_extractLaneGeometry(ODRStruct,maxPlotGap)
+%       fcn_RoadSeg_extractLaneGeometry(ODRRoad,maxPlotGap)
 %
 % INPUTS:
 %
-%      ODRStruct: a nested structure containing the XDOR map elements
+%      ODRRoad: a nested structure containing the XDOR road element
+%         structure
 %      maxPlotGap: a scalar parameter defining the maximum distance (in
 %         meters) between adjacent plot points (to make sure that any
 %         curves have sufficient definition)
