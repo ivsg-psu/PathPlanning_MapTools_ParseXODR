@@ -1,0 +1,289 @@
+{"features":[{
+    "geometry": {
+        "coordinates": [
+            [
+                -7.80749106415471e-18,
+                3.3913855389378794e-05,
+                0
+            ],
+            [
+                8.983152841195067e-05,
+                3.3913855389378794e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{fed90c13-ea8e-4f39-abfb-948a65c70f76}",
+        "LaneType": "Shoulder",
+        "LeftBoundary": {
+            "Dir": "Forward",
+            "Id": "{f47604b2-6bba-46f4-a4b6-4759cff2590d}"
+        },
+        "Predecessors": [
+        ],
+        "RightBoundary": {
+            "Dir": "Forward",
+            "Id": "{49ab005f-f028-4504-8164-ab8866f7c8a1}"
+        },
+        "Successors": [
+        ],
+        "TravelDir": "Undirected",
+        "Type": "Lane"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -1.6985994545169534e-18,
+                1.5826465848376785e-05,
+                0
+            ],
+            [
+                8.983152841194456e-05,
+                1.5826465848376785e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{c151d485-8f65-4f05-af42-ebe2d245d405}",
+        "LaneType": "Driving",
+        "LeftBoundary": {
+            "Dir": "Forward",
+            "Id": "{49ab005f-f028-4504-8164-ab8866f7c8a1}"
+        },
+        "Predecessors": [
+        ],
+        "RightBoundary": {
+            "Dir": "Forward",
+            "Id": "{8366db53-9387-4782-939f-f4a9c7db6a6a}"
+        },
+        "SpeedLimit": "55mph",
+        "Successors": [
+        ],
+        "TravelDir": "Backward",
+        "Type": "Lane"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -1.6985994545169534e-18,
+                -1.5826465848376785e-05,
+                0
+            ],
+            [
+                8.983152841194456e-05,
+                -1.5826465848376785e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{74e02658-15af-4a5f-9292-b690748974e8}",
+        "LaneType": "Driving",
+        "LeftBoundary": {
+            "Dir": "Forward",
+            "Id": "{8366db53-9387-4782-939f-f4a9c7db6a6a}"
+        },
+        "Predecessors": [
+        ],
+        "RightBoundary": {
+            "Dir": "Forward",
+            "Id": "{92af0bba-bab7-4ef1-865e-1c5f5bca39eb}"
+        },
+        "SpeedLimit": "55mph",
+        "Successors": [
+        ],
+        "TravelDir": "Forward",
+        "Type": "Lane"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -7.80749106415471e-18,
+                -3.3913855389378794e-05,
+                0
+            ],
+            [
+                8.983152841195067e-05,
+                -3.3913855389378794e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{915e6809-c546-4db8-b6c6-7114eca5e139}",
+        "LaneType": "Shoulder",
+        "LeftBoundary": {
+            "Dir": "Forward",
+            "Id": "{92af0bba-bab7-4ef1-865e-1c5f5bca39eb}"
+        },
+        "Predecessors": [
+        ],
+        "RightBoundary": {
+            "Dir": "Forward",
+            "Id": "{c285a556-19bc-45bb-8057-1256b287c076}"
+        },
+        "Successors": [
+        ],
+        "TravelDir": "Undirected",
+        "Type": "Lane"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -8.887315003097631e-18,
+                3.617477908200403e-05,
+                0
+            ],
+            [
+                8.983152841195174e-05,
+                3.617477908200403e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{f47604b2-6bba-46f4-a4b6-4759cff2590d}",
+        "RightLane": {
+            "Dir": "Forward",
+            "Id": "{fed90c13-ea8e-4f39-abfb-948a65c70f76}"
+        },
+        "Type": "LaneBoundary"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -6.800464244691089e-18,
+                3.165293169675355e-05,
+                0
+            ],
+            [
+                8.983152841194965e-05,
+                3.165293169675355e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{49ab005f-f028-4504-8164-ab8866f7c8a1}",
+        "LeftLane": {
+            "Dir": "Forward",
+            "Id": "{fed90c13-ea8e-4f39-abfb-948a65c70f76}"
+        },
+        "RightLane": {
+            "Dir": "Forward",
+            "Id": "{c151d485-8f65-4f05-af42-ebe2d245d405}"
+        },
+        "Type": "LaneBoundary"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                6.066426623274834e-21,
+                0,
+                0
+            ],
+            [
+                8.983152841194285e-05,
+                0,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{8366db53-9387-4782-939f-f4a9c7db6a6a}",
+        "LeftLane": {
+            "Dir": "Forward",
+            "Id": "{c151d485-8f65-4f05-af42-ebe2d245d405}"
+        },
+        "RightLane": {
+            "Dir": "Forward",
+            "Id": "{74e02658-15af-4a5f-9292-b690748974e8}"
+        },
+        "Type": "LaneBoundary"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -6.800464244691089e-18,
+                -3.165293169675355e-05,
+                0
+            ],
+            [
+                8.983152841194965e-05,
+                -3.165293169675355e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{92af0bba-bab7-4ef1-865e-1c5f5bca39eb}",
+        "LeftLane": {
+            "Dir": "Forward",
+            "Id": "{74e02658-15af-4a5f-9292-b690748974e8}"
+        },
+        "RightLane": {
+            "Dir": "Forward",
+            "Id": "{915e6809-c546-4db8-b6c6-7114eca5e139}"
+        },
+        "Type": "LaneBoundary"
+    },
+    "type": "Feature"
+}
+,{
+    "geometry": {
+        "coordinates": [
+            [
+                -8.887315003097631e-18,
+                -3.617477908200403e-05,
+                0
+            ],
+            [
+                8.983152841195174e-05,
+                -3.617477908200403e-05,
+                0
+            ]
+        ],
+        "type": "LineString"
+    },
+    "properties": {
+        "Id": "{c285a556-19bc-45bb-8057-1256b287c076}",
+        "LeftLane": {
+            "Dir": "Forward",
+            "Id": "{915e6809-c546-4db8-b6c6-7114eca5e139}"
+        },
+        "Type": "LaneBoundary"
+    },
+    "type": "Feature"
+}
+],"type":"FeatureCollection"}
