@@ -11,7 +11,7 @@ flag_write_XODR_file = 0;
 % Revision Number, Vendor Name. You can also include the version of the
 % file in case it is revised.
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
-ODRStruct.OpenDRIVE.header.Attributes.revMinor = '7';
+ODRStruct.OpenDRIVE.header.Attributes.revMinor = '4';
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 ODRStruct.OpenDRIVE.header.Attributes.version = '1';
