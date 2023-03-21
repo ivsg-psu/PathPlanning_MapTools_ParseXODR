@@ -4,7 +4,7 @@ clearvars
 
 % Set this flag to write to an XODR file when done, leave clear to end the
 % script before writing to a file (e.g. while building the geometry)
-flag_write_XODR_file = 0;
+flag_write_XODR_file = 1;
 
 % Start a figure in order to plot the geometry as the user enters it
 figure(1)
@@ -17,7 +17,7 @@ ylabel('North (m)')
 
 % Start an XODR structure with the static header information
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
-ODRStruct.OpenDRIVE.header.Attributes.revMinor = '7';
+ODRStruct.OpenDRIVE.header.Attributes.revMinor = '4';
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 % Start the road portion of the XODR structure at a station of zero and
@@ -236,11 +236,14 @@ while ~doneFlag
         [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
     end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.id = num2str(leftLaneInd);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.type = laneParams{5};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.Attributes.level = 'false';
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.a = laneParams{1};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.b = laneParams{2};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.c = laneParams{3};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.d = laneParams{4};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.left.lane{leftLaneInd}.width.Attributes.sOffset = '0';
+
   end
   
   ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.center.lane.Attributes.id = '0';
@@ -264,11 +267,12 @@ while ~doneFlag
         [1 80; 1 80; 1 80; 1 80; 1 80],{'3.25'; '0'; '0'; '0'; 'driving'});
     end
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.id = num2str(-rightLaneInd);
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.type = laneParams{5};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.Attributes.level = 'false';
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.a = laneParams{1};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.b = laneParams{2};
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.c = laneParams{3};
-    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.d = laneParams{4};
-    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.type = laneParams{5};
+    ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.d = laneParams{4};    
     ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{laneSectionCounter}.right.lane{rightLaneInd}.width.Attributes.sOffset = '0';
   end
   
