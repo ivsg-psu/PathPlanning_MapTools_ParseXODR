@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2023-03-21 15:41:44 by Eclipse SUMO GUI Version 1.15.0
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="../../../../../../../../OneDrive%20-%20The%20Pennsylvania%20State%20University/Documents/GitHub/PathPlanning_MapTools_ParseXODR/Data/XODRExport/XODRExport/SUMO/testXODR_23-03-21T15-17-43_300mArc_Line_Spiral_RR.net.xml"/>
+        <route-files value="../../../../../../../../OneDrive%20-%20The%20Pennsylvania%20State%20University/Documents/GitHub/PathPlanning_MapTools_ParseXODR/Data/XODRExport/XODRExport/SUMO/test.rou.xml"/>
+    </input>
+
+</configuration>
