@@ -17,11 +17,11 @@ ylabel('North (m)')
 
 % Start an XODR structure with the static header information
 ODRStruct.OpenDRIVE.header.Attributes.revMajor = '1';
-ODRStruct.OpenDRIVE.header.Attributes.revMinor = '4';
+ODRStruct.OpenDRIVE.header.Attributes.revMinor = '4'; % RoadRunner supports ASAM OpenDrive 1.4. 
 ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 % Start the road portion of the XODR structure at a station of zero and
-% with a static ID (can be chosen freely)
+% with a static ID (can be chosen freely) 
 ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; 
 ODRStruct.OpenDRIVE.road{1}.Attributes.id = '1'; 
 ODRStruct.OpenDRIVE.road{1}.planView = struct; 
