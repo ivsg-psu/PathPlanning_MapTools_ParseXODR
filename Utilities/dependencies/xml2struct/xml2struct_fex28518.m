@@ -22,6 +22,11 @@ function [ s ] = xml2struct_fex28518( file )
 % are replaced by _
 %
 % Written by W. Falkena, ASTI, TUDelft, 21-08-2010
+
+% Revision history:
+% 20230327: add line 77 to remove "#"
+
+
     
     if (nargin < 1)
         clc;
@@ -74,6 +79,7 @@ function [children,ptext] = parseChildNodes(theNode)
                     end
                 else
                     %add previously unkown new element to the structure
+                    name = erase(name,'#');
                     children.(name) = childs;
                     if(~isempty(text)) 
                         children.(name).('Text') = text; 
@@ -91,6 +97,44 @@ function [children,ptext] = parseChildNodes(theNode)
         end
     end
 end
+
+% ----- PARSE CHILD NODES -----
+% function children = parseChildNodes(theNode)
+%     % Initialize variables
+%     children = struct;
+%     numChildNodes = theNode.getLength;
+% 
+%     for count = 1:numChildNodes
+%         theChild = theNode.item(count-1);
+%         theChildName = char(theChild.getNodeName);
+%         
+%         if strcmp(theChild.getNodeType,'4') % CDATA_SECTION_NODE
+%             if strcmp(theChild.getNodeValue(end-2:end), ']]>')
+%                 children.(theChildName) = theChild.getNodeValue(10:end-3);
+%             else
+%                 children.(theChildName) = theChild.getNodeValue(10:end);
+%             end
+%         else
+%             % Recurse over child nodes
+%             if theChild.hasChildNodes
+%                 if length(children) == 0
+%                     children = parseChildNodes(theChild);
+%                 else
+%                     % Check for existing fieldname
+%                     if isfield(children,theChildName)
+%                         % Append the node
+%                         children.(theChildName) = [children.(theChildName) parseChildNodes(theChild)];
+%                     else
+%                         % Add the new field
+%                         children.(theChildName) = parseChildNodes(theChild);
+%                     end
+%                 end
+%             end
+%         end
+%     end
+% end
+
+
 
 % ----- Subfunction getNodeData -----
 function [text,name,attr,childs] = getNodeData(theNode)
