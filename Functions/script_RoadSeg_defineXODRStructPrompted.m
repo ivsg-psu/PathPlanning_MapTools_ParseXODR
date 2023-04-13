@@ -22,7 +22,6 @@ ODRStruct.OpenDRIVE.header.Attributes.date = datestr(now,'yyyy-mm-ddTHH:MM:SS');
 ODRStruct.OpenDRIVE.header.Attributes.vendor = 'PSU-IVSG';
 % Start the road portion of the XODR structure at a station of zero and
 % with a static ID (can be chosen freely) 
-ODRStruct.OpenDRIVE.road{1}.Attributes.s = '0'; 
 ODRStruct.OpenDRIVE.road{1}.Attributes.id = '1'; 
 ODRStruct.OpenDRIVE.road{1}.planView = struct; 
 ODRStruct.OpenDRIVE.road{1}.planView.geometry = cell(1); 

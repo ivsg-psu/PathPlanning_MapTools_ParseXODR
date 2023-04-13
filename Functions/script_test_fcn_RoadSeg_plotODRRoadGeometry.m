@@ -13,7 +13,7 @@ end
 
 % Load an example file from a static file path
 %ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/workzone_50m_curve_objects.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/Ex_Simple-LaneOffset.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('C:\Users\ccctt\OneDrive - The Pennsylvania State University\Documents\GitHub\PathPlanning_MapTools_ParseXODR\Data\Ex_Simple_Lane_Offset.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);

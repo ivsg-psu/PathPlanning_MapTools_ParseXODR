@@ -4,7 +4,7 @@ clearvars
 
 % Set this flag to write to an XODR file when done, leave clear to end the
 % script before writing to a file (e.g. while building the geometry)
-flag_write_XODR_file = 0;
+flag_write_XODR_file = 1;
 
 % Start with the OpenDRIVE header. Make sure to fill out the following
 % attributes: Date, OpenDRIVE Major Revision Number, OpenDRIVE Minor
@@ -75,9 +75,9 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{1}.line = struct;
 % as strings, even if numeric in value.
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length = '80';
 % Since the math is easy here, we'll simply determine the parameters of the
-% start point by inspection of the previous element. We moved 20 meters
+% start point by inspection of the previous element. We moved 100 meters
 % along the path, which was a straight line in the x direction. Thus, we
-% have (E,N) = (20,0) and an unchanged heading of zero.
+% have (E,N) = (100,0) and an unchanged heading of zero.
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.s = '100';
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.x = '100';
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.y = '0';

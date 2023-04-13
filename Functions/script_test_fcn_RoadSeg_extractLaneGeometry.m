@@ -34,7 +34,8 @@ ylabel('North (m)')
 % workzone_100m_Lane_Offset
 % ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_100m_Lane_Offset.xodr');
 % ODR Viewer Example File
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/Data/ODRViewerEx.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(['C:\Users\ccctt\OneDrive - The Pennsylvania State University\Documents\GitHub\' ...
+    'PathPlanning_MapTools_ParseXODR\Data\Ex_Simple_Lane_Offset.xodr']);
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);

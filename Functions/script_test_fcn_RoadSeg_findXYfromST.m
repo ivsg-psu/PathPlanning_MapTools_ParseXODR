@@ -7,7 +7,7 @@
 %     2022_04_02
 %     -- wrote the code
 
-% Create a test arc for the function
+%% Create a test arc for the function
 h0 = 3*pi/4;
 x0 = 9;
 y0 = 2;
@@ -26,13 +26,13 @@ axis equal
 
 % Run the function with the plotting enabled by sending in the figure
 % handle
-[x1,y1,h1] = fcn_RoadSeg_findXYfromST('arc',x0,y0,h0,s0,l0,s,t,K0);
+[x1,y1,h1] = fcn_RoadSeg_findXYfromST('arc',x0,y0,h0,s0,l0,s,0,K0);
  
 % Plot the results returned from the function
 figure(fHand)
 plot(x1,y1,'k*-.')
 
-% Create a test spiral for the function
+%% Create a test spiral for the function
 h0 = -3*pi/4;
 x0 = 9;
 y0 = 2;
