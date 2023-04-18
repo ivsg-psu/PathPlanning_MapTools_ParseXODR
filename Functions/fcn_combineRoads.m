@@ -9,14 +9,29 @@
 % roads
 % 3. a level 7 <link> under <lane> to define the successor/predecessor
 % lanes 
-% 4. <geometry> attributes of the predecessor road 
+% 4. <geometry> attributes of the successor road 
 % 5. update the bounding box 
 
+% Author: Wushuang
+% Revision history:
+% 20230408 first write of the code
+% 20230412 added comments
+
+testCase = 1;
+if 1 == testCase % one lane, one way,no shoulder road
 predecessorRoad = 'testXODR_23-03-21T15-02-19_100mLine_oneLane_noShoulder.xodr';
 successorRoad = 'testXODR_23-03-21T15-02-19_100mLine_oneLane_noShoulder.xodr';
 
+elseif 2 == testCase % two lane, two way with shoulder road
+predecessorRoad = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
+successorRoad = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
+
+end
+
 predecessorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(predecessorRoad);
 successorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(successorRoad);
+
+
 
 %% update the id in <road> for successor road. (not needed for predecessor)
 successorStruct.OpenDRIVE.road{1}.Attributes.id = str2double(successorStruct.OpenDRIVE.road{1}.Attributes.id) + 1;
@@ -101,6 +116,11 @@ xlabel('East (m)')
 ylabel('North (m)')
 % Plot the realistic looking road on the figure
 fcn_RoadSeg_plotRealisticRoad(ODRStruct,0.5,1);
+
+% Use the axis bounding box to find the extents of the data (this can be
+% replaced by more specific code since this could theoretically miss a
+% point on a curve in between plot points that has a slightly larger value
+% in one of the cardinal directions)
 %% update bounding box 
 axis tight
 axlims = axis;
