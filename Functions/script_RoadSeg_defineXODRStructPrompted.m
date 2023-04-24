@@ -222,7 +222,7 @@ while ~doneFlag
   while ~isnumeric(numLeftLanes)
     numLeftLanes = input('Enter the number of left lanes in this section: ');
   end
-  for leftLaneInd = 1:numLeftLanes
+  for leftLaneInd = numLeftLanes:-1:1
     % Request the lane width cubic parameters (a, b, c, d) from the user. A
     % natural extension of this would be to include a secondary set of fields
     % that would calculate a, b, c, and d from a lane shift in s and t
