@@ -13,11 +13,11 @@
       <lanes>
          <laneSection s="0">
             <left>
-               <lane id="1" level="false" type="driving">
-                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
-               </lane>
                <lane id="2" level="false" type="shoulder">
                   <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="1" level="false" type="driving">
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
                </lane>
             </left>
             <center>

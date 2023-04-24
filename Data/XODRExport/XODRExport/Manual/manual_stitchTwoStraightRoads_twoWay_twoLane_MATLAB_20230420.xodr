@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenDRIVE>
+   <header date="2023-03-21T15:01:46" east="100" north="4.75" revMajor="1" revMinor="4"
+           south="-4.75"
+           vendor="PSU-IVSG"
+           west="-2.9085e-16"/>
+   <road id="1" length="100">
+        <link>
+            <successor elementType="road" elementId="2" contactPoint="start"/>
+        </link>
+      <planView>
+         <geometry hdg="0" length="100" s="0" x="0" y="0">
+            <line/>
+         </geometry>
+      </planView>
+      <lanes>
+         <laneSection s="0">
+            <left>
+               <lane id="2" level="false" type="shoulder">
+                    <link>
+                        <successor id="2"/>
+                    </link>               
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="1" level="false" type="driving">
+                    <link>
+                        <successor id="1"/>
+                    </link>
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </left>
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                    <link>
+                        <successor id="-1"/>
+                    </link>                  
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="-2" level="false" type="shoulder">
+                    <link>
+                        <successor id="-2"/>
+                    </link> 
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+   <road id="2" length="100">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+        </link>
+      <planView>
+         <geometry hdg="0" length="100" s="0" x="100" y="0">
+            <line/>
+         </geometry>
+      </planView>
+      <lanes>
+         <laneSection s="0">
+            <left>
+               <lane id="1" level="false" type="driving">
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="2" level="false" type="shoulder">
+                        <link>
+                            <predecessor id="2"/>
+                        </link>
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </left>
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="-2" level="false" type="shoulder">
+                        <link>
+                            <predecessor id="-2"/>
+                        </link>
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+</OpenDRIVE>

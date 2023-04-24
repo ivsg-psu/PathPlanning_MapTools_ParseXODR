@@ -1,4 +1,4 @@
-%function fcn_combineRoads(predecessorRoad,successorRoad)
+function fcn_combineRoads(predecessorRoad,successorRoad)
 % This function combines two roads defined by independent xodr files.
 % INPUTS:
 % successorRoad: a file that defines the successor road, in .xodr
@@ -16,22 +16,10 @@
 % Revision history:
 % 20230408 first write of the code
 % 20230412 added comments
-
-testCase = 1;
-if 1 == testCase % one lane, one way,no shoulder road
-predecessorRoad = 'testXODR_23-03-21T15-02-19_100mLine_oneLane_noShoulder.xodr';
-successorRoad = 'testXODR_23-03-21T15-02-19_100mLine_oneLane_noShoulder.xodr';
-
-elseif 2 == testCase % two lane, two way with shoulder road
-predecessorRoad = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
-successorRoad = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
-
-end
+% 20230420 updated code for two way, two lane
 
 predecessorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(predecessorRoad);
 successorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(successorRoad);
-
-
 
 %% update the id in <road> for successor road. (not needed for predecessor)
 successorStruct.OpenDRIVE.road{1}.Attributes.id = str2double(successorStruct.OpenDRIVE.road{1}.Attributes.id) + 1;
@@ -49,11 +37,11 @@ successorStruct.OpenDRIVE.road{1}.link.predecessor.Attributes.elementId = ...
     predecessorStruct.OpenDRIVE.road{1}.Attributes.id;
 successorStruct.OpenDRIVE.road{1}.link.predecessor.Attributes.contactPoint = 'end';
 
-%% update the <link> under <lane> in predecessor road.
-predecessorStruct.OpenDRIVE.road{1}.lanes.laneSection{1}.right.lane{1}.link.successor.Attributes.id = '-1';
+%% update the <link> under <lane> in predecessor road..
+% NOTE: this assumes that the predececssor and successor roads have the
+% same number of lanes in left and right
 
-%% update the <link> under <lane> in successor road.
-successorStruct.OpenDRIVE.road{1}.lanes.laneSection{1}.right.lane{1}.link.predecessor.Attributes.id = '-1';
+[predecessorStruct,successorStruct]= fcn_addLaneLink(predecessorStruct,successorStruct);
 
 %% update <geometry> attributes in the predecessor road
 
@@ -139,4 +127,4 @@ movefile([myFilename '.xml'],[myFilename '.xodr'])
 
 
 
-%end
+end
