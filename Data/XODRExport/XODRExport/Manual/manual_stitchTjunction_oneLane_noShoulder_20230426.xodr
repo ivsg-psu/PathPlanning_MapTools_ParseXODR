@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenDRIVE>
+   <header date="2023-03-21T15:01:46" east="100" north="4.75" revMajor="1" revMinor="4"
+           south="-4.75"
+           vendor="PSU-IVSG"
+           west="-2.9085e-16"/>
+   <road length="4.7989703396088963e+1" id="0" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="3"/>
+        </link>
+        <planView>
+            <geometry s="0.0000000000000000e+0" x="-1.4427802354662647e-1" y="2.0105134858007254e+0" hdg="1.5677898851900496e+0" length="4.7989703396088963e+1">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0000000000000000e+0" singleSide="false">
+                <center>
+                    <lane id="0" type="none" level="false">
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0000000000000000e+0" a="3.2500000000000000e+0" b="0.0000000000000000e+0" c="0.0000000000000000e+0" d="0.0000000000000000e+0"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+   </road> 
+   <road id="1" length="4.7849677469642145e+1" junction="-1">
+        <link>
+            <successor elementType="junction" elementId="3"/>
+        </link>
+        <planView>
+            <geometry s="0.0000000000000000e+0" x="-5.0000000000000000e+1" y="0.0000000000000000e+0" hdg="0.0000000000000000e+0" length="4.7849677469642145e+1">
+                <line/>
+            </geometry>
+        </planView>
+      <lanes>
+         <laneSection s="0">
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+   <road id="2" length="4.4650306622489786e+1" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="3"/>
+        </link>
+      <planView>
+         <geometry s="0.0000000000000000e+0" x="5.3496933775102136e+0" y="0.0000000000000000e+0" hdg="0.0000000000000000e+0" length="4.4650306622489786e+1">
+               <line/>
+         </geometry>
+      </planView>
+      <lanes>
+         <laneSection s="0">
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+   <road id="4" length="7.5000159078680682e+0" junction="3">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="2" contactPoint="start"/>
+        </link>
+        <planView>
+            <geometry s="0.0000000000000000e+0" x="-2.1503225303578546e+0" y="0.0000000000000000e+0" hdg="0.0000000000000000e+0" length="7.5000159078680682e+0">
+                <line/>
+            </geometry>
+        </planView>
+      <lanes>
+         <laneSection s="0">
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                     <link>
+                           <predecessor id="-1"/>
+                           <successor id="-1"/>
+                     </link>
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+   <road name="Road 5" length="3.1681124762832353e+0" id="5" junction="3">
+      <link>
+         <predecessor elementType="road" elementId="1" contactPoint="end"/>
+         <successor elementType="road" elementId="0" contactPoint="start"/>
+      </link>
+      <planView>
+         <geometry s="0.0000000000000000e+0" x="-2.1503225303578546e+0" y="0.0000000000000000e+0" hdg="0.0000000000000000e+0" length="3.5358037384817020e-2">
+               <line/>
+         </geometry>
+         <geometry s="3.5358037384817020e-2" x="-2.1149644929730376e+0" y="0.0000000000000000e+0" hdg="0.0000000000000000e+0" length="1.5478621335392739e+0">
+               <arc curvature="5.0937577463784622e-1"/>
+         </geometry>
+         <geometry s="1.5832201709240910e+0" x="-7.2256050825729723e-1" y="5.7923809549321525e-1" hdg="7.8844347330415765e-1" length="1.5498440834517113e+0">
+               <arc curvature="5.0285471952132288e-1"/>
+         </geometry>
+         <geometry s="3.1330642543758023e+0" x="-1.4438432526114769e-1" y="1.9751556082109774e+0" hdg="1.5677898851900496e+0" length="3.5048221907433064e-2">
+               <line/>
+         </geometry>
+      </planView>
+      <lanes>
+         <laneSection s="0.0000000000000000e+0" singleSide="false">
+               <center>
+                  <lane id="0" type="none" level="false">
+                  </lane>
+               </center>
+               <right>
+                  <lane id="-1" type="driving" level="false">
+                     <link>
+                           <predecessor id="-1"/>
+                           <successor id="-1"/>
+                     </link>
+                     <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+                  </lane>
+               </right>
+         </laneSection>
+      </lanes>
+   </road>
+   <junction id="3" name="junction3">
+        <connection id="0" incomingRoad="1" connectingRoad="4" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+        <connection id="1" incomingRoad="1" connectingRoad="5" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+        <userData>
+            <vectorJunction junctionId="{ec9f8795-fe5b-4e44-9174-5f1d26947f03}"/>
+        </userData>
+   </junction>   
+</OpenDRIVE>
