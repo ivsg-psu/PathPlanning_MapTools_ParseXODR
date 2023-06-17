@@ -69,7 +69,7 @@ roadData.OpenDRIVE.road{1}.Attributes.length = new_traversal.Station(end);
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roadData);
 myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
 % Write the XODR structure to an XML formatted file
-struct2xml(roadData,myFilename)
+struct2xml(ODRStruct,myFilename)
 % Move the output file so that it has an XODR file extension
 movefile([myFilename '.xml'],[myFilename '.xodr'])
 % output file name
