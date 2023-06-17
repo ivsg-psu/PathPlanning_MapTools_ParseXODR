@@ -6,6 +6,10 @@
 % 20230617 added more test cases since the function updated to change lane
 % width at some station offset
 
+% Note: the function may give some information indicating that the heading 
+% of predecessor segment is different from the successor segment, and that is OK.
+% Because for test track, we are approximating the curve using small <line>
+% segments.
 
 %% case 1, update a left shoulder lane width through the whole lane
 clear; close all; clc;
@@ -50,4 +54,4 @@ lane_ID = '-1';
 lane_width = 10;
 lane_sOffset = 500;
 filePath = 'testTrack.xodr';
-road4 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
+road5 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
