@@ -1,0 +1,39 @@
+<OpenDRIVE xmlns="http://www.opendrive.org" version="1.6">
+    <header revMajor="1" revMinor="6" name="LaneWidthExample" version="1.00" date="2023-06-16T00:00:00" north="0.0000000000000000e+00" south="0.0000000000000000e+00" east="0.0000000000000000e+00" west="0.0000000000000000e+00">
+    </header>
+    <road id="1" length="100" junction="-1">
+        <type s="0" type="town"/>
+        <link/>
+        <planView>
+            <geometry s="0.0000000000000000e+00" x="0" y="0" hdg="0" length="100">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <left>
+                    <lane id="1" type="driving" level="false">
+                        <link/>
+                        <width sOffset="0.00" a="3.00" b="0" c="0.00" d="0.00"/>
+                        <roadMark sOffset="0.00" type="solid" weight="standard" color="standard" width="0.13" laneChange="both"/>
+                    </lane>
+                </left>
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.00" type="broken" weight="standard" color="standard" width="0.13" laneChange="both"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link/>
+                        <width sOffset="0.00" a="3.00" b="0" c="0.00" d="0.00"/>
+                        <width sOffset="25" a="20.00" b="0" c="0.00" d="0.00"/>
+                        <roadMark sOffset="0.00" type="solid" weight="standard" color="standard" width="0.13" laneChange="both"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <objects/>
+        <signals/>
+    </road>
+</OpenDRIVE>

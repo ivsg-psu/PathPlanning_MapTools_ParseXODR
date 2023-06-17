@@ -1,15 +1,53 @@
 % This script tests the function fcn_modifyLaneWidths. 
 % For details, please see fcn_modifyLaneWidths.m
+% Author: Wushuang
+% Revision history:
+% 20230530 first write of code
+% 20230617 added more test cases since the function updated to change lane
+% width at some station offset
 
 
-%% case 1, a two way, two lane line-shape road
+%% case 1, update a left shoulder lane width through the whole lane
+clear; close all; clc;
+road_num = 1;
+lane_ID = '2';
+lane_width = 10;
+lane_sOffset = 0;
+filePath = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
+road1 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
 
-road1 = fcn_modifyLaneWidths(4,2,'testXODR_23-03-21T15-02-19_100mLine.xodr');
+%% case 2, update a right driving lane width through the whole lane
 
-%% case 2, a two way, two lane, line-arc-spiral road
+road_num = 1;
+lane_ID = '-1';
+lane_width = 10;
+lane_sOffset = 0;
+filePath = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
+road2 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
 
-road2 = fcn_modifyLaneWidths(4,2,'testXODR_23-03-21T15-17-43_300mArc_Line_Spiral.xodr');
+%% case 3, update a right driving lane width starting at station = 50 meters
 
-%% case 3, test track
+road_num = 1;
+lane_ID = '-1';
+lane_width = 10;
+lane_sOffset = 50;
+filePath = 'testXODR_23-03-21T15-02-19_100mLine.xodr';
+road3 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
 
-road3 = fcn_modifyLaneWidths(20,2,'TestTrackConvertedFromLL.xodr'); 
+%% case 4, update a right driving lane width of test track through the whole lane
+
+road_num = 1;
+lane_ID = '-1';
+lane_width = 10;
+lane_sOffset = 0;
+filePath = 'testTrack.xodr';
+road4 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
+
+%% case 5, update a right driving lane width of test track starting from station = 500 meters 
+
+road_num = 1;
+lane_ID = '-1';
+lane_width = 10;
+lane_sOffset = 500;
+filePath = 'testTrack.xodr';
+road4 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
