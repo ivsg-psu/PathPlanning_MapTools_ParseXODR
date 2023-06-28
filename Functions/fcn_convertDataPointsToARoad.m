@@ -27,7 +27,9 @@ function fileName = fcn_convertDataPointsToARoad(enuData)
 roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');
   
 figure();
-plot(enuData(:,1),enuData(:,2),'.')
+plot(enuData(:,1),enuData(:,2),'.','LineWidth',2);
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
 
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
@@ -39,6 +41,16 @@ new_traversal.Yaw = real(new_traversal.Yaw);
 % calculate the lengths of each line segment 
 new_traversal.segmentLength = diff(new_traversal.Station);
 
+subplot(2,1,1);
+plot(enuData(:,1),enuData(:,2),'ko','LineWidth',2);
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
+legend('Raw ENU data');
+subplot(2,1,2);
+plot(new_traversal.X,new_traversal.Y,'bo','LineWidth',2);
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
+legend('Resampled ENU data');
 % write the new_traversal into open drive struct 
 for ii = 1:length(new_traversal.segmentLength)
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.hdg = new_traversal.Yaw(ii);
@@ -48,20 +60,6 @@ for ii = 1:length(new_traversal.segmentLength)
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.y = new_traversal.Y(ii);    
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.line = struct; 
 end
-
-% for each segment, check the discrepancy between calculated end point, and
-% given end point.
-% for ii = 1:length(new_traversal.segmentLength)
-% eudis(ii) = fcn_checkPointsAlign(new_traversal.X(ii),new_traversal.Y(ii),new_traversal.Yaw(ii),...
-%     new_traversal.segmentLength(ii),new_traversal.X(ii+1),new_traversal.Y(ii+1));
-% 
-% end
-% figure();
-% plot(eudis,'o',LineWidth=4);
-% title('Discrepancy between calculated end point and given end point');
-
-
-
 % update total length of the road
 roadData.OpenDRIVE.road{1}.Attributes.length = new_traversal.Station(end);
 
@@ -74,8 +72,4 @@ struct2xml(ODRStruct,myFilename)
 movefile([myFilename '.xml'],[myFilename '.xodr'])
 % output file name
 fileName = myFilename ;
-
-
-
-
 end
