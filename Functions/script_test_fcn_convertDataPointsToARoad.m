@@ -7,7 +7,8 @@
 % 20230512 added comments
 % 20230601 added test cases
 % clear;close all; clc; 
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');
+clear;clc;close all;
+
 %% Case 1, test track
 % Hard coded test track data points
 data1 = [
@@ -144,15 +145,21 @@ data4 = [
     -77.83601880199996,40.86493658400008,0
     -77.83556504299997,40.86504032700003,0
     ];
+
 data4 = flipud(data4);
 data = [data3;data4];
 LL_centerline = fliplr(data(:,1:2));
+startLine = [ 40.8655035,-77.83071141];
+startLineInd = knnsearch(LL_centerline(:,[1,2]),startLine);
+% reorder the data by start line
+LL_centerline = [LL_centerline(startLineInd:end,:);LL_centerline(1:startLineInd-1,:)];
+
 % add elevation
 LL_centerline(:,3) = 333.817;
 % convert to ENU
 reference_LLA = [40.86368573, -77.83592832, 344.189];
 ENUdata = fcn_GPS_lla2enu(LL_centerline,reference_LLA);
-ENUdata(end+1,:) = ENUdata(1,:);
+
 
 %% case 1, resample test track data points
 case1 = fcn_convertDataPointsToARoad(ENUdata);

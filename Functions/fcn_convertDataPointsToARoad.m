@@ -24,33 +24,57 @@ function fileName = fcn_convertDataPointsToARoad(enuData)
 % add lane markers
 
 % Load template xodr file
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');
-  
+roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');  
+
 figure();
-plot(enuData(:,1),enuData(:,2),'.','LineWidth',2);
+plot(enuData(:,1),enuData(:,2),'.','LineWidth',4);
 xlabel('xEast [meters]');
 ylabel('yNorth [meters]');
-
+axis equal;
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
 
 interval = 10;
 new_stations    = (0:interval:input_traversal.Station(end))';
+% new_stations(end+1) = input_traversal.Station(end);
+
 new_traversal = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
+
+%% manually close the gap after resampling
+% 
+x1= new_traversal.X(end);
+y1 = new_traversal.Y(end);
+x2 = new_traversal.X(1);
+y2 = new_traversal.Y(1);
+gapPath = [x1,y1;x2,y2];
+gapTraversal = fcn_Path_convertPathToTraversalStructure(gapPath);
+
+new_traversal.X(end+1) = x2;
+new_traversal.Y(end+1) = y2;
+new_traversal.Z(end+1) = new_traversal.Z(1);
+new_traversal.Diff(end+1,:) = gapTraversal.Diff(end,:);
+new_traversal.Station(end+1) = gapTraversal.Station(end) + new_traversal.Station(end);
+new_traversal.Yaw(end+1) = gapTraversal.Yaw(end);
+
+
 new_traversal.Yaw = real(new_traversal.Yaw);
 % calculate the lengths of each line segment 
 new_traversal.segmentLength = diff(new_traversal.Station);
 
-subplot(2,1,1);
+%% plots
+figure();
 plot(enuData(:,1),enuData(:,2),'ko','LineWidth',2);
 xlabel('xEast [meters]');
 ylabel('yNorth [meters]');
 legend('Raw ENU data');
-subplot(2,1,2);
+axis equal;
+figure();
 plot(new_traversal.X,new_traversal.Y,'bo','LineWidth',2);
 xlabel('xEast [meters]');
 ylabel('yNorth [meters]');
 legend('Resampled ENU data');
+axis equal;
+
 % write the new_traversal into open drive struct 
 for ii = 1:length(new_traversal.segmentLength)
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.hdg = new_traversal.Yaw(ii);
