@@ -163,6 +163,25 @@ ENUdata = fcn_GPS_lla2enu(LL_centerline,reference_LLA);
 
 %% case 1, resample test track data points
 case1 = fcn_convertDataPointsToARoad(ENUdata);
+figure();
+plot(enuData(:,1),enuData(:,2),'.','LineWidth',4);
+hold on;
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
+axis equal;
+
+%% plots
+figure();
+plot(enuData(:,1),enuData(:,2),'ko','LineWidth',2);
+hold on;
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
+legend('Raw ENU data');
+axis equal;
+
+
+
+
 %% case 2, sample path from path class library
 fig_num = 33;
 single_path = fcn_Path_fillSamplePaths(4) * 100;

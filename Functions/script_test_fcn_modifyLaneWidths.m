@@ -44,7 +44,7 @@ road_num = 1;
 lane_ID = '-1';
 lane_width = 10;
 lane_sOffset = 0;
-filePath = 'testTrack.xodr';
+filePath = 'TestTrackConvertedFromENU.xodr';
 road4 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);
 
 %% case 5, update a right driving lane width of test track starting from station = 500 meters 
@@ -53,5 +53,5 @@ road_num = 1;
 lane_ID = '-1';
 lane_width = 10;
 lane_sOffset = 500;
-filePath = 'testTrack.xodr';
+filePath = 'TestTrackConvertedFromENU.xodr';
 road5 = fcn_modifyLaneWidths(road_num,lane_ID,lane_width,lane_sOffset,filePath);

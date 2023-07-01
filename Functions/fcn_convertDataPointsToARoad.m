@@ -26,11 +26,7 @@ function fileName = fcn_convertDataPointsToARoad(enuData)
 % Load template xodr file
 roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');  
 
-figure();
-plot(enuData(:,1),enuData(:,2),'.','LineWidth',4);
-xlabel('xEast [meters]');
-ylabel('yNorth [meters]');
-axis equal;
+
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
 
@@ -61,13 +57,6 @@ new_traversal.Yaw = real(new_traversal.Yaw);
 % calculate the lengths of each line segment 
 new_traversal.segmentLength = diff(new_traversal.Station);
 
-%% plots
-figure();
-plot(enuData(:,1),enuData(:,2),'ko','LineWidth',2);
-xlabel('xEast [meters]');
-ylabel('yNorth [meters]');
-legend('Raw ENU data');
-axis equal;
 figure();
 plot(new_traversal.X,new_traversal.Y,'bo','LineWidth',2);
 xlabel('xEast [meters]');
