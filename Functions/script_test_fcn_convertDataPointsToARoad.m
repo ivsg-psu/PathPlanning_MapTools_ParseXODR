@@ -1,12 +1,13 @@
 % This script works to write the xodr file for test track, using the data
 % points exported from scenario CAD design
+% For details, please see fcn_convertDataPointsToARoad.m
 % Author: Wushuang
 % Revision history:
 % 20230503 first write of the code
 % 20230505 complete updating geometry
 % 20230512 added comments
 % 20230601 added test cases
-% clear;close all; clc; 
+
 clear;clc;close all;
 
 %% Case 1, test track
@@ -149,9 +150,10 @@ data4 = [
 data4 = flipud(data4);
 data = [data3;data4];
 LL_centerline = fliplr(data(:,1:2));
+% define start line
 startLine = [ 40.8655035,-77.83071141];
-startLineInd = knnsearch(LL_centerline(:,[1,2]),startLine);
 % reorder the data by start line
+startLineInd = knnsearch(LL_centerline(:,[1,2]),startLine);
 LL_centerline = [LL_centerline(startLineInd:end,:);LL_centerline(1:startLineInd-1,:)];
 
 % add elevation
@@ -161,30 +163,12 @@ reference_LLA = [40.86368573, -77.83592832, 344.189];
 ENUdata = fcn_GPS_lla2enu(LL_centerline,reference_LLA);
 
 
-%% case 1, resample test track data points
+%% case 1, test track data points
 case1 = fcn_convertDataPointsToARoad(ENUdata);
-figure();
-plot(enuData(:,1),enuData(:,2),'.','LineWidth',4);
-hold on;
-xlabel('xEast [meters]');
-ylabel('yNorth [meters]');
-axis equal;
-
-%% plots
-figure();
-plot(enuData(:,1),enuData(:,2),'ko','LineWidth',2);
-hold on;
-xlabel('xEast [meters]');
-ylabel('yNorth [meters]');
-legend('Raw ENU data');
-axis equal;
-
-
-
 
 %% case 2, sample path from path class library
 fig_num = 33;
-single_path = fcn_Path_fillSamplePaths(4) * 100;
+single_path = fcn_Path_fillSamplePaths(4) * 100; % multiply by 100 to get a road with practical length
 traversal = fcn_Path_convertPathToTraversalStructure(single_path);
 case2 = fcn_convertDataPointsToARoad(single_path);
 

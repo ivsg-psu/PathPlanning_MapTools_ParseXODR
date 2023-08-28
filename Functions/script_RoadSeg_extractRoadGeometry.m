@@ -17,7 +17,7 @@ close all
 
 % Load an example file from a static file path
 %ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/ODRViewerEx.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_150m_double_curve_barrels_repeat.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('C:\Users\ccctt\OneDrive - The Pennsylvania State University\Documents\GitHub\PathPlanning_MapTools_ParseXODR\Data\workzone_150m_double_curve_barrels_repeat.xodr');
 % ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_50m_curve_objects.xodr');
 
 % Check the structure

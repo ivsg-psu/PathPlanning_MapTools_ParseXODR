@@ -1,43 +1,109 @@
-function fileName = fcn_convertDataPointsToARoad(enuData)
-% This function works to convert a set of data points into a road. 
-% Specifically, each pair of two data points forms a baby <line> segmeng in
-% <geometry>, and in total, they form a road
+function fileName = fcn_convertDataPointsToARoad(enuData,varargin)
+% fcn_convertDataPointsToARoad.m
+% This function converts a set of data points into a road representation. Specifically, 
+% each pair of consecutive data points forms a small line segment within the geometry, 
+% which when combined, create the entire road.
+%
+% FORMAT:
+%
+%       fileName = fcn_convertDataPointsToARoad(enuData)
+%
+% INPUTS:
+%       enuData: A set of data points in ENU (East, North, Up) coordinates.
+%
+% OUTPUTS:
+%       fileName: The name of the generated .xodr file representing the road.
+%
+% DEPENDENCIES:
+%       - fcn_RoadSeg_convertXODRtoMATLABStruct
+%       - fcn_Path_convertPathToTraversalStructure
+%       - fcn_Path_newTraversalByStationResampling
+%       - fcn_RoadSeg_XODRSegmentChecks
+%       - struct2xml
+%
+% EXAMPLES:
+%
+%       % Use the function with a set of ENU coordinates:
+%       fileName = fcn_convertDataPointsToARoad(enuCoordinates);
+%
+% This function was written by Wushuang
+% Questions or comments? Contact wxb41@psu.edu
+%
+% REVISION HISTORY:
+%
+% 2023-05-20: Initial creation of the function.
+% 2023-05-21: Added comments.
+% 2023-05-23: Utilized path class for traversal calculation.
+% 2023-05-25: Removed data shifting.
+% 2023-06-01: Implemented path data resampling function.
+%
+% TO DO:
+%       - add a flag to indicate whether user need to close the loop. 
 
-% INPUTS: 
-% - a set of data points in ENU coordinate
+flag_do_debug = 1; % Flag to show function info in UI
+flag_do_plots = 0; % Flag to plot the final results
+flag_check_inputs = 1; % Flag to perform input checking
 
-% OUTPUTS: 
-% - the file name of exported xodr file
+if flag_do_debug
+    st = dbstack; %#ok<*UNRCH>
+    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+end
 
-% This script works to write the xodr file for test track, using the data
-% points exported from scenario CAD design
-% Author: Wushuang
-% Revision history:
-% 20230520 first write of the code
-% 20230521 added comments
-% 20230523 edit to use path class to calculate traversal 
-% 20230525 remove "data shifting"
-% 20230601 added function to resample path data
 
-% to add:
-% variable of lane width, shoulder width
-% add lane markers
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |
+%              |_|
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if flag_check_inputs == 1
+    % Are there the right number of inputs?
+    if nargin < 1 || nargin > 2
+        error('Incorrect number of input arguments')
+    end
+end
+
+% Does user want to show the plots?
+if 2 == nargin
+    fig_num = varargin{1};
+    figure(fig_num);
+    flag_do_plots = 1;
+else
+    if flag_do_debug
+        fig = figure;
+        fig_num = fig.Number;
+        flag_do_plots = 1;
+    end
+end
+
+%% Main code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
+%  | |  | | (_| | | | | |
+%  |_|  |_|\__,_|_|_| |_|
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Load template xodr file
 roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');  
-
 
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
 
 interval = 10;
 new_stations    = (0:interval:input_traversal.Station(end))';
-% new_stations(end+1) = input_traversal.Station(end);
-
 new_traversal = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
 
-%% manually close the gap after resampling
-% 
+% close the gap after resampling
 x1= new_traversal.X(end);
 y1 = new_traversal.Y(end);
 x2 = new_traversal.X(1);
@@ -52,17 +118,10 @@ new_traversal.Diff(end+1,:) = gapTraversal.Diff(end,:);
 new_traversal.Station(end+1) = gapTraversal.Station(end) + new_traversal.Station(end);
 new_traversal.Yaw(end+1) = gapTraversal.Yaw(end);
 
-
 new_traversal.Yaw = real(new_traversal.Yaw);
-% calculate the lengths of each line segment 
 new_traversal.segmentLength = diff(new_traversal.Station);
 
-figure();
-plot(new_traversal.X,new_traversal.Y,'bo','LineWidth',2);
-xlabel('xEast [meters]');
-ylabel('yNorth [meters]');
-legend('Resampled ENU data');
-axis equal;
+
 
 % write the new_traversal into open drive struct 
 for ii = 1:length(new_traversal.segmentLength)
@@ -75,14 +134,31 @@ for ii = 1:length(new_traversal.segmentLength)
 end
 % update total length of the road
 roadData.OpenDRIVE.road{1}.Attributes.length = new_traversal.Station(end);
-
-%% write the output file
+% write the output file
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roadData);
 myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
-% Write the XODR structure to an XML formatted file
-struct2xml(ODRStruct,myFilename)
-% Move the output file so that it has an XODR file extension
-movefile([myFilename '.xml'],[myFilename '.xodr'])
-% output file name
+struct2xml(ODRStruct,myFilename);
+movefile([myFilename '.xml'],[myFilename '.xodr']);
 fileName = myFilename ;
+
+%% Any debugging?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____       _
+%  |  __ \     | |
+%  | |  | | ___| |__  _   _  __ _
+%  | |  | |/ _ \ '_ \| | | |/ _` |
+%  | |__| |  __/ |_) | |_| | (_| |
+%  |_____/ \___|_.__/ \__,_|\__, |
+%                            __/ |
+%                           |___/
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if 1==flag_do_plots
+figure(fig_num);
+
+plot(new_traversal.X,new_traversal.Y,'bo','LineWidth',2);
+xlabel('xEast [meters]');
+ylabel('yNorth [meters]');
+legend('Resampled ENU data');
+axis equal;
+end
 end
