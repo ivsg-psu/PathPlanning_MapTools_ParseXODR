@@ -98,8 +98,7 @@ roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrac
 
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
-
-interval = 10;
+interval = 10; % default resampling interval is set to 10 meters; 
 new_stations    = (0:interval:input_traversal.Station(end))';
 new_traversal = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
 
