@@ -172,7 +172,8 @@ single_path = fcn_Path_fillSamplePaths(4) * 100; % multiply by 100 to get a road
 traversal = fcn_Path_convertPathToTraversalStructure(single_path);
 case2 = fcn_convertDataPointsToARoad(single_path);
 
-
+%% case 3, updated test track data points for scenario 1.1
+case3 = fcn_convertDataPointsToARoad(Lane.ENU_laneCenterline);
 
 
 

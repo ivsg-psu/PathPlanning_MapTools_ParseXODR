@@ -94,31 +94,31 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Load template xodr file
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('manual_stitchPointsForTestTrack.xodr');  
+roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('RoadTemplate.xodr');  
 
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);
 interval = 10; % default resampling interval is set to 10 meters; 
 new_stations    = (0:interval:input_traversal.Station(end))';
 new_traversal = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
-
-% close the gap after resampling
-x1= new_traversal.X(end);
-y1 = new_traversal.Y(end);
-x2 = new_traversal.X(1);
-y2 = new_traversal.Y(1);
-gapPath = [x1,y1;x2,y2];
-gapTraversal = fcn_Path_convertPathToTraversalStructure(gapPath);
-
-new_traversal.X(end+1) = x2;
-new_traversal.Y(end+1) = y2;
-new_traversal.Z(end+1) = new_traversal.Z(1);
-new_traversal.Diff(end+1,:) = gapTraversal.Diff(end,:);
-new_traversal.Station(end+1) = gapTraversal.Station(end) + new_traversal.Station(end);
-new_traversal.Yaw(end+1) = gapTraversal.Yaw(end);
-
-new_traversal.Yaw = real(new_traversal.Yaw);
 new_traversal.segmentLength = diff(new_traversal.Station);
+% close the gap after resampling
+% x1= new_traversal.X(end);
+% y1 = new_traversal.Y(end);
+% x2 = new_traversal.X(1);
+% y2 = new_traversal.Y(1);
+% gapPath = [x1,y1;x2,y2];
+% gapTraversal = fcn_Path_convertPathToTraversalStructure(gapPath);
+% 
+% new_traversal.X(end+1) = x2;
+% new_traversal.Y(end+1) = y2;
+% new_traversal.Z(end+1) = new_traversal.Z(1);
+% new_traversal.Diff(end+1,:) = gapTraversal.Diff(end,:);
+% new_traversal.Station(end+1) = gapTraversal.Station(end) + new_traversal.Station(end);
+% new_traversal.Yaw(end+1) = gapTraversal.Yaw(end);
+% 
+% new_traversal.Yaw = real(new_traversal.Yaw);
+% 
 
 
 
@@ -139,6 +139,7 @@ myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
 struct2xml(ODRStruct,myFilename);
 movefile([myFilename '.xml'],[myFilename '.xodr']);
 fileName = myFilename ;
+
 
 %% Any debugging?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
