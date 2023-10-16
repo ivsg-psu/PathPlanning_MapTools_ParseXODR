@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenDRIVE>
+   <header date="2023-03-21T15:01:46" east="100" north="4.75" revMajor="1" revMinor="4"
+           south="-4.75"
+           vendor="PSU-IVSG"
+           west="-2.9085e-16"/>
+   <road id="1" length="1540">
+      <planView>
+         <geometry hdg="2.2706" length="10" s="0" x="438.6418" y="203.7163">
+            <line/>
+         </geometry>
+         <geometry hdg="2.3743" length="10" s="10" x="432.206" y="211.36">
+            <line/>
+         </geometry>
+         <geometry hdg="2.4548" length="10" s="20" x="425.0101" y="218.2998">
+            <line/>
+         </geometry>
+         <geometry hdg="2.5868" length="10" s="30" x="417.2815" y="224.6367">
+            <line/>
+         </geometry>
+         <geometry hdg="2.7003" length="10" s="40" x="408.7872" y="229.9009">
+            <line/>
+         </geometry>
+         <geometry hdg="2.7923" length="10" s="50" x="399.7498" y="234.1696">
+            <line/>
+         </geometry>
+         <geometry hdg="2.9091" length="10" s="60" x="390.3564" y="237.5906">
+            <line/>
+         </geometry>
+         <geometry hdg="3.0009" length="10" s="70" x="380.6312" y="239.8938">
+            <line/>
+         </geometry>
+         <geometry hdg="3.1084" length="10" s="80" x="370.7347" y="241.295">
+            <line/>
+         </geometry>
+         <geometry hdg="3.2042" length="10" s="90" x="360.7455" y="241.6268">
+            <line/>
+         </geometry>
+         <geometry hdg="3.2757" length="10" s="100" x="350.7682" y="241.0009">
+            <line/>
+         </geometry>
+         <geometry hdg="3.3417" length="10" s="110" x="340.8598" y="239.664">
+            <line/>
+         </geometry>
+         <geometry hdg="3.3953" length="10" s="120" x="331.0623" y="237.6773">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4192" length="10" s="130" x="321.3828" y="235.1677">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="140" x="311.7659" y="232.4268">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="150" x="302.1521" y="229.6744">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="160" x="292.5383" y="226.922">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="170" x="282.9246" y="224.1696">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="180" x="273.3108" y="221.4172">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="190" x="263.6971" y="218.6648">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="200" x="254.0833" y="215.9124">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="210" x="244.4695" y="213.16">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="220" x="234.8558" y="210.4077">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="230" x="225.242" y="207.6553">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="240" x="215.6283" y="204.9029">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="250" x="206.0145" y="202.1505">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="260" x="196.4007" y="199.3981">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="270" x="186.787" y="196.6457">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="280" x="177.1732" y="193.8933">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="290" x="167.5595" y="191.141">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="300" x="157.9457" y="188.3886">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="310" x="148.3319" y="185.6362">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="320" x="138.7182" y="182.8838">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="330" x="129.1044" y="180.1314">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="340" x="119.4907" y="177.379">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204-2.1073e-08i" length="10" s="350" x="109.8769" y="174.6266">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204-2.1073e-08i" length="10" s="360" x="100.2631" y="171.8743">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204-2.1073e-08i" length="10" s="370" x="90.6494" y="169.1219">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="380" x="81.0356" y="166.3695">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="390" x="71.4219" y="163.6171">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="400" x="61.8081" y="160.8647">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204+2.1073e-08i" length="10" s="410" x="52.1943" y="158.1123">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4204" length="10" s="420" x="42.5806" y="155.3599">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4294" length="10" s="430" x="32.9668" y="152.6075">
+            <line/>
+         </geometry>
+         <geometry hdg="3.434" length="10" s="440" x="23.3784" y="149.769">
+            <line/>
+         </geometry>
+         <geometry hdg="3.434" length="10" s="450" x="13.803" y="146.886">
+            <line/>
+         </geometry>
+         <geometry hdg="3.434" length="10" s="460" x="4.2276" y="144.0029">
+            <line/>
+         </geometry>
+         <geometry hdg="3.4491" length="10" s="470" x="-5.3478" y="141.1199">
+            <line/>
+         </geometry>
+         <geometry hdg="3.5151" length="10" s="480" x="-14.878" y="138.0933">
+            <line/>
+         </geometry>
+         <geometry hdg="3.5427" length="10" s="490" x="-24.1867" y="134.4448">
+            <line/>
+         </geometry>
+         <geometry hdg="3.6024" length="10" s="500" x="-33.3923" y="130.5405">
+            <line/>
+         </geometry>
+         <geometry hdg="3.6777" length="10" s="510" x="-42.345" y="126.0962">
+            <line/>
+         </geometry>
+         <geometry hdg="3.7549" length="10" s="520" x="-50.9391" y="120.9898">
+            <line/>
+         </geometry>
+         <geometry hdg="3.8242" length="10" s="530" x="-59.1138" y="115.2355">
+            <line/>
+         </geometry>
+         <geometry hdg="3.8707" length="10" s="540" x="-66.8715" y="108.9288">
+            <line/>
+         </geometry>
+         <geometry hdg="3.9311" length="10" s="550" x="-74.3275" y="102.2686">
+            <line/>
+         </geometry>
+         <geometry hdg="3.977" length="10" s="560" x="-81.3686" y="95.1698">
+            <line/>
+         </geometry>
+         <geometry hdg="4.0101" length="10" s="570" x="-88.0757" y="87.7553">
+            <line/>
+         </geometry>
+         <geometry hdg="4.072" length="10" s="580" x="-94.5345" y="80.122">
+            <line/>
+         </geometry>
+         <geometry hdg="4.1693" length="10" s="590" x="-100.506" y="72.1083">
+            <line/>
+         </geometry>
+         <geometry hdg="4.2316" length="10" s="600" x="-105.6716" y="63.5499">
+            <line/>
+         </geometry>
+         <geometry hdg="4.3048" length="10" s="610" x="-110.2955" y="54.6858">
+            <line/>
+         </geometry>
+         <geometry hdg="4.3625" length="10" s="620" x="-114.2582" y="45.5082">
+            <line/>
+         </geometry>
+         <geometry hdg="4.4337" length="10" s="630" x="-117.6853" y="36.1152">
+            <line/>
+         </geometry>
+         <geometry hdg="4.4984" length="10" s="640" x="-120.4347" y="26.5048">
+            <line/>
+         </geometry>
+         <geometry hdg="4.5804" length="10" s="650" x="-122.5578" y="16.7359">
+            <line/>
+         </geometry>
+         <geometry hdg="4.6194" length="10" s="660" x="-123.8737" y="6.8241">
+            <line/>
+         </geometry>
+         <geometry hdg="4.6607" length="10" s="670" x="-124.8021" y="-3.1323">
+            <line/>
+         </geometry>
+         <geometry hdg="4.7317" length="10" s="680" x="-125.3185" y="-13.1166">
+            <line/>
+         </geometry>
+         <geometry hdg="4.7907" length="10" s="690" x="-125.1256" y="-23.1133">
+            <line/>
+         </geometry>
+         <geometry hdg="4.8357" length="10" s="700" x="-124.3435" y="-33.0805">
+            <line/>
+         </geometry>
+         <geometry hdg="4.9051" length="10" s="710" x="-123.1134" y="-43.0034">
+            <line/>
+         </geometry>
+         <geometry hdg="4.9638" length="10" s="720" x="-121.1991" y="-52.8154">
+            <line/>
+         </geometry>
+         <geometry hdg="5.0417" length="10" s="730" x="-118.7116" y="-62.4997">
+            <line/>
+         </geometry>
+         <geometry hdg="5.0879" length="10" s="740" x="-115.4788" y="-71.96">
+            <line/>
+         </geometry>
+         <geometry hdg="5.153" length="10" s="750" x="-111.8112" y="-81.2622">
+            <line/>
+         </geometry>
+         <geometry hdg="5.222" length="10" s="760" x="-107.5472" y="-90.3047">
+            <line/>
+         </geometry>
+         <geometry hdg="5.2786" length="10" s="770" x="-102.6691" y="-99.0335">
+            <line/>
+         </geometry>
+         <geometry hdg="5.3387" length="10" s="780" x="-97.3053" y="-107.4726">
+            <line/>
+         </geometry>
+         <geometry hdg="5.4032" length="10" s="790" x="-91.4439" y="-115.574">
+            <line/>
+         </geometry>
+         <geometry hdg="5.4592" length="10" s="800" x="-85.0733" y="-123.2802">
+            <line/>
+         </geometry>
+         <geometry hdg="5.5159" length="10" s="810" x="-78.2814" y="-130.6175">
+            <line/>
+         </geometry>
+         <geometry hdg="5.5834" length="10" s="820" x="-71.0836" y="-137.5588">
+            <line/>
+         </geometry>
+         <geometry hdg="5.6389" length="10" s="830" x="-63.4357" y="-143.9982">
+            <line/>
+         </geometry>
+         <geometry hdg="5.7085" length="10" s="840" x="-55.4432" y="-150.0025">
+            <line/>
+         </geometry>
+         <geometry hdg="5.7624" length="10" s="850" x="-47.0494" y="-155.4379">
+            <line/>
+         </geometry>
+         <geometry hdg="5.824" length="10" s="860" x="-38.3785" y="-160.4121">
+            <line/>
+         </geometry>
+         <geometry hdg="5.9046" length="10" s="870" x="-29.416" y="-164.8438">
+            <line/>
+         </geometry>
+         <geometry hdg="5.9488" length="10" s="880" x="-20.1267" y="-168.5393">
+            <line/>
+         </geometry>
+         <geometry hdg="6.0191" length="10" s="890" x="-10.681" y="-171.8214">
+            <line/>
+         </geometry>
+         <geometry hdg="6.0719" length="10" s="900" x="-1.0304" y="-174.4305">
+            <line/>
+         </geometry>
+         <geometry hdg="6.1748" length="10" s="910" x="8.7453" y="-176.5269">
+            <line/>
+         </geometry>
+         <geometry hdg="6.2255" length="10" s="920" x="18.6816" y="-177.6077">
+            <line/>
+         </geometry>
+         <geometry hdg="6.2724" length="10" s="930" x="28.6646" y="-178.1839">
+            <line/>
+         </geometry>
+         <geometry hdg="6.339" length="10" s="940" x="38.6622" y="-178.2912">
+            <line/>
+         </geometry>
+         <geometry hdg="6.4107" length="10" s="950" x="48.6424" y="-177.7335">
+            <line/>
+         </geometry>
+         <geometry hdg="6.4755" length="10" s="960" x="58.5598" y="-176.4621">
+            <line/>
+         </geometry>
+         <geometry hdg="6.5325" length="10" s="970" x="68.3741" y="-174.5506">
+            <line/>
+         </geometry>
+         <geometry hdg="6.5963" length="10" s="980" x="78.0614" y="-172.0845">
+            <line/>
+         </geometry>
+         <geometry hdg="6.6603" length="10" s="990" x="87.5742" y="-169.0045">
+            <line/>
+         </geometry>
+         <geometry hdg="6.7185" length="10" s="1000" x="96.8695" y="-165.3224">
+            <line/>
+         </geometry>
+         <geometry hdg="6.7749" length="10" s="1010" x="105.9343" y="-161.1068">
+            <line/>
+         </geometry>
+         <geometry hdg="6.8336" length="10" s="1020" x="114.7484" y="-156.3858">
+            <line/>
+         </geometry>
+         <geometry hdg="6.8803" length="10" s="1030" x="123.2691" y="-151.1575">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9067" length="10" s="1040" x="131.5381" y="-145.535">
+            <line/>
+         </geometry>
+         <geometry hdg="6.923" length="10" s="1050" x="139.6563" y="-139.6965">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9263" length="10" s="1060" x="147.6786" y="-133.7264">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1070" x="155.6809" y="-127.7298">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1080" x="163.6115" y="-121.6384">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1090" x="171.5421" y="-115.5469">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1100" x="179.4727" y="-109.4555">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1110" x="187.4033" y="-103.3641">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1120" x="195.3339" y="-97.2726">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1130" x="203.2645" y="-91.1812">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1140" x="211.1951" y="-85.0897">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1150" x="219.1257" y="-78.9983">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1160" x="227.0563" y="-72.9069">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1170" x="234.9869" y="-66.8154">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1180" x="242.9175" y="-60.724">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1190" x="250.8481" y="-54.6325">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1200" x="258.7787" y="-48.5411">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1210" x="266.7093" y="-42.4497">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1220" x="274.6399" y="-36.3582">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1230" x="282.5705" y="-30.2668">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1240" x="290.5011" y="-24.1754">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1250" x="298.4317" y="-18.0839">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1260" x="306.3623" y="-11.9925">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1270" x="314.2929" y="-5.901">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1280" x="322.2235" y="0.1904">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1290" x="330.1541" y="6.2818">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1300" x="338.0847" y="12.3733">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382" length="10" s="1310" x="346.0153" y="18.4647">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1320" x="353.9459" y="24.5561">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1330" x="361.8765" y="30.6476">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1340" x="369.8071" y="36.739">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1350" x="377.7377" y="42.8305">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1360" x="385.6683" y="48.9219">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9382+4.2147e-08i" length="10" s="1370" x="393.5989" y="55.0133">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9377+4.2147e-08i" length="10" s="1380" x="401.5295" y="61.1048">
+            <line/>
+         </geometry>
+         <geometry hdg="6.9455+4.2147e-08i" length="10" s="1390" x="409.463" y="67.1924">
+            <line/>
+         </geometry>
+         <geometry hdg="7.0085+4.2147e-08i" length="10" s="1400" x="417.3477" y="73.3415">
+            <line/>
+         </geometry>
+         <geometry hdg="7.0746+4.2147e-08i" length="10" s="1410" x="424.829" y="79.9734">
+            <line/>
+         </geometry>
+         <geometry hdg="7.1703+4.2147e-08i" length="10" s="1420" x="431.854" y="87.0835">
+            <line/>
+         </geometry>
+         <geometry hdg="7.2676+4.2147e-08i" length="10" s="1430" x="438.1692" y="94.8348">
+            <line/>
+         </geometry>
+         <geometry hdg="7.3785+4.2147e-08i" length="10" s="1440" x="443.6968" y="103.155">
+            <line/>
+         </geometry>
+         <geometry hdg="7.4956+4.2147e-08i" length="10" s="1450" x="448.2718" y="112.0409">
+            <line/>
+         </geometry>
+         <geometry hdg="7.5911+4.2147e-08i" length="10" s="1460" x="451.7772" y="121.3988">
+            <line/>
+         </geometry>
+         <geometry hdg="7.7027+4.2147e-08i" length="10" s="1470" x="454.3755" y="131.053">
+            <line/>
+         </geometry>
+         <geometry hdg="7.8016+4.2147e-08i" length="10" s="1480" x="455.8814" y="140.9292">
+            <line/>
+         </geometry>
+         <geometry hdg="7.8985+4.2147e-08i" length="10" s="1490" x="456.4046" y="150.9096">
+            <line/>
+         </geometry>
+         <geometry hdg="8.03+4.2147e-08i" length="10" s="1500" x="455.9596" y="160.8962">
+            <line/>
+         </geometry>
+         <geometry hdg="8.1503+4.2147e-08i" length="10" s="1510" x="454.2102" y="170.7312">
+            <line/>
+         </geometry>
+         <geometry hdg="8.2569+4.2147e-08i" length="10" s="1520" x="451.2915" y="180.2918">
+            <line/>
+         </geometry>
+         <geometry hdg="8.3728+4.2147e-08i" length="10" s="1530" x="447.3735" y="189.4831">
+            <line/>
+         </geometry>
+      </planView>
+      <lanes>
+         <laneSection s="0">
+            <left>
+               <lane id="2" level="false" type="shoulder">
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="1" level="false" type="driving">
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </left>
+            <center>
+               <lane id="0" level="false" type="none"/>
+            </center>
+            <right>
+               <lane id="-1" level="false" type="driving">
+                  <width a="3.25" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+               <lane id="-2" level="false" type="shoulder">
+                  <width a="1.5" b="0" c="0" d="0" sOffset="0"/>
+               </lane>
+            </right>
+         </laneSection>
+      </lanes>
+   </road>
+</OpenDRIVE>
