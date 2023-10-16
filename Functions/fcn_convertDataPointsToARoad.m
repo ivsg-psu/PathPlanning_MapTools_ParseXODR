@@ -1,4 +1,4 @@
-function fileName = fcn_convertDataPointsToARoad(enuData,varargin)
+function fullFileName = fcn_convertDataPointsToARoad(enuData,outputFileName,varargin)
 % fcn_convertDataPointsToARoad.m
 % This function converts a set of data points into a road representation. Specifically, 
 % each pair of consecutive data points forms a small line segment within the geometry, 
@@ -6,13 +6,14 @@ function fileName = fcn_convertDataPointsToARoad(enuData,varargin)
 %
 % FORMAT:
 %
-%       fileName = fcn_convertDataPointsToARoad(enuData)
+%       fullFileName = fcn_convertDataPointsToARoad(enuData)
 %
 % INPUTS:
 %       enuData: A set of data points in ENU (East, North, Up) coordinates.
-%
+%       outputFileName (optional): given file name to write the output
+%       file, without extention, in string
 % OUTPUTS:
-%       fileName: The name of the generated .xodr file representing the road.
+%       fullFileName: The name of the generated .xodr file representing the road, with extension.
 %
 % DEPENDENCIES:
 %       - fcn_RoadSeg_convertXODRtoMATLABStruct
@@ -65,13 +66,13 @@ end
 
 if flag_check_inputs == 1
     % Are there the right number of inputs?
-    if nargin < 1 || nargin > 2
+    if nargin < 2 || nargin > 3
         error('Incorrect number of input arguments')
     end
 end
 
 % Does user want to show the plots?
-if 2 == nargin
+if 3 == nargin
     fig_num = varargin{1};
     figure(fig_num);
     flag_do_plots = 1;
@@ -135,11 +136,11 @@ end
 roadData.OpenDRIVE.road{1}.Attributes.length = new_traversal.Station(end);
 % write the output file
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roadData);
-myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
-struct2xml(ODRStruct,myFilename);
-movefile([myFilename '.xml'],[myFilename '.xodr']);
-fileName = myFilename ;
-
+% myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
+% struct2xml(ODRStruct,myFilename);
+% movefile([myFilename '.xml'],[myFilename '.xodr']);
+% fileName = myFilename ;
+fullFileName = fcn_ParseXODR_convertODRstructToXODRFile(ODRStruct,outputFileName)
 
 %% Any debugging?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

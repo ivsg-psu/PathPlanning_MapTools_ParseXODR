@@ -174,7 +174,7 @@ case2 = fcn_convertDataPointsToARoad(single_path);
 
 %% case 3, updated test track data points for scenario 1.1
 % The Lane.ENU_laneCenterline is the Lane structure generated from script_test_fcn_LoadWZ_loadLane.m
-case3 = fcn_convertDataPointsToARoad(Lane.ENU_laneCenterline);
+case3 = fcn_convertDataPointsToARoad(Lane.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU,'scenario1_1_doubleYellow');
 
 
 

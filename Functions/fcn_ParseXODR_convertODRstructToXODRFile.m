@@ -7,7 +7,7 @@ function outputFilename = fcn_ParseXODR_convertODRstructToXODRFile(data,varargin
 %   data: MATLAB structure you want to convert
 %
 % FORMAT:
-%   myFilename = fcn_convertODRstructToXODRFile(data,varargin)
+%   outputFilename = fcn_convertODRstructToXODRFile(data,varargin)
 %
 % INPUTS:
 %   data: MATLAB structure containing road network data
