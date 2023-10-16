@@ -125,7 +125,7 @@ new_traversal.segmentLength = diff(new_traversal.Station);
 
 % write the new_traversal into open drive struct 
 for ii = 1:length(new_traversal.segmentLength)
-    roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.hdg = new_traversal.Yaw(ii);
+    roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.hdg = real(new_traversal.Yaw(ii));
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.length = new_traversal.segmentLength(ii);
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.s = new_traversal.Station(ii);
     roadData.OpenDRIVE.road{1}.planView.geometry{ii}.Attributes.x = new_traversal.X(ii);

@@ -111,13 +111,13 @@
          <geometry hdg="3.4204" length="10" s="340" x="119.4907" y="177.379">
             <line/>
          </geometry>
-         <geometry hdg="3.4204-2.1073e-08i" length="10" s="350" x="109.8769" y="174.6266">
+         <geometry hdg="3.4204" length="10" s="350" x="109.8769" y="174.6266">
             <line/>
          </geometry>
-         <geometry hdg="3.4204-2.1073e-08i" length="10" s="360" x="100.2631" y="171.8743">
+         <geometry hdg="3.4204" length="10" s="360" x="100.2631" y="171.8743">
             <line/>
          </geometry>
-         <geometry hdg="3.4204-2.1073e-08i" length="10" s="370" x="90.6494" y="169.1219">
+         <geometry hdg="3.4204" length="10" s="370" x="90.6494" y="169.1219">
             <line/>
          </geometry>
          <geometry hdg="3.4204" length="10" s="380" x="81.0356" y="166.3695">
@@ -129,7 +129,7 @@
          <geometry hdg="3.4204" length="10" s="400" x="61.8081" y="160.8647">
             <line/>
          </geometry>
-         <geometry hdg="3.4204+2.1073e-08i" length="10" s="410" x="52.1943" y="158.1123">
+         <geometry hdg="3.4204" length="10" s="410" x="52.1943" y="158.1123">
             <line/>
          </geometry>
          <geometry hdg="3.4204" length="10" s="420" x="42.5806" y="155.3599">
@@ -363,7 +363,7 @@
          <geometry hdg="6.9382" length="10" s="1180" x="242.9175" y="-60.724">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1190" x="250.8481" y="-54.6325">
+         <geometry hdg="6.9382" length="10" s="1190" x="250.8481" y="-54.6325">
             <line/>
          </geometry>
          <geometry hdg="6.9382" length="10" s="1200" x="258.7787" y="-48.5411">
@@ -375,97 +375,97 @@
          <geometry hdg="6.9382" length="10" s="1220" x="274.6399" y="-36.3582">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1230" x="282.5705" y="-30.2668">
+         <geometry hdg="6.9382" length="10" s="1230" x="282.5705" y="-30.2668">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1240" x="290.5011" y="-24.1754">
+         <geometry hdg="6.9382" length="10" s="1240" x="290.5011" y="-24.1754">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1250" x="298.4317" y="-18.0839">
+         <geometry hdg="6.9382" length="10" s="1250" x="298.4317" y="-18.0839">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1260" x="306.3623" y="-11.9925">
+         <geometry hdg="6.9382" length="10" s="1260" x="306.3623" y="-11.9925">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1270" x="314.2929" y="-5.901">
+         <geometry hdg="6.9382" length="10" s="1270" x="314.2929" y="-5.901">
             <line/>
          </geometry>
-         <geometry hdg="6.9382-2.1073e-08i" length="10" s="1280" x="322.2235" y="0.1904">
+         <geometry hdg="6.9382" length="10" s="1280" x="322.2235" y="0.1904">
             <line/>
          </geometry>
          <geometry hdg="6.9382" length="10" s="1290" x="330.1541" y="6.2818">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1300" x="338.0847" y="12.3733">
+         <geometry hdg="6.9382" length="10" s="1300" x="338.0847" y="12.3733">
             <line/>
          </geometry>
          <geometry hdg="6.9382" length="10" s="1310" x="346.0153" y="18.4647">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1320" x="353.9459" y="24.5561">
+         <geometry hdg="6.9382" length="10" s="1320" x="353.9459" y="24.5561">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1330" x="361.8765" y="30.6476">
+         <geometry hdg="6.9382" length="10" s="1330" x="361.8765" y="30.6476">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1340" x="369.8071" y="36.739">
+         <geometry hdg="6.9382" length="10" s="1340" x="369.8071" y="36.739">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1350" x="377.7377" y="42.8305">
+         <geometry hdg="6.9382" length="10" s="1350" x="377.7377" y="42.8305">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+2.1073e-08i" length="10" s="1360" x="385.6683" y="48.9219">
+         <geometry hdg="6.9382" length="10" s="1360" x="385.6683" y="48.9219">
             <line/>
          </geometry>
-         <geometry hdg="6.9382+4.2147e-08i" length="10" s="1370" x="393.5989" y="55.0133">
+         <geometry hdg="6.9382" length="10" s="1370" x="393.5989" y="55.0133">
             <line/>
          </geometry>
-         <geometry hdg="6.9377+4.2147e-08i" length="10" s="1380" x="401.5295" y="61.1048">
+         <geometry hdg="6.9377" length="10" s="1380" x="401.5295" y="61.1048">
             <line/>
          </geometry>
-         <geometry hdg="6.9455+4.2147e-08i" length="10" s="1390" x="409.463" y="67.1924">
+         <geometry hdg="6.9455" length="10" s="1390" x="409.463" y="67.1924">
             <line/>
          </geometry>
-         <geometry hdg="7.0085+4.2147e-08i" length="10" s="1400" x="417.3477" y="73.3415">
+         <geometry hdg="7.0085" length="10" s="1400" x="417.3477" y="73.3415">
             <line/>
          </geometry>
-         <geometry hdg="7.0746+4.2147e-08i" length="10" s="1410" x="424.829" y="79.9734">
+         <geometry hdg="7.0746" length="10" s="1410" x="424.829" y="79.9734">
             <line/>
          </geometry>
-         <geometry hdg="7.1703+4.2147e-08i" length="10" s="1420" x="431.854" y="87.0835">
+         <geometry hdg="7.1703" length="10" s="1420" x="431.854" y="87.0835">
             <line/>
          </geometry>
-         <geometry hdg="7.2676+4.2147e-08i" length="10" s="1430" x="438.1692" y="94.8348">
+         <geometry hdg="7.2676" length="10" s="1430" x="438.1692" y="94.8348">
             <line/>
          </geometry>
-         <geometry hdg="7.3785+4.2147e-08i" length="10" s="1440" x="443.6968" y="103.155">
+         <geometry hdg="7.3785" length="10" s="1440" x="443.6968" y="103.155">
             <line/>
          </geometry>
-         <geometry hdg="7.4956+4.2147e-08i" length="10" s="1450" x="448.2718" y="112.0409">
+         <geometry hdg="7.4956" length="10" s="1450" x="448.2718" y="112.0409">
             <line/>
          </geometry>
-         <geometry hdg="7.5911+4.2147e-08i" length="10" s="1460" x="451.7772" y="121.3988">
+         <geometry hdg="7.5911" length="10" s="1460" x="451.7772" y="121.3988">
             <line/>
          </geometry>
-         <geometry hdg="7.7027+4.2147e-08i" length="10" s="1470" x="454.3755" y="131.053">
+         <geometry hdg="7.7027" length="10" s="1470" x="454.3755" y="131.053">
             <line/>
          </geometry>
-         <geometry hdg="7.8016+4.2147e-08i" length="10" s="1480" x="455.8814" y="140.9292">
+         <geometry hdg="7.8016" length="10" s="1480" x="455.8814" y="140.9292">
             <line/>
          </geometry>
-         <geometry hdg="7.8985+4.2147e-08i" length="10" s="1490" x="456.4046" y="150.9096">
+         <geometry hdg="7.8985" length="10" s="1490" x="456.4046" y="150.9096">
             <line/>
          </geometry>
-         <geometry hdg="8.03+4.2147e-08i" length="10" s="1500" x="455.9596" y="160.8962">
+         <geometry hdg="8.03" length="10" s="1500" x="455.9596" y="160.8962">
             <line/>
          </geometry>
-         <geometry hdg="8.1503+4.2147e-08i" length="10" s="1510" x="454.2102" y="170.7312">
+         <geometry hdg="8.1503" length="10" s="1510" x="454.2102" y="170.7312">
             <line/>
          </geometry>
-         <geometry hdg="8.2569+4.2147e-08i" length="10" s="1520" x="451.2915" y="180.2918">
+         <geometry hdg="8.2569" length="10" s="1520" x="451.2915" y="180.2918">
             <line/>
          </geometry>
-         <geometry hdg="8.3728+4.2147e-08i" length="10" s="1530" x="447.3735" y="189.4831">
+         <geometry hdg="8.3728" length="10" s="1530" x="447.3735" y="189.4831">
             <line/>
          </geometry>
       </planView>
