@@ -1,0 +1,57 @@
+<?xml version="1.0" standalone="yes"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="5" name="SimpleRoadWithSign" version="1.00" north="0.0" south="0.0" east="0.0" west="0.0">
+        <!-- Additional header attributes and elements can be added as needed -->
+    </header>
+    
+    <road id="1" name="MainRoad" length="1000.0" junction="-1">
+        
+        <type s="0.0" type="rural" speed="80"/> <!-- For illustrative purposes: rural road type with 80 km/h limit -->
+
+        <planView>
+            <geometry s="0.0" x="0.0" y="0.0" hdg="0.0" length="1000.0">
+                <line/>
+            </geometry>
+        </planView>
+
+        <elevationProfile>
+            <!-- Elevation data can be added here if required -->
+        </elevationProfile>
+
+        <lanes>
+            <laneSection s="0.0">
+                <left>
+                    <!-- Add lane information for left lanes if any -->
+                </left>
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <!-- Central lane, usually a divider or similar -->
+                    </lane>
+                </center>
+                <right>
+                    <lane id="1" type="driving" level="false">
+                        <!-- Driving lane on the right side -->
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+
+        <objects>
+            <object id="1001" name="workZoneSign" s="500.0" t="2.0" zOffset="0.5" type="sign" subtype="warning" validLength="150.0">
+                <outline>
+                    <cornerLocal x="0.0" y="0.0" z="0.0"/>
+                    <cornerLocal x="0.0" y="2.0" z="0.0"/>
+                    <cornerLocal x="1.0" y="2.0" z="0.0"/>
+                    <cornerLocal x="1.0" y="0.0" z="0.0"/>
+                </outline>
+                <userData>
+                    <property name="signText" value="Work Zone Ahead"/>
+                </userData>
+            </object>
+        </objects>
+
+    </road>
+
+    <!-- Additional road elements and junctions can be added if needed -->
+
+</OpenDRIVE>
