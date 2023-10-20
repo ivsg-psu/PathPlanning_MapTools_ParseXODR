@@ -38,8 +38,6 @@ objectCluster = fcn_LoadWZ_loadObjectCluster(ObjectClusterName, 'AlignedDesign',
 inputXODR = 'scenario1_1_doubleYellow.xodr';
 % Extract the reference ENU coordinates from the loaded Lane
 referenceENU = Lane.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
-% Extract the object's ENU coordinates from the loaded object cluster
-objectENU = objectCluster.TraceCenterOfObjectCluster.ENU;
 % Define the output XODR file name
 outputFileName = 'scenario1_1_doubleYellow_withChannelizers_FromOutsideWhiteSolidLineShoulder_ToOutsideWhiteSolidLine';
 
