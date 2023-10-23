@@ -25,7 +25,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <!-- <a href="https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR">
+  <!-- <a href="https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
@@ -34,7 +34,7 @@
   <p align="left">
     MATLAB code implementation of a series of functions that read in OpenDRIVE *.xodr files, check for errors against the OpenDRIVE specification, and parse the XML-coded geometries into MATLAB structures that can be analyzed, modified, and plotted using other existing code.
     <br />
-    <a href="https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/tree/main/Documents"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/tree/main/Documents"><strong>Explore the docs »</strong></a>
     <br />
   </p>
 </p>
@@ -122,7 +122,7 @@ To get a local copy up and running follow these simple steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR.git
+   git clone https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.git
    ```
 
 
@@ -140,7 +140,7 @@ also link to more resources. -->
    ```
 For more examples, please refer to the [Documentation] 
 
-https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/tree/main/Documents
+https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/tree/main/Documents
 
 
 
@@ -156,19 +156,19 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
 
-Project Link: [https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR](https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR)
+Project Link: [https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR](https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR)
 
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ivsg-psu/PathPlanning_MapTools_ParseXODR.svg?style=for-the-badge
-[contributors-url]: https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ivsg-psu/PathPlanning_MapTools_ParseXODR.svg?style=for-the-badge
-[forks-url]: https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/network/members
-[stars-shield]: https://img.shields.io/github/stars/ivsg-psu/PathPlanning_MapTools_ParseXODR.svg?style=for-the-badge
-[stars-url]: https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ivsg-psu/PathPlanning_MapTools_ParseXODR.svg?style=for-the-badge
-[issues-url]: https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/issues
-[license-shield]: https://img.shields.io/github/license/ivsg-psu/PathPlanning_MapTools_ParseXODR.svg?style=for-the-badge
-[license-url]: https://github.com/ivsg-psu/PathPlanning_MapTools_ParseXODR/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.svg?style=for-the-badge
+[contributors-url]: https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.svg?style=for-the-badge
+[forks-url]: https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/network/members
+[stars-shield]: https://img.shields.io/github/stars/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.svg?style=for-the-badge
+[stars-url]: https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.svg?style=for-the-badge
+[issues-url]: https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/issues
+[license-shield]: https://img.shields.io/github/license/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR.svg?style=for-the-badge
+[license-url]: https://github.com/ivsg-psu/FieldDataCollection_RoadSegments_ParseXODR/blob/master/LICENSE.txt
