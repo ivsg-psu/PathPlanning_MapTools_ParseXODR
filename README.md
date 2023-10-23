@@ -29,7 +29,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
 
-  <h3 align="left">PathPlanning_MapTools_ParseXODR Repository</h3>
+  <h3 align="left">FieldDataCollection_RoadSegments_ParseXODR Repository</h3>
 
   <p align="left">
     MATLAB code implementation of a series of functions that read in OpenDRIVE *.xodr files, check for errors against the OpenDRIVE specification, and parse the XML-coded geometries into MATLAB structures that can be analyzed, modified, and plotted using other existing code.

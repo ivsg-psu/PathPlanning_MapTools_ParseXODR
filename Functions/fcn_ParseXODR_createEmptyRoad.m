@@ -1,10 +1,10 @@
 function road = fcn_ParseXODR_createEmptyRoad
-%% fcn_LoadWZ_fillEmptyLane
-% Fills an empty Lane structure 
+%% fcn_ParseXODR_createEmptyRoad
+% Fills an empty road structure 
 %
 % FORMAT:
 %
-%       EmptyLane = fcn_LoadWZ_fillEmptyLane
+%       road = fcn_ParseXODR_createEmptyRoad
 %
 % INPUTS:
 %
