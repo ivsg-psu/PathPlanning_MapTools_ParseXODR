@@ -1,4 +1,4 @@
-function fcn_ParseXODR_addObjects(inputXODR, referenceENU, objectCluster, outputFileName)
+function ODRstruct = fcn_ParseXODR_addObjects(ODRstruct, referenceENU, objectsENU, objectsRadius)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fcn_ParseXODR_addObjects
 % Take input XODR file, reference ENU, and object clusters, then add objects
@@ -77,12 +77,10 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Initialize conversion of XODR to MATLAB struct format.
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct(inputXODR);
 
 %% Convert xy to st
 % Extract object's East-North (EN) coordinates
-objectEN = objectCluster.TraceCenterOfObjectCluster.ENU(:,1:2);
+objectEN = objectsENU(:,1:2);
 
 % Loop through each object's EN coordinates
 for ii = 1:length(objectEN)
@@ -94,11 +92,11 @@ for ii = 1:length(objectEN)
 
     %% Write objects into road struct
     % Update road data with object attributes
-    roadData.OpenDRIVE.road{1}.objects.object{ii} = fcn_UpdateObjectAttributes(roadData, ii, St_points, objectCluster);
+    ODRstruct.OpenDRIVE.road{1}.objects.object{ii} = fcn_UpdateObjectAttributes(ODRstruct, ii, St_points, objectsRadius);
 end
 
 %% Convert updated road struct back to XODR file format.
-fcn_ParseXODR_convertODRstructToXODRFile(roadData, outputFileName);
+% fcn_ParseXODR_convertODRstructToXODRFile(ODRstruct, outputFileName);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   _____       _                 
 %  |  __ \     | |                
@@ -127,7 +125,7 @@ end % Ends main function
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
 
-function object = fcn_UpdateObjectAttributes(roadData, idx, St_points, objectCluster)
+function object = fcn_UpdateObjectAttributes(ODRstruct, idx, St_points, objectsRadius)
 % Helper function to set object attributes in the road structure.
 
 object.Attributes.id = num2str(idx);
@@ -141,7 +139,7 @@ object.Attributes.pitch = '0';
 object.Attributes.orientation = '-';
 object.Attributes.type = 'obstacle';
 object.Attributes.height = '1';
-object.Attributes.radius = num2str(objectCluster.objectClusterRadius(idx));
+object.Attributes.radius = num2str(objectsRadius);
 object.Attributes.validLength = '0';
 object.Attributes.dynamic = 'no';
 

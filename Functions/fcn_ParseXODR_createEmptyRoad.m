@@ -1,10 +1,10 @@
-function road = fcn_ParseXODR_createEmptyRoad
+function emptyRoad = fcn_ParseXODR_createEmptyRoad
 %% fcn_ParseXODR_createEmptyRoad
 % Fills an empty road structure 
 %
 % FORMAT:
 %
-%       road = fcn_ParseXODR_createEmptyRoad
+%       emptyRoad = fcn_ParseXODR_createEmptyRoad
 %
 % INPUTS:
 %
@@ -13,7 +13,7 @@ function road = fcn_ParseXODR_createEmptyRoad
 %
 % OUTPUTS:
 %
-%      EmptyLane: a structural array containaing key fields defining a road
+%      emptyRoad: a structural array containaing key fields defining a road
 %      complying with ASAM OPENDRIVE standard
 %     
 %
@@ -71,228 +71,228 @@ end
 
 
 % Create the top-level structure
-road = struct();
+emptyRoad = struct();
 
 % Create the nested OpenDRIVE structure
-road.OpenDRIVE = struct();
+emptyRoad.OpenDRIVE = struct();
 
 % Assuming the 'road' field in 'OpenDRIVE' is a cell array
-road.OpenDRIVE.road = cell(1, 1); % Initialize cell array
+emptyRoad.OpenDRIVE.road = cell(1, 1); % Initialize cell array
 
 % Create the nested structure inside the cell
-road.OpenDRIVE.road{1, 1} = struct();
-road.OpenDRIVE.header = struct();
+emptyRoad.OpenDRIVE.road{1, 1} = struct();
+emptyRoad.OpenDRIVE.header = struct();
 
 % Create the 'Attributes' substructure within 'header'
-road.OpenDRIVE.header.Attributes = struct();
-road.OpenDRIVE.header.Attributes.date = '';
-road.OpenDRIVE.header.Attributes.east = '';
-road.OpenDRIVE.header.Attributes.name = '';
-road.OpenDRIVE.header.Attributes.north = '';
-road.OpenDRIVE.header.Attributes.revMajor = '';
-road.OpenDRIVE.header.Attributes.revMinor = '';
-road.OpenDRIVE.header.Attributes.south = '';
-road.OpenDRIVE.header.Attributes.vendor = '';
-road.OpenDRIVE.header.Attributes.version = '';
-road.OpenDRIVE.header.Attributes.west = '';
+emptyRoad.OpenDRIVE.header.Attributes = struct();
+emptyRoad.OpenDRIVE.header.Attributes.date = '0';
+emptyRoad.OpenDRIVE.header.Attributes.east = '0';
+emptyRoad.OpenDRIVE.header.Attributes.name = 'HDmap';
+emptyRoad.OpenDRIVE.header.Attributes.north = '0';
+emptyRoad.OpenDRIVE.header.Attributes.revMajor = '1';
+emptyRoad.OpenDRIVE.header.Attributes.revMinor = '6';
+emptyRoad.OpenDRIVE.header.Attributes.south = '0';
+emptyRoad.OpenDRIVE.header.Attributes.vendor = 'IVSG';
+emptyRoad.OpenDRIVE.header.Attributes.version = '1';
+emptyRoad.OpenDRIVE.header.Attributes.west = '0';
 
 % Create the 'Attributes' substructure within the nested 'road'
-road.OpenDRIVE.road{1, 1}.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.Attributes.id = '';
-road.OpenDRIVE.road{1, 1}.Attributes.junction = '';
-road.OpenDRIVE.road{1, 1}.Attributes.length = '';
-road.OpenDRIVE.road{1, 1}.Attributes.name = '';
-road.OpenDRIVE.road{1, 1}.Attributes.rule = '';
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes.id = '0';
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes.junction = '-1';
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes.length = '0';
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes.name = 'Road 0';
+emptyRoad.OpenDRIVE.road{1, 1}.Attributes.rule = 'RHT';
 
 % create 'type' under road{1,1}
 
-road.OpenDRIVE.road{1, 1}.type.speed.Attributes.max = '';
-road.OpenDRIVE.road{1, 1}.type.speed.Attributes.unit = '';
-road.OpenDRIVE.road{1, 1}.type.Attributes.s = '';
-road.OpenDRIVE.road{1, 1}.type.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.type.speed.Attributes.max = '';
+emptyRoad.OpenDRIVE.road{1, 1}.type.speed.Attributes.unit = '';
+emptyRoad.OpenDRIVE.road{1, 1}.type.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.type.Attributes.type = '';
 
-% Create the 'planView' structure within road.OpenDRIVE.road{1, 1}
-road.OpenDRIVE.road{1, 1}.planView = struct();
+% Create the 'planView' structure within emptyRoad.OpenDRIVE.road{1, 1}
+emptyRoad.OpenDRIVE.road{1, 1}.planView = struct();
 
 % Create the nested 'geometry' structure within 'planView'
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1} = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1} = struct();
 
 % Create the 'Attributes' substructure within 'geometry'
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.hdg = '';
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.length = '';
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.s = '';
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.x = '';
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.y = '';
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.hdg = '';
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.length = '';
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.x = '';
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.Attributes.y = '';
 
-road.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.line = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.planView.geometry{1,1}.line = struct();
 
-% Create the 'elevationProfile' structure within road.OpenDRIVE.road{1, 1}
-road.OpenDRIVE.road{1, 1}.elevationProfile = struct();
+% Create the 'elevationProfile' structure within emptyRoad.OpenDRIVE.road{1, 1}
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile = struct();
 
 % Create the nested 'elevation' structure within 'elevationProfile'
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation = struct();
 
 % Create the 'Attributes' substructure within 'elevation'
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.elevationProfile.elevation.Attributes.s = '';
 
-% Create the 'lateralProfile' structure within road.OpenDRIVE.road{1, 1}
-road.OpenDRIVE.road{1, 1}.lateralProfile = struct();
+% Create the 'lateralProfile' structure within emptyRoad.OpenDRIVE.road{1, 1}
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile = struct();
 
 % Create the nested 'superelevation' structure within 'lateralProfile'
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation = struct();
 
 % Create the 'Attributes' substructure within 'superelevation'
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.superelevation.Attributes.s = '';
 
-% Create the 'shape' structure within road.OpenDRIVE.road{1, 1}.lateralProfile
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape = struct();
+% Create the 'shape' structure within emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape = struct();
 
 % Create the 'Attributes' substructure within 'shape'
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.s = '';
-road.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.t = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lateralProfile.shape.Attributes.t = '';
 
-% Create the 'laneOffset' structure within road.OpenDRIVE.road{1, 1}.lanes
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset = struct();
+% Create the 'laneOffset' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset = struct();
 
 % Create the 'Attributes' substructure within 'laneOffset'
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneOffset.Attributes.s = '';
 
 % create laneSection attributes
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.Attributes.s = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.Attributes.singleSide = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.Attributes.singleSide = '';
 
 % create left lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.Attributes.id = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.Attributes.level = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.Attributes.id = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.Attributes.level = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.Attributes.type = '';
 
-% Create the 'width' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width = struct();
+% Create the 'width' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width = struct();
 
 % Create the 'Attributes' substructure within 'width'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.width.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.width.Attributes.sOffset = '';
 
-% Create the 'roadMark' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark = struct();
+% Create the 'roadMark' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark = struct();
 
 % Create the 'Attributes' substructure within 'roadMark'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.color = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.laneChange = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.material = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.sOffset = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.type = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.weight = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.roadMark.Attributes.width = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.color = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.laneChange = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.material = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.weight = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.roadMark.Attributes.width = '';
 
-% Create the 'speed' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.speed = struct();
+% Create the 'speed' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.speed = struct();
 
 % Create the 'Attributes' substructure within 'speed'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.speed.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.speed.Attributes.max = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.speed.Attributes.sOffset = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane.speed.Attributes.unit = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.speed.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.speed.Attributes.max = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.speed.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.left.lane{1,1}.speed.Attributes.unit = '';
 
 % create attributes for center lane
 
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.id = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.level = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.id = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.level = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.Attributes.type = '';
 
-% Create the 'roadMark' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark = struct();
+% Create the 'roadMark' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark = struct();
 
 % Create the 'Attributes' substructure within 'roadMark'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.color = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.laneChange = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.material = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.sOffset = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.type = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.weight = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.width = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.color = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.laneChange = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.material = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.weight = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.center.lane.roadMark.Attributes.width = '';
 
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.Attributes.id = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.Attributes.level = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.Attributes.id = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.Attributes.level = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.Attributes.type = '';
 
-% Create the 'width' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width = struct();
+% Create the 'width' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width = struct();
 
 % Create the 'Attributes' substructure within 'width'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes.a = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes.b = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes.c = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes.d = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.width.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes.a = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes.b = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes.c = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes.d = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.width.Attributes.sOffset = '';
 
-% Create the 'roadMark' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark = struct();
+% Create the 'roadMark' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark = struct();
 
 % Create the 'Attributes' substructure within 'roadMark'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.color = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.laneChange = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.material = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.sOffset = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.type = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.weight = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.roadMark.Attributes.width = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.color = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.laneChange = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.material = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.weight = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.roadMark.Attributes.width = '';
 
-% Create the 'speed' structure within road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.speed = struct();
+% Create the 'speed' structure within emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.speed = struct();
 
 % Create the 'Attributes' substructure within 'speed'
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.speed.Attributes = struct();
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.speed.Attributes.max = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.speed.Attributes.sOffset = '';
-road.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane.speed.Attributes.unit = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.speed.Attributes = struct();
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.speed.Attributes.max = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.speed.Attributes.sOffset = '';
+emptyRoad.OpenDRIVE.road{1, 1}.lanes.laneSection{1,1}.right.lane{1,1}.speed.Attributes.unit = '';
 % create attributes for object
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.id = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.name = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.s = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.t = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.zoffset = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.hdg = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.roll = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.pitch = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.orientation = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.type = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.height = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.radius = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.validLength = '';
-road.OpenDRIVE.road{1,1}.objects.object.Attributes.dynamic = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.id = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.name = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.s = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.t = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.zoffset = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.hdg = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.roll = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.pitch = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.orientation = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.type = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.height = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.radius = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.validLength = '';
+emptyRoad.OpenDRIVE.road{1,1}.objects.object{1}.Attributes.dynamic = '';
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   _____       _

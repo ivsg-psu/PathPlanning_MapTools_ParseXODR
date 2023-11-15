@@ -164,7 +164,7 @@ ENUdata = fcn_GPS_lla2enu(LL_centerline,reference_LLA);
 
 
 %% case 1, test track data points
-case1 = fcn_convertDataPointsToARoad(ENUdata);
+case1 = fcn_convertDataPointsToARoad(ENUdata,'test');
 
 %% case 2, sample path from path class library
 fig_num = 33;

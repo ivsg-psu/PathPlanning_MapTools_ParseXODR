@@ -76,6 +76,7 @@
         </lanes>
         <objects>
             <object id="1" name="Drum01" s="4.4669906564082957e+01" t="-2.0229687926712532e+00" zOffset="0.0000000000000000e+00" hdg="-1.1457084584367063e+00" roll="0.0000000000000000e+00" pitch="0.0000000000000000e+00" orientation="-" type="none" height="1.0083752441406251e+00" width="9.7033795256643707e-01" length="9.7033783812552910e-01" validLength="0.0000000000000000e+00" dynamic="no"/>
+            <object id="2" name="Drum01" s="5.4082957e+01" t="-2.0229687926712532e+00" zOffset="0.0000000000000000e+00" hdg="-1.1457084584367063e+00" roll="0.0000000000000000e+00" pitch="0.0000000000000000e+00" orientation="-" type="none" height="1.0083752441406251e+00" width="9.7033795256643707e-01" length="9.7033783812552910e-01" validLength="0.0000000000000000e+00" dynamic="no"/>
         </objects>
     </road>
 </OpenDRIVE>
