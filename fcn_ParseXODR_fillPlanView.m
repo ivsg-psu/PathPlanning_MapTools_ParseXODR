@@ -1,8 +1,8 @@
-function roads = fcn_ParseXODR_fillPlanView(roads,roadCenterLine)
+function [roads,new_traversal] = fcn_ParseXODR_fillPlanView(roads,roadCenterLine,interval)
 
 
 input_traversal = fcn_Path_convertPathToTraversalStructure(roadCenterLine);
-interval = 10; % default resampling interval is set to 10 meters; 
+%interval = 10; % default resampling interval is set to 10 meters; 
 new_stations    = (0:interval:input_traversal.Station(end))';
 new_traversal = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
 new_traversal.segmentLength = diff(new_traversal.Station);

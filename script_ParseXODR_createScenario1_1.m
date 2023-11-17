@@ -123,7 +123,7 @@ for ii = 1:length(objectCluster)
 end
 
 % Remove duplicate coordinates to avoid redundancy
-objectsENU = unique(objectsENU, 'rows');
+objectsENU = unique(objectsENU, 'rows','stable');
 
 % Add object coordinates to the OpenDRIVE structure
 ODRStruct = fcn_ParseXODR_addObjects(ODRStruct, roadCenterLine, objectsENU, 0.6);
