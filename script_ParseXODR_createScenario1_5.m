@@ -9,7 +9,8 @@
 % This script creates xodr file for ADS scenario 1.5.
 % It sets up road and lane structures, adds objects and signals,
 % and finally generates an XODR file based on these configurations.
-%
+% 
+% Author: Wushuang Bai, wxb41@psu.edu
 % Revision history:
 % 20231110 - Initial script setup
 % 20231120 - Added comments and enhanced documentation
