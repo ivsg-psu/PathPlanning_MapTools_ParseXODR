@@ -123,6 +123,7 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{3}.Attributes.s = num2str(start.sectio
 %% Definition for lane section 1
 numOfLeftLane = 0;
 numOfRightLane = 1;
+flag_shoulder = 0;
 section1 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit); 
 
 % Since scenario 1.1 does not have a left lane, set the left lane section to empty
@@ -130,15 +131,16 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{1}.left = [];
 
 % Fill in the right lane details: 1 driving lane and 1 shoulder
 roads.OpenDRIVE.road{1}.lanes.laneSection{1} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{1}, ...
-    'right', 1, section1.rightWidthStruct, section1.rightMarkStruct, section1.rightSpeedStruct, 0);
+    'right', 1, section1.rightWidthStruct, section1.rightMarkStruct, section1.rightSpeedStruct, flag_shoulder);
 
 % Fill in the center lane details
 roads.OpenDRIVE.road{1}.lanes.laneSection{1} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{1}, ...
-    'center', 1, [], section1.centerMarkStruct, [], 0);
+    'center', 1, [], section1.centerMarkStruct, [], flag_shoulder);
 
 %% Definition for lane section 2
 numOfLeftLane = 2;
 numOfRightLane = 1;
+flag_shoulder = 0;
 section2 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
 section2.centerMarkStruct.Attributes.type = 'broken solid';
 
@@ -147,32 +149,33 @@ section2.leftMarkStruct(1).Attributes.type = 'solid broken';
 
 % Since scenario 1.1 does not have a left lane, set the left lane section to empty
 roads.OpenDRIVE.road{1}.lanes.laneSection{2} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{2}, ...
-    'left', numOfLeftLane, section2.leftWidthStruct, section2.leftMarkStruct, section2.leftSpeedStruct, 0);
+    'left', numOfLeftLane, section2.leftWidthStruct, section2.leftMarkStruct, section2.leftSpeedStruct, flag_shoulder);
 
 % Fill in the right lane details: 1 driving lane and 1 shoulder
 roads.OpenDRIVE.road{1}.lanes.laneSection{2} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{2}, ...
-    'right', numOfRightLane , section2.rightWidthStruct, section2.rightMarkStruct, section2.rightSpeedStruct, 0);
+    'right', numOfRightLane , section2.rightWidthStruct, section2.rightMarkStruct, section2.rightSpeedStruct, flag_shoulder);
 
 % Fill in the center lane details
 roads.OpenDRIVE.road{1}.lanes.laneSection{2} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{2}, ...
-    'center', 1, [], section2.centerMarkStruct, [], 0);
+    'center', 1, [], section2.centerMarkStruct, [], flag_shoulder);
 
 roads.OpenDRIVE.road{1}.lanes.laneSection{2}.left.lane{1}.Attributes.type = 'restricted';
 
 %% Definition for lane section 3
 numOfLeftLane = 0;
 numOfRightLane = 1;
+flag_shoulder = 0;
 section3 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
 
 % Since scenario 1.1 does not have a left lane, set the left lane section to empty
 roads.OpenDRIVE.road{1}.lanes.laneSection{3}.left = [];
 % Fill in the right lane details: 1 driving lane and 1 shoulder
 roads.OpenDRIVE.road{1}.lanes.laneSection{3} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{3}, ...
-    'right', 1, section3.rightWidthStruct, section3.rightMarkStruct, section3.rightSpeedStruct, 0);
+    'right', 1, section3.rightWidthStruct, section3.rightMarkStruct, section3.rightSpeedStruct, flag_shoulder);
 
 % Fill in the center lane details
 roads.OpenDRIVE.road{1}.lanes.laneSection{3} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{3}, ...
-    'center', 1, [], section3.centerMarkStruct, [], 0);
+    'center', 1, [], section3.centerMarkStruct, [], flag_shoulder);
 
 
 %% load objects
