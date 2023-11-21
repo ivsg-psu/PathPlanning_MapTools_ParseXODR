@@ -5,47 +5,56 @@
 %  ____) | (_|  __/ | | | (_| | |  | | (_) | |_ ___) |
 % |_____/ \___\___|_| |_|\__,_|_|  |_|\___/|_(_)____/ 
 
-% 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This script creates xodr file for ADS scenario 1.5.
+% It sets up road and lane structures, adds objects and signals,
+% and finally generates an XODR file based on these configurations.
+%
+% Revision history:
+% 20231110 - Initial script setup
+% 20231120 - Added comments and enhanced documentation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear; 
-close all;clc;
+close all; clc;
+
+% Initialize flags for adding signals and objects
 flag_addSignals = 1;
 flag_gridObjects = 1;
 gridText = [];
 
-
+% Define figure number for plotting
 fig_num = 15000;
 figure(fig_num);
 clf;
 
+% Load various lane data for the scenario
+% Lane 1: Outer loop road main lane entry
 LaneName = 'Scenario_1_5_OuterLoopRoad_m1_MainLoopOuterLaneEntry';
 Lane1 = fcn_LoadWZ_loadLane(LaneName, 'AlignedDesign', 1, fig_num);
 
- LaneName = 'Scenario_1_5_EntryTransitionRoad_m2_NewLane1_DoubleYellowLeft';
+% Lane 2: Entry transition road
+LaneName = 'Scenario_1_5_EntryTransitionRoad_m2_NewLane1_DoubleYellowLeft';
 Lane2 = fcn_LoadWZ_loadLane(LaneName, 'AlignedDesign', 1, fig_num);
 
-% start of lane section 2
+% Lane 3: Entry multi-lane highway
 LaneName = 'Scenario_1_5_EntryMultiLaneHighway_m1_NewLane1_DoubleDashedYellowLeft';
 Lane3 = fcn_LoadWZ_loadLane(LaneName, 'AlignedDesign', 1, fig_num);
-% start of lane section 3
+
+% Lane 4: Exit transition road
 LaneName = 'Scenario_1_5_ExitTransitionRoad_m2_NewLane1_DoubleYellowLeft';
 Lane4 = fcn_LoadWZ_loadLane(LaneName, 'AlignedDesign', 1, fig_num);
 
+% Lane 5: Outer loop road main lane exit
 LaneName = 'Scenario_1_5_OuterLoopRoad_m1_MainLoopOuterLaneExit';
 Lane5 = fcn_LoadWZ_loadLane(LaneName, 'AlignedDesign', 1, fig_num);
 
+% Aggregate road center ENU coordinates
 roadCenterENU = [Lane1.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     Lane2.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     Lane3.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     Lane4.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     Lane5.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;];
 
-figure();
-plot(roadCenterENU(:,1),roadCenterENU(:,2),'k','LineWidth',2);
-
-
-%%
 
 % Set the base name for the output scenario file
 scenarioName = 'scenario1_5';
@@ -90,9 +99,6 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{1}.Attributes.singleSide = 'false';
 roads.OpenDRIVE.road{1}.lanes.laneSection{2} = roads.OpenDRIVE.road{1}.lanes.laneSection{1};
 roads.OpenDRIVE.road{1}.lanes.laneSection{3} = roads.OpenDRIVE.road{1}.lanes.laneSection{1};
 
-
-
-
 % get s for lane section 2 and 3. 
 XY_points = Lane3.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU(1,1:2);
 referencePath = roadCenterLine(:,1:2);
@@ -113,11 +119,9 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{3}.Attributes.s = num2str(start.sectio
 
 
 %% Definition for lane section 1
-
 numOfLeftLane = 0;
 numOfRightLane = 1;
-section1 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
- 
+section1 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit); 
 
 % Since scenario 1.1 does not have a left lane, set the left lane section to empty
 roads.OpenDRIVE.road{1}.lanes.laneSection{1}.left = [];
@@ -135,7 +139,6 @@ numOfLeftLane = 2;
 numOfRightLane = 1;
 section2 = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
 section2.centerMarkStruct.Attributes.type = 'broken solid';
-
 
 section2.leftMarkStruct(1).Attributes.color = 'yellow';
 section2.leftMarkStruct(1).Attributes.type = 'solid broken';
@@ -170,8 +173,6 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{3} = fcn_ParseXODR_fillLanes(roads.Ope
     'center', 1, [], section3.centerMarkStruct, [], 0);
 
 
-
-
 %% load objects
 % Initialize figure for visualization
 fig_num = 2343;
@@ -200,7 +201,6 @@ for ith_objectCluster = 1:N_ObjectClusters
 end
 
 disp(ObjectClusterNames(isPlotted)');
-
 % Initialize an array to store object coordinates
 objectsENU = [];
 
@@ -212,8 +212,6 @@ end
 % Remove duplicate coordinates to avoid redundancy
 objectsENU = unique(objectsENU, 'rows','stable');
 
-
-
 %% add objects
 % Perform checks and adjustments on the road segment, ensuring it adheres to OpenDRIVE standards
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roads);
@@ -221,7 +219,6 @@ ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roads);
 % Add object coordinates to the OpenDRIVE structure
 ODRStruct = fcn_ParseXODR_addObjects(ODRStruct, roadCenterLine, objectsENU, 0.608);
 signalsName = cell(0);
-
 
 %% add signs 
 fig_num = 2343;
@@ -252,7 +249,6 @@ for ii = 9:length(objectCluster)
     signalsName{end+1} = objectCluster{ii}.objectClusterName;
 end
 
-
 if 1 == flag_addSignals
 for ii = 1:length(signalsName)
 ODRStruct = fcn_ParseXODR_addSignals(ODRStruct,roadCenterLine,signalsENU(ii,:),ii,signalsName{ii});
@@ -260,18 +256,13 @@ end
 outputFileName = [outputFileName,'_WithSigns'];
 
 end
-%% fill header
-
+%% file conversion 
 % Assign the formatted date and time to the 'date' attribute within the header
 ODRStruct.OpenDRIVE.header.Attributes.date = dt;
-
 % Prepare the final output structure with header and road information
 outputStruct.OpenDRIVE.header = ODRStruct.OpenDRIVE.header;
 outputStruct.OpenDRIVE.road = ODRStruct.OpenDRIVE.road;
-
-
 outputFileName = [outputFileName,gridText];
-
 % Convert and save the OpenDRIVE structure to an .xodr file with the specified output file name
 fcn_ParseXODR_convertODRstructToXODRFile(outputStruct, outputFileName);
 

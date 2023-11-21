@@ -1,4 +1,4 @@
-function ODRstruct = fcn_ParseXODR_addSignals(ODRstruct, referenceENU, objectsENU,signalID,signalName)
+function ODRstruct = fcn_ParseXODR_addSignals(ODRstruct, referenceENU, signalENU,signalID,signalName)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fcn_ParseXODR_addSignals
 % Take input XODR file, reference ENU, and object clusters, then add objects
@@ -10,25 +10,27 @@ function ODRstruct = fcn_ParseXODR_addSignals(ODRstruct, referenceENU, objectsEN
 %
 % INPUTS:
 %
-%      inputXODR      : XODR file to be parsed.
+%      ODRstruct     : matlab struct for xodr file
 %
-%      referenceENU   : Reference East-North-Up data.
+%      referenceENU   : Reference East-North-Up data for road center line
 %
-%      objectCluster  : Struct containing object cluster data.
+%      signalENU  : ENU coordinate for the object/signal
 %
-%      outputFileName : Name of the output XODR file.
-%
+%      signalID: the ID for the signal
+%   
+%      signalName: the name for the signal, for example "road work ahead sign"
 % OUTPUTS:
 %
-%      An updated XODR file with added objects.
+%      ODRstruct: an updated struct that contains the signal added
 %
 % DEPENDENCIES:
 %
-%      fcn_Path_convertXY2St.m
+%      NA
 %
 % EXAMPLES:
 %
-%      see script_test_fcn_ParseXODR_addObjects.m
+%      See script_ParseXODR_createScenario1_5.m for a comprehensive test
+%      suite. 
 %
 % This function was written by Wushuang Bai
 % Questions or comments? wxb41@psu.edu
@@ -36,7 +38,7 @@ function ODRstruct = fcn_ParseXODR_addSignals(ODRstruct, referenceENU, objectsEN
 % Revision history:
 % 2023 10 14 first write of the code
 % 2023 10 17 added comments
-
+% 2023 11 20 updated comments
 
 flag_do_debug = 1; % Flag to show function info in UI
 flag_check_inputs = 1; % Flag to perform input checking
@@ -80,18 +82,15 @@ end
 
 %% Convert xy to st
 % Extract object's East-North (EN) coordinates
-objectEN = objectsENU(:,1:2);
-
+objectEN = signalENU(:,1:2);
 XY_points = objectEN;
 referencePath = referenceENU(:,1:2);
 flag_snap_type = 1;  % Define snap type for conversion
-
 St_points = fcn_Path_convertXY2St(referencePath, XY_points, flag_snap_type);
 
 %% Write objects into road struct
 % Update road data with object attributes
 ODRstruct.OpenDRIVE.road{1}.signals.signal{signalID} = fcn_UpdateObjectAttributes(signalID, St_points,signalName);
-
 
 %% Convert updated road struct back to XODR file format.
 % fcn_ParseXODR_convertODRstructToXODRFile(ODRstruct, outputFileName);
