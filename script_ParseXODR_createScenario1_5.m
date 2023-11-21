@@ -83,7 +83,8 @@ roads = fcn_ParseXODR_fillRoadType(roads,speedlimit);
 
 % Retrieve the centerline of the road from the 'Lane' data and fill in the plan view for the road
 roadCenterLine = roadCenterENU;
-[roads,new_traversal] = fcn_ParseXODR_fillPlanView(roads,roadCenterLine,5);
+resampleStationInterval = 10;
+[roads,new_traversal] = fcn_ParseXODR_fillPlanView(roads,roadCenterLine,resampleStationInterval);
 
 % Remove unnecessary fields 'elevationProfile' and 'lateralProfile' from the road structure
 roads.OpenDRIVE.road{1} = rmfield(roads.OpenDRIVE.road{1},{'elevationProfile','lateralProfile'});
