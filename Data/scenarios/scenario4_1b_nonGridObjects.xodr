@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <OpenDRIVE>
-   <header date="2023_11_21T17_09_45" east="456.3572" name="HDmap" north="241.6269"
+   <header date="2023_12_05T20_01_41" east="456.4151" name="HDmap" north="241.6269"
            revMajor="1"
            revMinor="6"
-           south="-178.3782"
+           south="-177.7973"
            vendor="IVSG"
            version="1"
            west="-125.3188"/>
-   <road id="0" junction="-1" length="1540" name="Road 0" rule="RHT">
+   <road id="0" junction="-1" length="1530" name="Road 0" rule="RHT">
       <type s="0" type="town">
          <speed max="25" unit="mph"/>
       </type>
@@ -282,196 +282,193 @@
          <geometry hdg="6.0191" length="10" s="890" x="-10.681" y="-171.8214">
             <line/>
          </geometry>
-         <geometry hdg="6.0607" length="10" s="900" x="-1.0304" y="-174.4305">
+         <geometry hdg="6.0666" length="10" s="900" x="-1.0304" y="-174.4305">
             <line/>
          </geometry>
-         <geometry hdg="6.1561" length="10" s="910" x="8.4966" y="-176.5861">
+         <geometry hdg="6.1749" length="10" s="910" x="8.4124" y="-176.5081">
             <line/>
          </geometry>
-         <geometry hdg="6.2307" length="10" s="920" x="18.4134" y="-177.8534">
+         <geometry hdg="6.2623" length="10" s="920" x="18.3499" y="-177.5881">
             <line/>
          </geometry>
-         <geometry hdg="6.3068" length="10" s="930" x="28.3972" y="-178.3782">
+         <geometry hdg="6.3496" length="10" s="930" x="28.3438" y="-177.7973">
             <line/>
          </geometry>
-         <geometry hdg="6.3784" length="10" s="940" x="38.3918" y="-178.1425">
+         <geometry hdg="6.4369" length="10" s="940" x="38.3181" y="-177.1341">
             <line/>
          </geometry>
-         <geometry hdg="6.4565" length="10" s="950" x="48.3439" y="-177.1918">
+         <geometry hdg="6.5248" length="10" s="950" x="48.1969" y="-175.6035">
             <line/>
          </geometry>
-         <geometry hdg="6.5286" length="10" s="960" x="58.1916" y="-175.4674">
+         <geometry hdg="6.6129" length="10" s="960" x="57.9035" y="-173.2115">
             <line/>
          </geometry>
-         <geometry hdg="6.6047" length="10" s="970" x="67.8894" y="-173.0379">
+         <geometry hdg="6.7002" length="10" s="970" x="67.3618" y="-169.9749">
             <line/>
          </geometry>
-         <geometry hdg="6.679" length="10" s="980" x="77.3746" y="-169.8783">
+         <geometry hdg="6.7875" length="10" s="980" x="76.5015" y="-165.926">
             <line/>
          </geometry>
-         <geometry hdg="6.754" length="10" s="990" x="86.5989" y="-166.0234">
+         <geometry hdg="6.8749" length="10" s="990" x="85.253" y="-161.0955">
             <line/>
          </geometry>
-         <geometry hdg="6.8283" length="10" s="1000" x="95.5084" y="-161.4885">
+         <geometry hdg="6.9326" length="10" s="1000" x="93.5497" y="-155.5201">
             <line/>
          </geometry>
-         <geometry hdg="6.9014" length="10" s="1010" x="104.0565" y="-156.3044">
+         <geometry hdg="6.9356" length="10" s="1010" x="101.5136" y="-149.473">
             <line/>
          </geometry>
-         <geometry hdg="6.9354" length="10" s="1020" x="112.2033" y="-150.5097">
+         <geometry hdg="6.9356" length="10" s="1020" x="109.4599" y="-143.402">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1030" x="120.1505" y="-144.4398">
+         <geometry hdg="6.9356" length="10" s="1030" x="117.4062" y="-137.3311">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1040" x="128.0968" y="-138.3689">
+         <geometry hdg="6.9356" length="10" s="1040" x="125.3525" y="-131.2602">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1050" x="136.0431" y="-132.298">
+         <geometry hdg="6.9356" length="10" s="1050" x="133.2988" y="-125.1892">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1060" x="143.9894" y="-126.227">
+         <geometry hdg="6.9356" length="10" s="1060" x="141.2451" y="-119.1183">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1070" x="151.9357" y="-120.1561">
+         <geometry hdg="6.9356" length="10" s="1070" x="149.1914" y="-113.0473">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1080" x="159.882" y="-114.0851">
+         <geometry hdg="6.9356" length="10" s="1080" x="157.1377" y="-106.9764">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1090" x="167.8283" y="-108.0142">
+         <geometry hdg="6.9356" length="10" s="1090" x="165.084" y="-100.9055">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1100" x="175.7746" y="-101.9433">
+         <geometry hdg="6.9356" length="10" s="1100" x="173.0303" y="-94.8345">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1110" x="183.7209" y="-95.8723">
+         <geometry hdg="6.9356" length="10" s="1110" x="180.9766" y="-88.7636">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1120" x="191.6672" y="-89.8014">
+         <geometry hdg="6.9356" length="10" s="1120" x="188.9229" y="-82.6927">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1130" x="199.6135" y="-83.7305">
+         <geometry hdg="6.9356" length="10" s="1130" x="196.8692" y="-76.6217">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1140" x="207.5598" y="-77.6595">
+         <geometry hdg="6.9356" length="10" s="1140" x="204.8155" y="-70.5508">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1150" x="215.5061" y="-71.5886">
+         <geometry hdg="6.9356" length="10" s="1150" x="212.7618" y="-64.4799">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1160" x="223.4524" y="-65.5177">
+         <geometry hdg="6.9356" length="10" s="1160" x="220.7082" y="-58.4089">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1170" x="231.3987" y="-59.4467">
+         <geometry hdg="6.9356" length="10" s="1170" x="228.6545" y="-52.338">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1180" x="239.345" y="-53.3758">
+         <geometry hdg="6.9356" length="10" s="1180" x="236.6008" y="-46.267">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1190" x="247.2913" y="-47.3048">
+         <geometry hdg="6.9356" length="10" s="1190" x="244.5471" y="-40.1961">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1200" x="255.2376" y="-41.2339">
+         <geometry hdg="6.9356" length="10" s="1200" x="252.4934" y="-34.1252">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1210" x="263.1839" y="-35.163">
+         <geometry hdg="6.9356" length="10" s="1210" x="260.4397" y="-28.0542">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1220" x="271.1302" y="-29.092">
+         <geometry hdg="6.9356" length="10" s="1220" x="268.386" y="-21.9833">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1230" x="279.0765" y="-23.0211">
+         <geometry hdg="6.9356" length="10" s="1230" x="276.3323" y="-15.9124">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1240" x="287.0228" y="-16.9502">
+         <geometry hdg="6.9356" length="10" s="1240" x="284.2786" y="-9.8414">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1250" x="294.9691" y="-10.8792">
+         <geometry hdg="6.9356" length="10" s="1250" x="292.2249" y="-3.7705">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1260" x="302.9154" y="-4.8083">
+         <geometry hdg="6.9356" length="10" s="1260" x="300.1712" y="2.3004">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1270" x="310.8618" y="1.2626">
+         <geometry hdg="6.9356" length="10" s="1270" x="308.1175" y="8.3714">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1280" x="318.8081" y="7.3336">
+         <geometry hdg="6.9356" length="10" s="1280" x="316.0638" y="14.4423">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1290" x="326.7544" y="13.4045">
+         <geometry hdg="6.9356" length="10" s="1290" x="324.0101" y="20.5133">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1300" x="334.7007" y="19.4755">
+         <geometry hdg="6.9356" length="10" s="1300" x="331.9564" y="26.5842">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1310" x="342.647" y="25.5464">
+         <geometry hdg="6.9356" length="10" s="1310" x="339.9027" y="32.6551">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1320" x="350.5933" y="31.6173">
+         <geometry hdg="6.9356" length="10" s="1320" x="347.849" y="38.7261">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1330" x="358.5396" y="37.6883">
+         <geometry hdg="6.9356" length="10" s="1330" x="355.7953" y="44.797">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1340" x="366.4859" y="43.7592">
+         <geometry hdg="6.9356" length="10" s="1340" x="363.7416" y="50.8679">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1350" x="374.4322" y="49.8301">
+         <geometry hdg="6.9356" length="10" s="1350" x="371.6879" y="56.9389">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1360" x="382.3785" y="55.9011">
+         <geometry hdg="6.9356" length="10" s="1360" x="379.6342" y="63.0098">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1370" x="390.3248" y="61.972">
+         <geometry hdg="6.9356" length="10" s="1370" x="387.5805" y="69.0807">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1380" x="398.2711" y="68.0429">
+         <geometry hdg="6.9356" length="10" s="1380" x="395.5268" y="75.1517">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1390" x="406.2174" y="74.1139">
+         <geometry hdg="6.9356" length="10" s="1390" x="403.4731" y="81.2226">
             <line/>
          </geometry>
-         <geometry hdg="6.9356" length="10" s="1400" x="414.1637" y="80.1848">
+         <geometry hdg="6.9356" length="10" s="1400" x="411.4194" y="87.2936">
             <line/>
          </geometry>
-         <geometry hdg="6.9366" length="10" s="1410" x="422.11" y="86.2557">
+         <geometry hdg="6.9356" length="10" s="1410" x="419.3657" y="93.3645">
             <line/>
          </geometry>
-         <geometry hdg="7.022" length="10" s="1420" x="429.9969" y="92.294">
+         <geometry hdg="6.9356" length="10" s="1420" x="427.312" y="99.4354">
             <line/>
          </geometry>
-         <geometry hdg="7.1709" length="10" s="1430" x="437.3827" y="99.0213">
+         <geometry hdg="6.9926" length="10" s="1430" x="435.2583" y="105.5064">
             <line/>
          </geometry>
-         <geometry hdg="7.3205" length="10" s="1440" x="443.6882" y="106.7705">
+         <geometry hdg="7.1969" length="10" s="1440" x="442.8291" y="112.0065">
             <line/>
          </geometry>
-         <geometry hdg="7.47" length="10" s="1450" x="448.7685" y="115.3732">
+         <geometry hdg="7.4084" length="10" s="1450" x="448.9258" y="119.9093">
             <line/>
          </geometry>
-         <geometry hdg="7.5981" length="10" s="1460" x="452.5108" y="124.6362">
+         <geometry hdg="7.6064" length="10" s="1460" x="453.2276" y="128.9155">
             <line/>
          </geometry>
-         <geometry hdg="7.7422" length="10" s="1470" x="454.9981" y="134.1419">
+         <geometry hdg="7.7782" length="10" s="1470" x="455.658" y="138.5307">
             <line/>
          </geometry>
-         <geometry hdg="7.8295" length="10" s="1480" x="456.1123" y="144.0721">
+         <geometry hdg="7.8813" length="10" s="1480" x="456.4147" y="148.4995">
             <line/>
          </geometry>
-         <geometry hdg="7.9346" length="10" s="1490" x="456.3572" y="154.0603">
+         <geometry hdg="7.9949" length="10" s="1490" x="456.1418" y="158.493">
             <line/>
          </geometry>
-         <geometry hdg="8.074" length="10" s="1500" x="455.5529" y="164.0194">
+         <geometry hdg="8.1244" length="10" s="1500" x="454.7393" y="168.38">
             <line/>
          </geometry>
-         <geometry hdg="8.1771" length="10" s="1510" x="453.3727" y="173.7692">
+         <geometry hdg="8.2258" length="10" s="1510" x="452.0697" y="178.0114">
             <line/>
          </geometry>
-         <geometry hdg="8.297" length="10" s="1520" x="450.1993" y="183.2478">
-            <line/>
-         </geometry>
-         <geometry hdg="8.4018" length="10" s="1530" x="445.9158" y="192.2756">
+         <geometry hdg="8.354" length="10" s="1520" x="448.439" y="187.3219">
             <line/>
          </geometry>
       </planView>
@@ -497,28 +494,18 @@
                </lane>
             </right>
          </laneSection>
-         <laneSection s="1020.8509" singleSide="false">
+         <laneSection s="1001.9283" singleSide="false">
             <left>
-               <lane id="1" level="false" type="restricted">
-                  <width a="3.65" b="0" c="0" d="0" sOffset="0"/>
-                  <roadMark color="yellow" laneChange="none" material="standard" sOffset="0"
-                            type="solid broken"
-                            weight="standard"
-                            width="0.125"/>
-                  <speed max="25" sOffset="0" unit="mph"/>
-               </lane>
-               <lane id="2" level="false" type="driving">
-                  <width a="3.65" b="0" c="0" d="0" sOffset="0"/>
-                  <roadMark color="white" laneChange="none" material="standard" sOffset="0" type="solid"
-                            weight="standard"
-                            width="0.125"/>
-                  <speed max="25" sOffset="0" unit="mph"/>
+               <lane id="" level="" type="">
+                  <width a="" b="" c="" d="" sOffset=""/>
+                  <roadMark color="" laneChange="" material="" sOffset="" type="" weight="" width=""/>
+                  <speed max="" sOffset="" unit=""/>
                </lane>
             </left>
             <center>
                <lane id="0" level="false" type="none">
                   <roadMark color="yellow" laneChange="none" material="standard" sOffset="0"
-                            type="broken solid"
+                            type="solid solid"
                             weight="standard"
                             width="0.125"/>
                </lane>
@@ -526,14 +513,28 @@
             <right>
                <lane id="-1" level="false" type="driving">
                   <width a="3.65" b="0" c="0" d="0" sOffset="0"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0" type="broken"
+                            weight="standard"
+                            width="0.125"/>
+                  <speed max="25" sOffset="0" unit="mph"/>
+               </lane>
+               <lane id="-2" level="false" type="driving">
+                  <width a="3.65" b="0" c="0" d="0" sOffset="0"/>
                   <roadMark color="white" laneChange="none" material="standard" sOffset="0" type="solid"
+                            weight="standard"
+                            width="0.125"/>
+                  <speed max="25" sOffset="0" unit="mph"/>
+               </lane>
+               <lane id="-3" level="false" type="shoulder">
+                  <width a="7.3" b="0" c="0" d="0" sOffset="0"/>
+                  <roadMark color="white" laneChange="none" material="standard" sOffset="0" type="none"
                             weight="standard"
                             width="0.125"/>
                   <speed max="25" sOffset="0" unit="mph"/>
                </lane>
             </right>
          </laneSection>
-         <laneSection s="1419.1466" singleSide="false">
+         <laneSection s="1433.2293" singleSide="false">
             <left/>
             <center>
                <lane id="0" level="false" type="none">
@@ -559,8 +560,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1038.6772"
-                 t="3.6574"
+                 s="1018.2543"
+                 t="-13.3718"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -568,8 +569,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1044.7732"
-                 t="3.2511"
+                 s="1023.436"
+                 t="-12.1604"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -577,8 +578,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1050.8692"
-                 t="2.8447"
+                 s="1028.6176"
+                 t="-10.949"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -586,8 +587,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1056.9652"
-                 t="2.4383"
+                 s="1033.7993"
+                 t="-9.7376"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -595,8 +596,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1063.0612"
-                 t="2.0319"
+                 s="1038.9809"
+                 t="-8.5262"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -604,8 +605,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1069.1572"
-                 t="1.6256"
+                 s="1044.1626"
+                 t="-7.3148"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -613,8 +614,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1075.2532"
-                 t="1.2192"
+                 s="1059.4026"
+                 t="-6.5833"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -622,8 +623,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1081.3492"
-                 t="0.81281"
+                 s="1074.6426"
+                 t="-5.8518"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -631,8 +632,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1087.4452"
-                 t="0.40643"
+                 s="1089.8826"
+                 t="-5.1204"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -640,8 +641,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1093.5412"
-                 t="4.9931e-05"
+                 s="1105.1226"
+                 t="-4.3889"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -649,8 +650,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1111.8292"
-                 t="4.9931e-05"
+                 s="1120.3626"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -658,8 +659,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1130.1172"
-                 t="4.9931e-05"
+                 s="1150.8426"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -667,8 +668,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1148.4052"
-                 t="4.9931e-05"
+                 s="1181.3225"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -676,8 +677,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1166.6932"
-                 t="4.9931e-05"
+                 s="1211.8025"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -685,8 +686,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1184.9812"
-                 t="4.9931e-05"
+                 s="1242.2824"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -694,8 +695,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1203.2692"
-                 t="4.9931e-05"
+                 s="1272.7624"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -703,8 +704,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1221.5572"
-                 t="4.9931e-05"
+                 s="1303.2424"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -712,8 +713,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1239.8452"
-                 t="4.9931e-05"
+                 s="1333.7223"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -721,8 +722,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1258.1332"
-                 t="4.9931e-05"
+                 s="1364.2023"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -730,8 +731,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1276.4212"
-                 t="4.9931e-05"
+                 s="1371.8196"
+                 t="-3.6574"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -739,8 +740,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1294.7092"
-                 t="4.9931e-05"
+                 s="1377.9156"
+                 t="-4.3889"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -748,8 +749,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1312.9972"
-                 t="4.9931e-05"
+                 s="1384.0115"
+                 t="-5.1204"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -757,8 +758,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1331.2852"
-                 t="4.9931e-05"
+                 s="1390.1075"
+                 t="-5.8518"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -766,8 +767,8 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1349.5732"
-                 t="4.9931e-05"
+                 s="1396.2034"
+                 t="-6.5833"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
@@ -775,295 +776,11 @@
                  pitch="0"
                  radius="0.608"
                  roll="0"
-                 s="1367.8612"
-                 t="4.9931e-05"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="26" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1386.1492"
-                 t="4.9931e-05"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="27" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1404.4372"
-                 t="4.9931e-05"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="28" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1349.5732"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="29" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1358.7172"
-                 t="3.0479"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="30" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1367.8612"
-                 t="2.4383"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="31" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1377.0052"
-                 t="1.8287"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="32" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1386.1492"
-                 t="1.2192"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="33" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1395.2932"
-                 t="0.60962"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="34" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1056.9652"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="35" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1075.2532"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="36" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1093.5412"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="37" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1111.8292"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="38" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1130.1172"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="39" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1148.4052"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="40" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1166.6932"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="41" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1184.9812"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="42" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1203.2692"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="43" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1221.5572"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="44" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1239.8452"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="45" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1258.1332"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="46" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1276.4212"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="47" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1294.7092"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="48" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1312.9972"
-                 t="3.6574"
-                 type="obstacle"
-                 validLength="0"
-                 zoffset="0"/>
-         <object dynamic="no" hdg="0" height="1" id="49" name="TrafficCone01" orientation="-"
-                 pitch="0"
-                 radius="0.608"
-                 roll="0"
-                 s="1331.2852"
-                 t="3.6574"
+                 s="1402.2994"
+                 t="-7.3148"
                  type="obstacle"
                  validLength="0"
                  zoffset="0"/>
       </objects>
-      <signals>
-         <signal dynamic="no" hOffset="0" height="1" id="1"
-                 name="AlignedDesign_Scenario_1_5_Signs_RoadWorkAhead"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="946.0568"
-                 subtype="-1"
-                 t="-4.7165"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-         <signal dynamic="no" hOffset="0" height="1" id="2"
-                 name="AlignedDesign_Scenario_1_5_Signs_CenterLaneClosedAhead"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="991.0838"
-                 subtype="-1"
-                 t="-5.057"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-         <signal dynamic="no" hOffset="0" height="1" id="3"
-                 name="AlignedDesign_Scenario_1_5_Signs_SpeedLimit25_Inner"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="1436.7098"
-                 subtype="-1"
-                 t="5.2276"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-         <signal dynamic="no" hOffset="0" height="1" id="4"
-                 name="AlignedDesign_Scenario_1_5_Signs_SpeedLimit25_Outer"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="1433.7971"
-                 subtype="-1"
-                 t="-6.012"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-         <signal dynamic="no" hOffset="0" height="1" id="5"
-                 name="AlignedDesign_Scenario_1_5_Signs_SpeedLimit30_Inner"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="130.0711"
-                 subtype="-1"
-                 t="2.2774"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-         <signal dynamic="no" hOffset="0" height="1" id="6"
-                 name="AlignedDesign_Scenario_1_5_Signs_SpeedLimit30_Outer"
-                 orientation="-"
-                 pitch="0"
-                 roll="0"
-                 s="130.1642"
-                 subtype="-1"
-                 t="-2.751"
-                 type="-1"
-                 width="0.608"
-                 zOffset="0"/>
-      </signals>
    </road>
 </OpenDRIVE>

@@ -103,10 +103,6 @@ if numOfRightLane >= 1
     rightWidthStruct(1:numOfRightLane) = widthStruct;
     rightMarkStruct(1:numOfRightLane) = markStruct;
     rightSpeedStruct(1:numOfRightLane) = speedStruct;
-
-    sectionStruct.rightWidthStruct = rightWidthStruct;
-    sectionStruct.rightMarkStruct = rightMarkStruct;
-    sectionStruct.rightSpeedStruct = rightSpeedStruct;
 end
 
 % Construct left lane structures if any
@@ -114,10 +110,6 @@ if numOfLeftLane >= 1
     leftWidthStruct(1:numOfLeftLane) = widthStruct;
     leftMarkStruct(1:numOfLeftLane) = markStruct;
     leftSpeedStruct(1:numOfLeftLane) = speedStruct;
-
-    sectionStruct.leftWidthStruct = leftWidthStruct;
-    sectionStruct.leftMarkStruct = leftMarkStruct;
-    sectionStruct.leftSpeedStruct = leftSpeedStruct;
 end
 
 % Define the center lane marking parameters
@@ -142,6 +134,18 @@ if numOfLeftLane >= 2
     for ii = 1:numOfLeftLane-1
         leftMarkStruct(ii).Attributes.type = 'broken';
     end
+end
+
+if numOfRightLane>=1
+sectionStruct.rightWidthStruct = rightWidthStruct;
+sectionStruct.rightMarkStruct = rightMarkStruct;
+sectionStruct.rightSpeedStruct = rightSpeedStruct;
+end
+
+if numOfLeftLane>=1
+sectionStruct.leftWidthStruct = leftWidthStruct;
+sectionStruct.leftMarkStruct = leftMarkStruct;
+sectionStruct.leftSpeedStruct = leftSpeedStruct;
 end
 
 end % Ends main function
