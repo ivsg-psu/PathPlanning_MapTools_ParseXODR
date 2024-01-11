@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <OpenDRIVE>
-   <header date="2023_12_05T19_56_32" east="456.4151" name="HDmap" north="241.6269"
+   <header date="2023_12_06T20_36_01" east="456.4151" name="HDmap" north="241.6269"
            revMajor="1"
            revMinor="6"
            south="-177.7973"
@@ -495,13 +495,7 @@
             </right>
          </laneSection>
          <laneSection s="1001.9283" singleSide="false">
-            <left>
-               <lane id="" level="" type="">
-                  <width a="" b="" c="" d="" sOffset=""/>
-                  <roadMark color="" laneChange="" material="" sOffset="" type="" weight="" width=""/>
-                  <speed max="" sOffset="" unit=""/>
-               </lane>
-            </left>
+            <left/>
             <center>
                <lane id="0" level="false" type="none">
                   <roadMark color="yellow" laneChange="none" material="standard" sOffset="0"

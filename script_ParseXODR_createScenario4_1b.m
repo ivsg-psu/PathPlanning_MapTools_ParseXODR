@@ -23,31 +23,7 @@ flag_addSignals = 0;
 flag_gridObjects = 0;
 gridText = [];
 
-
-ApplicationString = 'AlignedDesign';
-% ApplicationString = 'DesignDrawings';
-
-
-% fig_num = 41800; % Numbered 418 because it sounds like 4-1-"a"
-% figure(fig_num);
-% clf;
-% % start of section 1
-% Lane1 = fcn_LoadWZ_loadLane('Scenario_4_1a_OuterLoopRoad_m1_MainLoopOuterLaneEntry', ApplicationString, 1, fig_num);
-% 
-% Lane2 = fcn_LoadWZ_loadLane('Scenario_4_1a_EntryTransitionRoad_m1_NewLane4_DoubleYellowLeft', ApplicationString, 1, fig_num);
-% 
-% % start of section 2
-% Lane3 = fcn_LoadWZ_loadLane('Scenario_4_1a_EntryTransitionTwoLaneSpace_m1_NewLane4_DoubleYellowLeft', ApplicationString, 1, fig_num);
-% Lane4 = fcn_LoadWZ_loadLane('Scenario_4_1a_EntryTransitionDoubleLane_m1_NewLane4_DoubleYellowLeft', ApplicationString, 1, fig_num);
-% 
-% 
-% Lane5 = fcn_LoadWZ_loadLane('Scenario_4_1a_ExitStraightaway_doubleLane', ApplicationString, 1, fig_num);
-% Lane6 = fcn_LoadWZ_loadLane('Scenario_4_1a_ExitStraightawayIntoTransition_doubleLane', ApplicationString, 1, fig_num);
-% 
-% % start of section 3
-% Lane7 = fcn_LoadWZ_loadLane('Scenario_4_1a_ExitTransitionRoad_m1_NewLane4_DoubleYellowLeft', ApplicationString, 1, fig_num);
-% Lane8 = fcn_LoadWZ_loadLane('Scenario_4_1a_OuterLoopRoad_m1_MainLoopOuterLaneExit', ApplicationString, 1, fig_num);
-
+%% define road center 
 
 ApplicationString = 'AlignedDesign';
 % ApplicationString = 'DesignDrawings';
@@ -81,6 +57,7 @@ roadCenterENU = [Lane1.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     Lane8.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU;
     ];
 
+% make sure there is no overlap
 figure();
 plot(roadCenterENU(:,1),roadCenterENU(:,2));
 
@@ -117,7 +94,7 @@ resampleStationInterval = 10;
 % Remove unnecessary fields 'elevationProfile' and 'lateralProfile' from the road structure
 roads.OpenDRIVE.road{1} = rmfield(roads.OpenDRIVE.road{1},{'elevationProfile','lateralProfile'});
 
-%% Start defining lane information
+%% define lane section 
 % Initialize lane offset for the road
 roads.OpenDRIVE.road{1}.lanes.laneOffset = fcn_ParseXODR_fillLaneOffset(roads.OpenDRIVE.road{1}.lanes.laneOffset, 0,0,0,0,0);
 
@@ -179,7 +156,7 @@ section2.rightMarkStruct(3).Attributes.type = 'none';
 section2.rightWidthStruct(3).Attributes.a = '7.3';
 
 % Since this scenario does not have a left lane, set the left lane section to empty
-roads.OpenDRIVE.road{1}.lanes.laneSection{1}.left = [];
+roads.OpenDRIVE.road{1}.lanes.laneSection{2}.left = [];
 
 % Fill in the right lane details: 1 driving lane and 1 shoulder
 roads.OpenDRIVE.road{1}.lanes.laneSection{2} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{2}, ...
@@ -262,7 +239,7 @@ ODRStruct = fcn_ParseXODR_addObjects(ODRStruct, roadCenterLine, objectsENU, 0.60
 signalsName = cell(0);
 
 %% add signs 
-% no sign for this one 
+% CMU does not use signs
 
 %% file conversion 
 % Assign the formatted date and time to the 'date' attribute within the header
