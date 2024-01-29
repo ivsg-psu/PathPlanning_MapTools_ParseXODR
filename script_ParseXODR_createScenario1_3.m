@@ -82,7 +82,7 @@ roads.OpenDRIVE.road{1}.lanes.laneSection{3} = roads.OpenDRIVE.road{1}.lanes.lan
 
 
 
-% get s for lane section 2 and 3. 
+% get st-coordinates for lane section 2 and 3. 
 XY_points = Lane3.LeftMarkerCluster.TraceCenterOfMarkerCluster.ENU(1,1:2);
 referencePath = roadCenterLine(:,1:2);
 flag_snap_type = 1;

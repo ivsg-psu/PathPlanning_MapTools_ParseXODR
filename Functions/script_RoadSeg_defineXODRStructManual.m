@@ -37,7 +37,9 @@ ODRStruct.OpenDRIVE.road{1}.Attributes.rule = 'RHT';
 % "planView" element, and can be of type line, arc, or spiral. OpenDRIVE
 % also supports cubic polynomials and parametric cubic polynomials, but
 % these are not used by highway designers and are thus not supported by the
-% rest of the PSU OpenDRIVE-MATLAB tool suite. % Examples for each of the
+% rest of the PSU OpenDRIVE-MATLAB tool suite. 
+%
+% Examples for each of the
 % three types are given here, assuming that we are going to create the
 % first road, though this can be followed by additional road definitions.
 % Create the empty structure for the planView, to be filled subsequently

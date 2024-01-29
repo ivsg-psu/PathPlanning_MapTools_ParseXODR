@@ -41,6 +41,11 @@ library_folders{ith_library} = {''};
 library_url{ith_library}     = 'struct2xml_fex59411.zip';
 
 ith_library = ith_library+1;
+library_name{ith_library}    = 'xml2struct_fex28518';
+library_folders{ith_library} = {''};                                
+library_url{ith_library}     = 'xml2struct_fex28518.zip';
+
+ith_library = ith_library+1;
 library_name{ith_library}    = 'GeometryClass_v2024_01_29';
 library_folders{ith_library} = {'Functions','Data'};                                
 library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_GeomTools_GeomClassLibrary/archive/refs/tags/GeometryClass_v2024_01_29.zip';
@@ -92,15 +97,15 @@ setenv('MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG','0');
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Patch%20Operations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+% Show how to load an XML XODR structure into MATLAB
 
 % Load an example file from a static file path
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Simple_Lane_Offset.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Simple_Lane_Gains.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Simple_Lane_Offset_Reversed.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/Ex_Complex_Lane_Offset.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_100m_Lane_Offset.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('109_WahbaLoop_WaddleIntersectionWithI99.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('109_WahbaLoop_WaddleIntersectionWithI99.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
@@ -123,8 +128,11 @@ minPlotGap = 0.2; % (m)
 % Call the plotting function
 fcn_RoadSeg_plotRealisticRoad(ODRStruct,minPlotGap,1);
 
+%% Show how to manually build a road with prompts
+script_RoadSeg_defineXODRStructPrompted
 
-
+%% Show how to programatically build a road (VERY powerful)
+script_RoadSeg_defineXODRStructManual
 
 %% Functions follow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

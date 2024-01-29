@@ -8,6 +8,9 @@
 % Revision history:
 %     2022_04_01
 %     -- wrote the code
+%     2024_01_29 - S. Brennan
+%     -- cleaned up dependencies, made sure it still worked with removal of
+%     hard path definitions
 
 clearvars
 close all
@@ -16,9 +19,9 @@ close all
 %ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct;
 
 % Load an example file from a static file path
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/ODRViewerEx.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('C:\Users\ccctt\OneDrive - The Pennsylvania State University\Documents\GitHub\PathPlanning_MapTools_ParseXODR\Data\workzone_150m_double_curve_barrels_repeat.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Data/workzone_50m_curve_objects.xodr');
+%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('ODRViewerEx.xodr');
+ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_150m_double_curve_barrels_repeat.xodr');
+% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
@@ -53,7 +56,7 @@ maxObjectVertexGap = 0.05;
 objectArray = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxObjectVertexGap);
 
 % Add the path for the patch objects plotting library
-addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_MapAssoc/'));
+% addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_MapAssoc/'));
 
 % Plot the patch objects on top of the (previously plotted) roadway figure
 fcn_Patch_plotPatch(objectArray,hRoad);

@@ -82,9 +82,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Make sure that the xml to structure dependency file is available
-addpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Utilities/dependencies/xml2struct/')
-if ~exist('xml2struct_fex28518','file')
-  addpath(uigetdir('.','Provide missing path to xml2struct_fex28518'));
+results = which("xml2struct_fex28518");
+
+if isempty(results)
+  % addpath(uigetdir('.','Provide missing path to xml2struct_fex28518'));
+   error('The package: xml2struct_fex28518, was not installed correctly.');
 end
 
 % Use the xml2struct utility to create a nested structure of the XODR
