@@ -1,5 +1,4 @@
-function laneSection = fcn_ParseXODR_fillLanes(laneSection, laneKeyWord, numOfLanes, widthStruct, ...
-    roadMarkStruct, speedStruct, shoulderFlag)
+function laneSection = fcn_ParseXODR_fillLanes(laneSection, laneKeyWord, numOfLanes, widthStruct, roadMarkStruct, speedStruct, shoulderFlag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fcn_ParseXODR_fillLanes
 % Fills in lane details for a lane section in an OpenDRIVE structure.

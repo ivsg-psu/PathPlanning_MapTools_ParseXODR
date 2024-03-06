@@ -27,7 +27,10 @@ function emptyRoad = fcn_ParseXODR_createEmptyRoad
 
 
 % Revision history:
-% 2023 10 19: start writing function
+% 2023_10_19 - W. Bai
+% -- start writing function
+
+
 flag_do_plots = 0;
 flag_do_debug = 0; % Flag to plot the results for debugging
 flag_check_inputs = 1; % Flag to perform input checking
