@@ -1,15 +1,20 @@
-function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
-%% fcn_ParseXODR_fillDefaultRoadLanes
-% Fills the default OpenDRIVE road lanes structure. This is the road field
-% under the top-most structure in the XODR specification, for example:
+function lane = fcn_ParseXODR_fillDefaultRoadLane(left_or_right_or_center, varargin)
+%% fcn_ParseXODR_fillDefaultRoadLane
+% Fills the default OpenDRIVE road lane (singular) structure. This is the
+% road fields of 'left','right', or 'center' under the top-most structure
+% in the XODR specification, for example:
 %
-%  testTrack.road{1,1}.lanes
+%  testTrack.road{1,1}.lanes.laneSection{1,1}.left.(etc)
 %
 % FORMAT:
 %
-%       lanes = fcn_ParseXODR_fillDefaultRoadLanes
+%       lane = fcn_ParseXODR_fillDefaultRoadLane(left_or_right_or_center)
 %
 % INPUTS:
+%
+%      left_or_right_or_center: a string input of 'left', 'right', or
+%      'center' specifying which lane is being added. There are differences
+%      in the default formats for center, versus left or right.
 %
 %      (OPTIONAL INPUTS)
 % 
@@ -17,15 +22,18 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %      input checking or debugging, no figures will be generated, and sets
 %      up code to maximize speed.
 %
+%
 % OUTPUTS:
 %
-%      lanes: a structure containing the following elements with
+%      lane: a structure containing the following elements with
 %      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "lanes" field under the OpenDRIVE
+%      OPENDRIVE standard for the "lane" field under the OpenDRIVE
 %      road structure:
 %
-%      lanes.laneOffset  
-%      lanes.laneSection{1,1}
+%      lane.Attributes  
+%      lane.width
+%      lane.roadMark
+%      lane.speed
 %
 % DEPENDENCIES:
 %
@@ -33,7 +41,7 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %
 % EXAMPLES:
 %      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLanes
+% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLane
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -51,7 +59,7 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==1 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -92,11 +100,12 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(0,1);
+        narginchk(1,2);
 
-        % % Check the projection_vector input to be length greater than or equal to 1
-        % fcn_DebugTools_checkInputsToFunctions(...
-        %     input_vectors, '2or3column_of_numbers');
+        % Check the left_or_right_or_center input to be a string
+        if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
+            error('The left_or_right_or_center input must be a string or character type');
+        end
 
     end
 end
@@ -104,7 +113,7 @@ end
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -124,19 +133,44 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Create the 'lanes' structure 
-lanes = struct();
+% Create the 'lane' structure 
+lane = struct();
 
-% Create the 'laneOffset' structure within lanes
-lanes.laneOffset = struct();
-% Create the 'Attributes' substructure within 'laneOffset'
-lanes.laneOffset.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
+% create 'Attributes' for center, right, or left lane
+lane.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'id','level','type'});
 
-% Initialize the empty laneSection
-lanes.laneSection   = cell(1, 1); % Initialize cell array
 
-% Create the nested laneSection inside the cell array
-lanes.laneSection{1, 1} = fcn_ParseXODR_fillDefaultRoadLaneSection(-1);
+% Create the 'width' structure within only right, left lane types
+switch lower(left_or_right_or_center)
+    case {'left','right'}
+        lane.width = struct();
+        % Create the 'Attributes' substructure within 'width'
+        lane.width.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','sOffset'});
+    case {'center'}
+        % Do nothing
+    otherwise
+        error('Unknown method.')
+end
+
+
+% Create the 'roadMark' structure within center, right, or left lanes
+lane.roadMark = struct();
+lane.roadMark.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'color','laneChange','material','sOffset','type','weight','width'});
+
+
+% Create the 'speed' structure within only right, left lane types
+switch lower(left_or_right_or_center)
+    case {'left','right'}
+        % Create the 'speed' structure within lanes.laneSection{1,1}.left.lane{1,1}
+        lane.speed = struct();
+        % Create the 'Attributes' substructure within 'speed'
+        lane.speed.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'max','sOffset','unit'});
+    case {'center'}
+        % Do nothing
+    otherwise
+        error('Unknown method.')
+end
+
 
 
 

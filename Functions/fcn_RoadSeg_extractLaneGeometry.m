@@ -50,8 +50,8 @@ flag_do_debug = 1; % Flag to plot the results for debugging
 flag_check_inputs = 1; % Flag to perform input checking
 
 if flag_do_debug
-  st = dbstack; %#ok<*UNRCH>
-  fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+    st = dbstack; %#ok<*UNRCH>
+    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
 end
 
 
@@ -69,10 +69,10 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if flag_check_inputs == 1
-  % Are there the right number of inputs?
-  if nargin < 2 || nargin > 2
-    error('Incorrect number of input arguments')
-  end
+    % Are there the right number of inputs?
+    if nargin < 2 || nargin > 2
+        error('Incorrect number of input arguments')
+    end
 end
 
 
@@ -113,43 +113,43 @@ tRight = nan(length(sPts),10);
 stationIndices = {};
 
 if flag_do_debug
-  fprintf(1,'Starting lane extraction routine for road %s\n',ODRRoad.Attributes.id);
+    fprintf(1,'Starting lane extraction routine for road %s\n',ODRRoad.Attributes.id);
 end
 
 % Determine whether there are any offsets to the center lane in the
 % current road
 if isfield(ODRRoad.lanes,'laneOffset')
-  % Determine the number of offset descriptors in the road
-  Noffsets = length(ODRRoad.lanes.laneOffset);
-  % Iterate through all of the offset descriptors
-  for laneOffsetIdx = 1:Noffsets
-    % Determine the start point of the offset descriptor
-    offsetStart = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.s);
-    % Determine the end point of the offset descriptor
-    if laneOffsetIdx == Noffsets
-      % If this is the last offset, it must run to the end of the road
-      offsetEnd = str2double(ODRRoad.Attributes.length);
-    else
-      % If this is not the last offset, it runs until the next offset
-      % descriptor
-      offsetEnd = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx+1}.Attributes.s);
+    % Determine the number of offset descriptors in the road
+    Noffsets = length(ODRRoad.lanes.laneOffset);
+    % Iterate through all of the offset descriptors
+    for laneOffsetIdx = 1:Noffsets
+        % Determine the start point of the offset descriptor
+        offsetStart = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.s);
+        % Determine the end point of the offset descriptor
+        if laneOffsetIdx == Noffsets
+            % If this is the last offset, it must run to the end of the road
+            offsetEnd = str2double(ODRRoad.Attributes.length);
+        else
+            % If this is not the last offset, it runs until the next offset
+            % descriptor
+            offsetEnd = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx+1}.Attributes.s);
+        end
+        % Determine which of the indices in the s-direction are affected by
+        % this offset descriptor
+        affectedIdxs = find(sPts >= offsetStart & sPts <= offsetEnd);
+        % Grab the properties of the offset
+        a = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.a);
+        b = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.b);
+        c = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.c);
+        d = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.d);
+        % Now calculate the t coordinate of the center line at each of the
+        % affected points
+        ds = sPts(affectedIdxs)-offsetStart;
+        tCenter(affectedIdxs) = a + b*ds + c*ds.^2 + d*ds.^3;
+        if flag_do_debug
+            fprintf(1,'Offset center lane from stations %d to %d\n',offsetStart,offsetEnd);
+        end
     end
-    % Determine which of the indices in the s-direction are affected by
-    % this offset descriptor
-    affectedIdxs = find(sPts >= offsetStart & sPts <= offsetEnd);
-    % Grab the properties of the offset
-    a = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.a);
-    b = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.b);
-    c = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.c);
-    d = str2double(ODRRoad.lanes.laneOffset{laneOffsetIdx}.Attributes.d);
-    % Now calculate the t coordinate of the center line at each of the
-    % affected points
-    ds = sPts(affectedIdxs)-offsetStart;
-    tCenter(affectedIdxs) = a + b*ds + c*ds.^2 + d*ds.^3;
-    if flag_do_debug
-      fprintf(1,'Offset center lane from stations %d to %d\n',offsetStart,offsetEnd);
-    end
-  end
 end
 
 % Determine the number of lane sections in the current road (there should
@@ -164,211 +164,211 @@ rightLanesStarted = 0;
 % Iterate through all of the lane sections to gather the lane linkage
 % information
 for laneSecIdx = 1:NlaneSegs
-  if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
-    % Determine the number of left lanes there are in the current section
-    NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
-    if ~leftLanesStarted
-      leftLanesStarted = 1;
-      % Initialize the current section with incrementally increasing lane
-      % IDs, working from smallest to largest (from center lane outward)
-      laneLinksLeft(laneSecIdx,:) = 1:NleftLanes;
-    % Code to run only for lane segments following the first definition of
-    % left lanes
-    else
-      % Initialize any new rows with NaN values, including the one for the
-      % current section
-      laneLinksLeft = [laneLinksLeft;...
-        nan(laneSecIdx - size(laneLinksLeft,1),size(laneLinksLeft,2))];
-      % Do a double-check to make sure that the right number of NaNs were
-      % added
-      if size(laneLinksLeft,1) ~= laneSecIdx
-        error('Addition of NaN rows did not produce consistent matrix size');
-      end
-      % Iterate through each of the left lanes in the current section,
-      for leftLaneIdx = 1:NleftLanes
-        % Grab the current lane ID
-        currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
-        % Check to see if this lane has a predecessor
-        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link,'predecessor')
-          % Get the predecessor of the current lane
-          currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link.predecessor.Attributes.id);
-          % Insert the current lane ID into the column matching that of its
-          % predecessor
-          laneLinksLeft(laneSecIdx,currPred == laneLinksLeft(laneSecIdx-1,:)) = currLane;
+    if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
+        % Determine the number of left lanes there are in the current section
+        NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
+        if ~leftLanesStarted
+            leftLanesStarted = 1;
+            % Initialize the current section with incrementally increasing lane
+            % IDs, working from smallest to largest (from center lane outward)
+            laneLinksLeft(laneSecIdx,:) = 1:NleftLanes;
+            % Code to run only for lane segments following the first definition of
+            % left lanes
         else
-          % This is a new lane starting, so handle as such by adding a new
-          % column on the end of the matrix and adding the current lane ID
-          % as the first entry, starting in the current row
-          laneLinksLeft = [laneLinksLeft nan(laneSecIdx,1)];
-          laneLinksLeft(end,end) = currLane;
+            % Initialize any new rows with NaN values, including the one for the
+            % current section
+            laneLinksLeft = [laneLinksLeft;...
+                nan(laneSecIdx - size(laneLinksLeft,1),size(laneLinksLeft,2))];
+            % Do a double-check to make sure that the right number of NaNs were
+            % added
+            if size(laneLinksLeft,1) ~= laneSecIdx
+                error('Addition of NaN rows did not produce consistent matrix size');
+            end
+            % Iterate through each of the left lanes in the current section,
+            for leftLaneIdx = 1:NleftLanes
+                % Grab the current lane ID
+                currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
+                % Check to see if this lane has a predecessor
+                if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link,'predecessor')
+                    % Get the predecessor of the current lane
+                    currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.link.predecessor.Attributes.id);
+                    % Insert the current lane ID into the column matching that of its
+                    % predecessor
+                    laneLinksLeft(laneSecIdx,currPred == laneLinksLeft(laneSecIdx-1,:)) = currLane;
+                else
+                    % This is a new lane starting, so handle as such by adding a new
+                    % column on the end of the matrix and adding the current lane ID
+                    % as the first entry, starting in the current row
+                    laneLinksLeft = [laneLinksLeft nan(laneSecIdx,1)];
+                    laneLinksLeft(end,end) = currLane;
+                end
+            end
         end
-      end
-    end
-  else
-    % This lane section does not contain any left lanes, so fill the
-    % laneLinksLeft variable with nans for this lane section
-    if 1 == laneSecIdx
-      laneLinksLeft = nan;
     else
-      laneLinksLeft(laneSecIdx,:) = nan(1,size(laneLinksLeft(laneSecIdx-1,:)));
-    end
-  end
-  if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
-    % Determine the number of right lanes there are in the current section
-    NrightLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane);
-    % Initialize the current row of the laneSecIdx matrix with
-    % incrementally counting lane IDs
-    if ~rightLanesStarted
-      rightLanesStarted = 1;
-      % Initialize the current section with incrementally increasing lane
-      % IDs, working from smallest to largest (from center lane outward)
-      laneLinksRight(laneSecIdx,:) = 1:NrightLanes;
-      % Code to run only for lane segments following the first definition of
-      % right lanes
-    else
-      % Initialize any new rows with NaN values, including the one for the
-      % current section
-      laneLinksRight = [laneLinksRight;...
-        nan(laneSecIdx - size(laneLinksRight,1),size(laneLinksRight,2))];
-      if size(laneLinksRight,1) ~= laneSecIdx
-        error('Addition of NaN rows did not produce consistent matrix size');
-      end
-      % Iterate through each of the right lanes in the current section,
-      for rightLaneIdx = 1:NrightLanes
-        % Grab the current lane ID
-        currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
-        % Check to see if this lane has a predecessor
-        if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link,'predecessor')
-          % Get the predecessor of the current lane
-          currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link.predecessor.Attributes.id);
-          % Insert the current lane ID into the column matching that of its
-          % predecessor
-          laneLinksRight(laneSecIdx,-currPred == laneLinksRight(laneSecIdx-1,:)) = -currLane;  % negative due to right lane ID convention
+        % This lane section does not contain any left lanes, so fill the
+        % laneLinksLeft variable with nans for this lane section
+        if 1 == laneSecIdx
+            laneLinksLeft = nan;
         else
-          % This is a new lane starting, so handle as such by adding a new
-          % column on the end of the matrix and adding the current lane ID
-          % as the first entry, starting in the current row
-          laneLinksRight = [laneLinksRight nan(laneSecIdx,1)];
-          laneLinksRight(end,end) = -currLane; % negative due to right lane ID convention
+            laneLinksLeft(laneSecIdx,:) = nan(1,size(laneLinksLeft(laneSecIdx-1,:)));
         end
-      end
     end
+    if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
+        % Determine the number of right lanes there are in the current section
+        NrightLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane);
+        % Initialize the current row of the laneSecIdx matrix with
+        % incrementally counting lane IDs
+        if ~rightLanesStarted
+            rightLanesStarted = 1;
+            % Initialize the current section with incrementally increasing lane
+            % IDs, working from smallest to largest (from center lane outward)
+            laneLinksRight(laneSecIdx,:) = 1:NrightLanes;
+            % Code to run only for lane segments following the first definition of
+            % right lanes
+        else
+            % Initialize any new rows with NaN values, including the one for the
+            % current section
+            laneLinksRight = [laneLinksRight;...
+                nan(laneSecIdx - size(laneLinksRight,1),size(laneLinksRight,2))];
+            if size(laneLinksRight,1) ~= laneSecIdx
+                error('Addition of NaN rows did not produce consistent matrix size');
+            end
+            % Iterate through each of the right lanes in the current section,
+            for rightLaneIdx = 1:NrightLanes
+                % Grab the current lane ID
+                currLane = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
+                % Check to see if this lane has a predecessor
+                if isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx},'link')  && isfield(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link,'predecessor')
+                    % Get the predecessor of the current lane
+                    currPred = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.link.predecessor.Attributes.id);
+                    % Insert the current lane ID into the column matching that of its
+                    % predecessor
+                    laneLinksRight(laneSecIdx,-currPred == laneLinksRight(laneSecIdx-1,:)) = -currLane;  % negative due to right lane ID convention
+                else
+                    % This is a new lane starting, so handle as such by adding a new
+                    % column on the end of the matrix and adding the current lane ID
+                    % as the first entry, starting in the current row
+                    laneLinksRight = [laneLinksRight nan(laneSecIdx,1)];
+                    laneLinksRight(end,end) = -currLane; % negative due to right lane ID convention
+                end
+            end
+        end
     else
-    % This lane section does not contain any left lanes, so fill the
-    % laneLinksLeft variable with nans for this lane section
-    if 1 == laneSecIdx
-      laneLinksRight = nan;
-    else
-      laneLinksRight(laneSecIdx,:) = nan(1,size(laneLinksRight(laneSecIdx-1,:)));
+        % This lane section does not contain any left lanes, so fill the
+        % laneLinksLeft variable with nans for this lane section
+        if 1 == laneSecIdx
+            laneLinksRight = nan;
+        else
+            laneLinksRight(laneSecIdx,:) = nan(1,size(laneLinksRight(laneSecIdx-1,:)));
+        end
     end
-  end
 end
 
 % Iterate through all of the lane sections
 for laneSecIdx = 1:NlaneSegs
-  % Determine the start and end points of the lane section
-  laneSecStart = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.Attributes.s);
-  % The station coordinate of the lane section end will be the start of
-  % the next lane section, unless it's the last lane section. If that's
-  % the case, use the station coordinate of the end of the road (the
-  % length) to determine the end of the section
-  if laneSecIdx == NlaneSegs
-    laneSecEnd = str2double(ODRRoad.Attributes.length);
-  else
-    laneSecEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx+1}.Attributes.s);
-  end
-  % Check for child lanes not in a left, center, or right container
-  if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'lane')
-    if flag_do_debug
-      fprintf(1,'In road %s, lane segment %d contains a lane outside of the <left>,<center>, and <right> containers, ignoring it.\n',...
-        ODRRoad.Attributes.id,laneSecIdx)
+    % Determine the start and end points of the lane section
+    laneSecStart = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.Attributes.s);
+    % The station coordinate of the lane section end will be the start of
+    % the next lane section, unless it's the last lane section. If that's
+    % the case, use the station coordinate of the end of the road (the
+    % length) to determine the end of the section
+    if laneSecIdx == NlaneSegs
+        laneSecEnd = str2double(ODRRoad.Attributes.length);
+    else
+        laneSecEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx+1}.Attributes.s);
     end
-  end
+    % Check for child lanes not in a left, center, or right container
+    if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'lane')
+        if flag_do_debug
+            fprintf(1,'In road %s, lane segment %d contains a lane outside of the <left>,<center>, and <right> containers, ignoring it.\n',...
+                ODRRoad.Attributes.id,laneSecIdx)
+        end
+    end
 
-  if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
-    % Iterate through all of the left lane elements
-    NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
-    for leftLaneIdx = 1:NleftLanes
-      % Get the lane index from the XODR structure
-      laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
-      laneDataIndex = find(laneLinksLeft(laneSecIdx,:) == laneID);
-      if isempty(laneDataIndex)
-        error('Lane index not found');
-      end
-      if flag_do_debug
-        fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
-      end
-      Nwidths = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width);
-      if ~iscell(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width)
-        ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width};
-      end
-      for widthIdx = 1:Nwidths
-        a = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.a);
-        b = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.b);
-        c = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.c);
-        d = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.d);
-        sOffset = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.sOffset);
-        widthStart = laneSecStart + sOffset;
-        if widthIdx == Nwidths
-          widthEnd = laneSecEnd;
-        else
-          widthEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
+    if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'left')
+        % Iterate through all of the left lane elements
+        NleftLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane);
+        for leftLaneIdx = 1:NleftLanes
+            % Get the lane index from the XODR structure
+            laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.Attributes.id);
+            laneDataIndex = find(laneLinksLeft(laneSecIdx,:) == laneID);
+            if isempty(laneDataIndex)
+                error('Lane index not found');
+            end
+            if flag_do_debug
+                fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
+            end
+            Nwidths = length(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width);
+            if ~iscell(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width)
+                ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width};
+            end
+            for widthIdx = 1:Nwidths
+                a = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.a);
+                b = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.b);
+                c = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.c);
+                d = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.d);
+                sOffset = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.sOffset);
+                widthStart = laneSecStart + sOffset;
+                if widthIdx == Nwidths
+                    widthEnd = laneSecEnd;
+                else
+                    widthEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.left.lane{leftLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
+                end
+                % Determine which of the indices in the s-direction are affected by
+                % this offset descriptor
+                stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
+                % Now calculate the t coordinate of the left line at each of the
+                % affected points
+                ds = sPts(stationIndices{laneSecIdx})-widthStart;
+                tLeft(stationIndices{laneSecIdx},laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
+                if flag_do_debug
+                    fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
+                end
+            end
         end
-        % Determine which of the indices in the s-direction are affected by
-        % this offset descriptor
-        stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
-        % Now calculate the t coordinate of the left line at each of the
-        % affected points
-        ds = sPts(stationIndices{laneSecIdx})-widthStart;
-        tLeft(stationIndices{laneSecIdx},laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
-        if flag_do_debug
-          fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
-        end
-      end
     end
-  end
-  if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
-    % Iterate through all of the right lane elements
-    NrightLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane);
-    for rightLaneIdx = 1:NrightLanes
-      % Get the lane index from the XODR structure
-      laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
-      laneDataIndex = find(laneLinksRight(laneSecIdx,:) == -laneID); % negative here due to the sign of the lanes on the right
-      if isempty(laneDataIndex)
-        error('Lane index not found');
-      end
-      if flag_do_debug
-        fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
-      end
-      Nwidths = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width);
-      if ~iscell(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width)
-        ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width};
-      end
-      for widthIdx = 1:Nwidths
-        a = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.a);
-        b = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.b);
-        c = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.c);
-        d = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.d);
-        sOffset = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.sOffset);
-        widthStart = laneSecStart + sOffset;
-        if widthIdx == Nwidths
-          widthEnd = laneSecEnd;
-        else
-          widthEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
+    if isfield(ODRRoad.lanes.laneSection{laneSecIdx},'right')
+        % Iterate through all of the right lane elements
+        NrightLanes = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane);
+        for rightLaneIdx = 1:NrightLanes
+            % Get the lane index from the XODR structure
+            laneID = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.Attributes.id);
+            laneDataIndex = find(laneLinksRight(laneSecIdx,:) == -laneID); % negative here due to the sign of the lanes on the right
+            if isempty(laneDataIndex)
+                error('Lane index not found');
+            end
+            if flag_do_debug
+                fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSecIdx);
+            end
+            Nwidths = length(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width);
+            if ~iscell(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width)
+                ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width};
+            end
+            for widthIdx = 1:Nwidths
+                a = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.a);
+                b = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.b);
+                c = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.c);
+                d = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.d);
+                sOffset = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.sOffset);
+                widthStart = laneSecStart + sOffset;
+                if widthIdx == Nwidths
+                    widthEnd = laneSecEnd;
+                else
+                    widthEnd = str2double(ODRRoad.lanes.laneSection{laneSecIdx}.right.lane{rightLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
+                end
+                % Determine which of the indices in the s-direction are affected by
+                % this offset descriptor
+                stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
+                % Now calculate the t coordinate of the left line at each of the
+                % affected points
+                ds = sPts(stationIndices{laneSecIdx})-widthStart;
+                tRight(stationIndices{laneSecIdx},laneDataIndex) = -(a + b*ds + c*ds.^2 + d*ds.^3);
+                if flag_do_debug
+                    fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
+                end
+            end
         end
-        % Determine which of the indices in the s-direction are affected by
-        % this offset descriptor
-        stationIndices{laneSecIdx} = find(sPts >= widthStart & sPts <= widthEnd);
-        % Now calculate the t coordinate of the left line at each of the
-        % affected points
-        ds = sPts(stationIndices{laneSecIdx})-widthStart;
-        tRight(stationIndices{laneSecIdx},laneDataIndex) = -(a + b*ds + c*ds.^2 + d*ds.^3);
-        if flag_do_debug
-          fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
-        end
-      end
     end
-  end
 end
 
 % Trim away any columns of the lane data matrices where there is no lane
@@ -380,14 +380,14 @@ tRight = tRight(:,any(~isnan(tRight)));
 % lane order, without including nan values (which get sorted to the end of
 % the temporary vector that is being summed anyway)
 for i = 1:length(stationIndices)
-  [~,sortInds] = sort(laneLinksLeft(i,:));
-  if ~isempty(tLeft)
-    tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
-  end
-  [~,sortInds] = sort(laneLinksRight(i,:));
-  if ~isempty(tRight)
-    tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
-  end
+    [~,sortInds] = sort(laneLinksLeft(i,:));
+    if ~isempty(tLeft)
+        tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
+    end
+    [~,sortInds] = sort(laneLinksRight(i,:));
+    if ~isempty(tRight)
+        tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
+    end
 end
 % Add any centerline offset that exists for the lanes
 tLeft = tLeft + tCenter;
@@ -395,5 +395,5 @@ tRight = tRight + tCenter;
 
 % Provide some indication of completion
 if flag_do_debug
-  fprintf(1,'Completed lane extraction routine\n');
+    fprintf(1,'Completed lane extraction routine\n');
 end

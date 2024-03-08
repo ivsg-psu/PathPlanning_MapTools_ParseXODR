@@ -1,39 +1,35 @@
-function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
-%% fcn_ParseXODR_fillDefaultRoadLanes
-% Fills the default OpenDRIVE road lanes structure. This is the road field
-% under the top-most structure in the XODR specification, for example:
+function roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork(varargin)
+%% fcn_ParseXODR_fillDefaultRoadNetwork
+% Fills the default roadNetwork structure. This is usually the top-most
+% structure in the XODR specification, for example:
 %
-%  testTrack.road{1,1}.lanes
+%  roadNetwork.OpenDRIVE.(etc)
 %
 % FORMAT:
 %
-%       lanes = fcn_ParseXODR_fillDefaultRoadLanes
+%       roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork
 %
 % INPUTS:
 %
-%      (OPTIONAL INPUTS)
-% 
-%      fig_num: a figure number to plot results. If set to -1, skips any
-%      input checking or debugging, no figures will be generated, and sets
-%      up code to maximize speed.
+%      (none)
+%
 %
 % OUTPUTS:
 %
-%      lanes: a structure containing the following elements with
+%      roadNetwork: a structure containing the following elements with
 %      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "lanes" field under the OpenDRIVE
-%      road structure:
+%      OPENDRIVE standard:
 %
-%      lanes.laneOffset  
-%      lanes.laneSection{1,1}
+%      roadNetwork.OpenDRIVE - contains OpenDRIVE road specification
+%     
 %
 % DEPENDENCIES:
 %
-%       fcn_ParseXODR_fillBlankFieldStructure
+%       fcn_ParseXODR_fillDefaultOpenDRIVE
 %
 % EXAMPLES:
 %      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLanes
+% See the script: script_test_fcn_ParseXODR_fillDefaultRoadNetwork
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -124,21 +120,10 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Create the 'lanes' structure 
-lanes = struct();
 
-% Create the 'laneOffset' structure within lanes
-lanes.laneOffset = struct();
-% Create the 'Attributes' substructure within 'laneOffset'
-lanes.laneOffset.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-
-% Initialize the empty laneSection
-lanes.laneSection   = cell(1, 1); % Initialize cell array
-
-% Create the nested laneSection inside the cell array
-lanes.laneSection{1, 1} = fcn_ParseXODR_fillDefaultRoadLaneSection(-1);
-
-
+% Create the empty roadNetwork structure
+roadNetwork = struct();
+roadNetwork.OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(-1);
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

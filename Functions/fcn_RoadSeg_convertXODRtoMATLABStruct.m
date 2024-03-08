@@ -26,8 +26,9 @@ function [ODRStruct,fullPath] = fcn_RoadSeg_convertXODRtoMATLABStruct(varargin)
 %       See the script: script_test_fcn_RoadSeg_parsingProcess.m for
 %       a full test suite.
 %
-% This function was written by C. Beal
-% Questions or comments? cbeal@bucknell.edu
+% This function was written by C. Beal on 2022_03_20, and is maintained by
+% S. Brennan
+% Questions or comments? cbeal@bucknell.edu or sbrennan@psu.edu
 
 % Revision history:
 %     2022_03_20
@@ -93,10 +94,10 @@ end
 % attributes
 ODRStruct = xml2struct_fex28518(fullPath);
 
-% Unify the formatting of the MATLAB data structure so that single roads or
-% single geometry segments are in cell arrays (of a single element) to be
-% consistent with the data structure when there are multiple roads and/or
-% multiple geometry elements
+% Unify the formatting of the MATLAB data structure so that singleton roads
+% or singleton geometry segments are in cell arrays (of a single element)
+% to be consistent with the data structures where there are multiple roads
+% and/or multiple geometry elements
 
 % Determine the number of roads in the map
 Nroads = length(ODRStruct.OpenDRIVE.road);
@@ -109,8 +110,10 @@ if 1 == Nroads
   ODRStruct.OpenDRIVE = rmfield(ODRStruct.OpenDRIVE,'road');
   ODRStruct.OpenDRIVE.road{1} = temp;
 end
+
 for roadInd = 1:Nroads
   NgeomElems = length(ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry);
+
   % Check for a single geometry element in the road structure
   if 1 == NgeomElems
     % If there is only a single geometry element, fix the structure by
@@ -120,6 +123,7 @@ for roadInd = 1:Nroads
     ODRStruct.OpenDRIVE.road{roadInd}.planView = rmfield(ODRStruct.OpenDRIVE.road{roadInd}.planView,'geometry');
     ODRStruct.OpenDRIVE.road{roadInd}.planView.geometry{1} = temp;
   end
+
   % Check for a single lane offset element in the road structure
   if isfield(ODRStruct.OpenDRIVE.road{roadInd}.lanes,'laneOffset')
     NlaneOffsets = length(ODRStruct.OpenDRIVE.road{roadInd}.lanes.laneOffset);

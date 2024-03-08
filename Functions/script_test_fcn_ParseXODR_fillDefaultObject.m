@@ -1,5 +1,5 @@
-% script_test_fcn_ParseXODR_fillDefaultRoadLanes
-% Exercises the function: fcn_ParseXODR_fillDefaultRoadLanes
+% script_test_fcn_ParseXODR_fillDefaultObject
+% Exercises the function: fcn_ParseXODR_fillDefaultObject
 
 % Revision history:
 % 2024_03_06 - S. Brennan
@@ -11,21 +11,17 @@ clc;
 
 %% BASIC test - no figure output
 
-lanes = fcn_ParseXODR_fillDefaultRoadLanes([]);
+object = fcn_ParseXODR_fillDefaultObject([]);
 
 % Check that the key elements are there
-assert(isfield(lanes,'laneOffset'));
-assert(isfield(lanes,'laneSection'));
-
+assert(isfield(object,'Attributes'));
 
 %% BASIC test - fast mode
 
-lanes = fcn_ParseXODR_fillDefaultRoadLanes(-1);
+object = fcn_ParseXODR_fillDefaultObject(-1);
 
 % Check that the key elements are there
-assert(isfield(lanes,'laneOffset'));
-assert(isfield(lanes,'laneSection'));
-
+assert(isfield(object,'Attributes'));
 
 %% UNUSED
 % %% Test 2: many vectors

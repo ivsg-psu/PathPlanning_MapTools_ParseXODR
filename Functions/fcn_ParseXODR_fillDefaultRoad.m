@@ -168,22 +168,7 @@ road{1, 1}.lateralProfile.shape.Attributes = fcn_ParseXODR_fillBlankFieldStructu
 road{1, 1}.lanes = fcn_ParseXODR_fillDefaultRoadLanes;
 
 % create attributes for object
-road{1,1}.objects.object{1}.Attributes.id = '';
-road{1,1}.objects.object{1}.Attributes.name = '';
-road{1,1}.objects.object{1}.Attributes.s = '';
-road{1,1}.objects.object{1}.Attributes.t = '';
-road{1,1}.objects.object{1}.Attributes.zoffset = '';
-road{1,1}.objects.object{1}.Attributes.hdg = '';
-road{1,1}.objects.object{1}.Attributes.roll = '';
-road{1,1}.objects.object{1}.Attributes.pitch = '';
-road{1,1}.objects.object{1}.Attributes.orientation = '';
-road{1,1}.objects.object{1}.Attributes.type = '';
-road{1,1}.objects.object{1}.Attributes.height = '';
-road{1,1}.objects.object{1}.Attributes.radius = '';
-road{1,1}.objects.object{1}.Attributes.validLength = '';
-road{1,1}.objects.object{1}.Attributes.dynamic = '';
-
-
+road{1,1}.objects.object{1} = fcn_ParseXODR_fillDefaultObject(-1);
 
 
 %% Plot the results (for debugging)?

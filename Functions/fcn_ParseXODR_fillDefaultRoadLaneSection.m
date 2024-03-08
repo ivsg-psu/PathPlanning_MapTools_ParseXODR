@@ -1,13 +1,13 @@
-function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
-%% fcn_ParseXODR_fillDefaultRoadLanes
-% Fills the default OpenDRIVE road lanes structure. This is the road field
+function laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(varargin)
+%% fcn_ParseXODR_fillDefaultRoadLaneSection
+% Fills the default OpenDRIVE road laneSection structure. This is the road field
 % under the top-most structure in the XODR specification, for example:
 %
-%  testTrack.road{1,1}.lanes
+%  testTrack.road{1,1}.lanes.laneSection
 %
 % FORMAT:
 %
-%       lanes = fcn_ParseXODR_fillDefaultRoadLanes
+%       laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection
 %
 % INPUTS:
 %
@@ -19,13 +19,12 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %
 % OUTPUTS:
 %
-%      lanes: a structure containing the following elements with
+%      laneSection: a structure containing the following elements with
 %      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "lanes" field under the OpenDRIVE
+%      OPENDRIVE standard for the "laneSection" field under the OpenDRIVE
 %      road structure:
 %
-%      lanes.laneOffset  
-%      lanes.laneSection{1,1}
+%      lanes.laneSection  
 %
 % DEPENDENCIES:
 %
@@ -33,7 +32,7 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %
 % EXAMPLES:
 %      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLanes
+% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLaneSection
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -124,20 +123,20 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Create the 'lanes' structure 
-lanes = struct();
+% Create the 'laneSection' structure 
+laneSection = struct();
 
-% Create the 'laneOffset' structure within lanes
-lanes.laneOffset = struct();
-% Create the 'Attributes' substructure within 'laneOffset'
-lanes.laneOffset.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
+% Fill the lane Attributes
+laneSection.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'s','singleSide'});
 
-% Initialize the empty laneSection
-lanes.laneSection   = cell(1, 1); % Initialize cell array
+% create left lane
+laneSection.left.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('left');
 
-% Create the nested laneSection inside the cell array
-lanes.laneSection{1, 1} = fcn_ParseXODR_fillDefaultRoadLaneSection(-1);
+% create center lane
+laneSection.center.lane = fcn_ParseXODR_fillDefaultRoadLane('center');
 
+% create right lane
+laneSection.right.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('right');
 
 
 %% Plot the results (for debugging)?

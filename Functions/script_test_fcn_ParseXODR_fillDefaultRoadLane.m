@@ -1,5 +1,5 @@
-% script_test_fcn_ParseXODR_fillDefaultRoadLanes
-% Exercises the function: fcn_ParseXODR_fillDefaultRoadLanes
+% script_test_fcn_ParseXODR_fillDefaultRoadLane
+% Exercises the function: fcn_ParseXODR_fillDefaultRoadLane
 
 % Revision history:
 % 2024_03_06 - S. Brennan
@@ -9,23 +9,46 @@ close all;
 clc;
 
 
-%% BASIC test - no figure output
+%% BASIC test - no figure output, 'right'
 
-lanes = fcn_ParseXODR_fillDefaultRoadLanes([]);
-
-% Check that the key elements are there
-assert(isfield(lanes,'laneOffset'));
-assert(isfield(lanes,'laneSection'));
-
-
-%% BASIC test - fast mode
-
-lanes = fcn_ParseXODR_fillDefaultRoadLanes(-1);
+lane = fcn_ParseXODR_fillDefaultRoadLane('right',[]);
 
 % Check that the key elements are there
-assert(isfield(lanes,'laneOffset'));
-assert(isfield(lanes,'laneSection'));
+assert(isfield(lane,'Attributes'));
+assert(isfield(lane,'width'));
+assert(isfield(lane,'roadMark'));
+assert(isfield(lane,'speed'));
 
+%% BASIC test - no figure output, 'left' (note, NOT case sensitive)
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('Left',[]);
+
+% Check that the key elements are there
+assert(isfield(lane,'Attributes'));
+assert(isfield(lane,'width'));
+assert(isfield(lane,'roadMark'));
+assert(isfield(lane,'speed'));
+
+%% BASIC test - no figure output, 'center' (note, NOT case sensitive)
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('CENTER',[]);
+
+% Check that the key elements are there
+assert(isfield(lane,'Attributes'));
+assert(~isfield(lane,'width'));
+assert(isfield(lane,'roadMark'));
+assert(~isfield(lane,'speed'));
+
+
+%% BASIC test - fast mode, 'right'
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('right',-1);
+
+% Check that the key elements are there
+assert(isfield(lane,'Attributes'));
+assert(isfield(lane,'width'));
+assert(isfield(lane,'roadMark'));
+assert(isfield(lane,'speed'));
 
 %% UNUSED
 % %% Test 2: many vectors

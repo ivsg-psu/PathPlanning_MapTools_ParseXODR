@@ -1,13 +1,13 @@
-function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
-%% fcn_ParseXODR_fillDefaultRoadLanes
-% Fills the default OpenDRIVE road lanes structure. This is the road field
-% under the top-most structure in the XODR specification, for example:
+function object = fcn_ParseXODR_fillDefaultObject(varargin)
+%% fcn_ParseXODR_fillDefaultObject
+% Fills the default OpenDRIVE object (singular) structure. This is under
+% the top-most structure in the XODR specification, for example:
 %
-%  testTrack.road{1,1}.lanes
+%  testTrack.road{1,1}.objects.object{1}.(etc)
 %
 % FORMAT:
 %
-%       lanes = fcn_ParseXODR_fillDefaultRoadLanes
+%       object = fcn_ParseXODR_fillDefaultObject(fig_num)
 %
 % INPUTS:
 %
@@ -17,15 +17,18 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %      input checking or debugging, no figures will be generated, and sets
 %      up code to maximize speed.
 %
+%
 % OUTPUTS:
 %
-%      lanes: a structure containing the following elements with
+%      object: a structure containing the following elements with
 %      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "lanes" field under the OpenDRIVE
+%      OPENDRIVE standard for the "object" field under the OpenDRIVE
 %      road structure:
 %
-%      lanes.laneOffset  
-%      lanes.laneSection{1,1}
+%      object.Attributes  
+%      object.width
+%      object.roadMark
+%      object.speed
 %
 % DEPENDENCIES:
 %
@@ -33,7 +36,7 @@ function lanes = fcn_ParseXODR_fillDefaultRoadLanes(varargin)
 %
 % EXAMPLES:
 %      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoadLanes
+% See the script: script_test_fcn_ParseXODR_fillDefaultObject
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -94,9 +97,10 @@ if 0==flag_max_speed
         % Are there the right number of inputs?
         narginchk(0,1);
 
-        % % Check the projection_vector input to be length greater than or equal to 1
-        % fcn_DebugTools_checkInputsToFunctions(...
-        %     input_vectors, '2or3column_of_numbers');
+        % % Check the left_or_right_or_center input to be a string
+        % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
+        %     error('The left_or_right_or_center input must be a string or character type');
+        % end
 
     end
 end
@@ -104,7 +108,7 @@ end
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -124,20 +128,11 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Create the 'lanes' structure 
-lanes = struct();
+% Create the 'object' structure 
+object = struct();
 
-% Create the 'laneOffset' structure within lanes
-lanes.laneOffset = struct();
-% Create the 'Attributes' substructure within 'laneOffset'
-lanes.laneOffset.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-
-% Initialize the empty laneSection
-lanes.laneSection   = cell(1, 1); % Initialize cell array
-
-% Create the nested laneSection inside the cell array
-lanes.laneSection{1, 1} = fcn_ParseXODR_fillDefaultRoadLaneSection(-1);
-
+% create 'Attributes' for center, right, or left lane
+object.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'id','name','s','t','zoffset','hdg','roll','pitch','orientation','type','height','radius','validLength','dynamic'});
 
 
 %% Plot the results (for debugging)?

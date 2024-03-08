@@ -28,7 +28,7 @@ assert(isfield(road{1},'objects'));
 
 %% BASIC test - fast mode
 
-header = fcn_ParseXODR_fillDefaultRoad(-1);
+road = fcn_ParseXODR_fillDefaultRoad(-1);
 
 % Check that the road is an array of cell elements
 assert(iscell(road));
