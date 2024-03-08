@@ -8,7 +8,11 @@ function emptyRoad = fcn_ParseXODR_createEmptyRoad
 %
 % INPUTS:
 %
-%      (none)
+%      (OPTIONAL INPUTS)
+% 
+%      fig_num: a figure number to plot results. If set to -1, skips any
+%      input checking or debugging, no figures will be generated, and sets
+%      up code to maximize speed.
 %
 %
 % OUTPUTS:
@@ -22,13 +26,16 @@ function emptyRoad = fcn_ParseXODR_createEmptyRoad
 %       NA
 %
 %
-% This function was written on 2023 10 19 by W. Bai
-% Questions or comments? wxb41@psu.edu
+% This function was first written on 2023 10 19 by W. Bai and updated by S.
+% Brennan, sbrennan@psu.edu
+% Questions or comments? sbrennan@psu.edu
 
 
 % Revision history:
 % 2023_10_19 - W. Bai
 % -- start writing function
+% 2024_03_08 - S. Brennan
+% -- updated debugging modes
 
 
 flag_do_plots = 0;

@@ -1,49 +1,38 @@
-function road = fcn_ParseXODR_fillDefaultRoad(varargin)
-%% fcn_ParseXODR_fillDefaultRoad
-% Fills the default OpenDRIVE road structure. This is the road field under
-% the top-most structure in the XODR specification, for example:
+function type = fcn_ParseXODR_fillDefaultRoadType(varargin)
+%% fcn_ParseXODR_fillDefaultRoadType
+% Fills the default OpenDRIVE road type structure. This is the road field
+% under the top-most structure in the XODR specification, for example:
 %
-%  testTrack.road{1,1}
+%  testTrack.road{1,1}.type
 %
 % FORMAT:
 %
-%       road = fcn_ParseXODR_fillDefaultRoad((fig_num))
+%       type = fcn_ParseXODR_fillDefaultRoadType
 %
 % INPUTS:
 %
-%      (OPTIONAL INPUTS)
-% 
-%      fig_num: a figure number to plot results. If set to -1, skips any
-%      input checking or debugging, no figures will be generated, and sets
-%      up code to maximize speed.
+%      (none)
 %
 %
 % OUTPUTS:
 %
-%      road: a structure containing the following elements with
+%      type: a structure containing the following elements with
 %      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "road" field under the OpenDRIVE
-%      structure:
+%      OPENDRIVE standard for the "type" field under the OpenDRIVE
+%      road structure:
 %
-%        road.Attributes
-%        road.type
-%        road.planView
-%        road.elevationProfile
-%        road.lateralProfile
-%        road.lanes
-%        road.objects
+%      type.speed.Attributes.max = '';
+%      type.speed.Attributes.unit = '';
+%      type.Attributes.s = '';
+%      type.Attributes.type = '';    
 %
 % DEPENDENCIES:
 %
-%       fcn_ParseXODR_fillDefaultRoadAttributes
-%       fcn_ParseXODR_fillDefaultRoadType
-%       fcn_ParseXODR_fillDefaultRoadPlanView 
-%       fcn_ParseXODR_fillBlankFieldStructure 
-%       fcn_ParseXODR_fillDefaultRoadLanes
+%       NA
 %
 % EXAMPLES:
 %      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoad
+% See the script: script_test_fcn_ParseXODR_fillDefaultRoadType
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -134,56 +123,14 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Initialize the empty road
-road   = cell(1, 1); % Initialize cell array
+% Initialize the empty type structure
+type = struct();
 
-% Create the nested structure inside the cell
-road{1, 1} = struct();
-
-% Fill the 'Attributes' 
-road{1, 1}.Attributes = fcn_ParseXODR_fillDefaultRoadAttributes;
-
-% create 'type' under road{1,1}
-road{1, 1}.type = fcn_ParseXODR_fillDefaultRoadType;
-
-% Create the 'planView' structure within road{1, 1}
-road{1, 1}.planView = fcn_ParseXODR_fillDefaultRoadPlanView;
-
-% Create the 'elevationProfile' structure within road{1, 1}
-road{1, 1}.elevationProfile = struct();
-road{1, 1}.elevationProfile.elevation = struct(); % Create the nested 'elevation' structure within 'elevationProfile'
-% Create the 'Attributes' substructure within 'elevation'
-road{1, 1}.elevationProfile.elevation.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-
-% Create the 'lateralProfile' structure within road{1, 1}
-road{1, 1}.lateralProfile = struct();
-road{1, 1}.lateralProfile.superelevation = struct(); % Create the nested 'elevation' structure within 'elevationProfile'
-% Create the 'Attributes' substructure within 'lateralProfile'
-road{1, 1}.lateralProfile.superelevation.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-% Create the 'shape' substructure within 'lateralProfile'
-road{1, 1}.lateralProfile.shape = struct();
-road{1, 1}.lateralProfile.shape.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s','t'});
-
-% Create the 'lanes' structure
-road{1, 1}.lanes = fcn_ParseXODR_fillDefaultRoadLanes;
-
-% create attributes for object
-road{1,1}.objects.object{1}.Attributes.id = '';
-road{1,1}.objects.object{1}.Attributes.name = '';
-road{1,1}.objects.object{1}.Attributes.s = '';
-road{1,1}.objects.object{1}.Attributes.t = '';
-road{1,1}.objects.object{1}.Attributes.zoffset = '';
-road{1,1}.objects.object{1}.Attributes.hdg = '';
-road{1,1}.objects.object{1}.Attributes.roll = '';
-road{1,1}.objects.object{1}.Attributes.pitch = '';
-road{1,1}.objects.object{1}.Attributes.orientation = '';
-road{1,1}.objects.object{1}.Attributes.type = '';
-road{1,1}.objects.object{1}.Attributes.height = '';
-road{1,1}.objects.object{1}.Attributes.radius = '';
-road{1,1}.objects.object{1}.Attributes.validLength = '';
-road{1,1}.objects.object{1}.Attributes.dynamic = '';
-
-
+% create 'type' fields and fill with defaults
+type.speed.Attributes.max = '';
+type.speed.Attributes.unit = '';
+type.Attributes.s = '';
+type.Attributes.type = '';
 
 
 %% Plot the results (for debugging)?

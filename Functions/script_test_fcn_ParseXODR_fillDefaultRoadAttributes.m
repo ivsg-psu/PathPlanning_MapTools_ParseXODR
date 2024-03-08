@@ -1,5 +1,5 @@
-% script_test_fcn_ParseXODR_fillDefaultRoad
-% Exercises the function: fcn_ParseXODR_fillDefaultRoad
+% script_test_fcn_ParseXODR_fillDefaultRoadAttributes
+% Exercises the function: fcn_ParseXODR_fillDefaultRoadAttributes
 
 % Revision history:
 % 2024_03_06 - S. Brennan
@@ -11,37 +11,27 @@ clc;
 
 %% BASIC test - no figure output
 
-road = fcn_ParseXODR_fillDefaultRoad([]);
+Attributes = fcn_ParseXODR_fillDefaultRoadAttributes([]);
 
-
-% Check that the road is an array of cell elements
-assert(iscell(road));
 
 % Check that the key elements are there
-assert(isfield(road{1},'Attributes'));
-assert(isfield(road{1},'type'));
-assert(isfield(road{1},'planView'));
-assert(isfield(road{1},'elevationProfile'));
-assert(isfield(road{1},'lateralProfile'));
-assert(isfield(road{1},'lanes'));
-assert(isfield(road{1},'objects'));
+assert(isfield(Attributes,'id'));
+assert(isfield(Attributes,'junction'));
+assert(isfield(Attributes,'length'));
+assert(isfield(Attributes,'name'));
+assert(isfield(Attributes,'rule'));
 
 %% BASIC test - fast mode
 
-header = fcn_ParseXODR_fillDefaultRoad(-1);
+Attributes = fcn_ParseXODR_fillDefaultRoadAttributes(-1);
 
-% Check that the road is an array of cell elements
-assert(iscell(road));
 
 % Check that the key elements are there
-assert(isfield(road{1},'Attributes'));
-assert(isfield(road{1},'type'));
-assert(isfield(road{1},'planView'));
-assert(isfield(road{1},'elevationProfile'));
-assert(isfield(road{1},'lateralProfile'));
-assert(isfield(road{1},'lanes'));
-assert(isfield(road{1},'objects'));
-
+assert(isfield(Attributes,'id'));
+assert(isfield(Attributes,'junction'));
+assert(isfield(Attributes,'length'));
+assert(isfield(Attributes,'name'));
+assert(isfield(Attributes,'rule'));
 
 %% UNUSED
 % %% Test 2: many vectors

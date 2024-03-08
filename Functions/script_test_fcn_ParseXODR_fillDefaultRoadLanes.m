@@ -1,5 +1,5 @@
-% script_test_fcn_ParseXODR_fillDefaultRoad
-% Exercises the function: fcn_ParseXODR_fillDefaultRoad
+% script_test_fcn_ParseXODR_fillDefaultRoadLanes
+% Exercises the function: fcn_ParseXODR_fillDefaultRoadLanes
 
 % Revision history:
 % 2024_03_06 - S. Brennan
@@ -11,7 +11,7 @@ clc;
 
 %% BASIC test - no figure output
 
-road = fcn_ParseXODR_fillDefaultRoad([]);
+road = fcn_ParseXODR_fillDefaultRoadLanes([]);
 
 
 % Check that the road is an array of cell elements
@@ -28,7 +28,7 @@ assert(isfield(road{1},'objects'));
 
 %% BASIC test - fast mode
 
-header = fcn_ParseXODR_fillDefaultRoad(-1);
+header = fcn_ParseXODR_fillDefaultRoadLanes(-1);
 
 % Check that the road is an array of cell elements
 assert(iscell(road));

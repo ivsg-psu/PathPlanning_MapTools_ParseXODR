@@ -1,15 +1,16 @@
-function road = fcn_ParseXODR_fillDefaultRoad(varargin)
-%% fcn_ParseXODR_fillDefaultRoad
-% Fills the default OpenDRIVE road structure. This is the road field under
-% the top-most structure in the XODR specification, for example:
-%
-%  testTrack.road{1,1}
+function output_struct = fcn_ParseXODR_fillBlankFieldStructure(fields, varargin)
+%% fcn_ParseXODR_fillBlankFieldStructure
+% Fills a structure while creating user-defined fields, and filling these
+% with blank inputs.
 %
 % FORMAT:
 %
-%       road = fcn_ParseXODR_fillDefaultRoad((fig_num))
+%       output_struct = fcn_ParseXODR_fillBlankFieldStructure(fields, fig_num)
 %
 % INPUTS:
+%
+%      fields: a cell array of text values that specify field names to be
+%      created
 %
 %      (OPTIONAL INPUTS)
 % 
@@ -20,30 +21,28 @@ function road = fcn_ParseXODR_fillDefaultRoad(varargin)
 %
 % OUTPUTS:
 %
-%      road: a structure containing the following elements with
-%      default settings, such that each setting complies with ASAM
-%      OPENDRIVE standard for the "road" field under the OpenDRIVE
-%      structure:
+%      output_struct: a structure containing fields for each of the text
+%      inputs, and filled with blank values
 %
-%        road.Attributes
-%        road.type
-%        road.planView
-%        road.elevationProfile
-%        road.lateralProfile
-%        road.lanes
-%        road.objects
 %
 % DEPENDENCIES:
 %
-%       fcn_ParseXODR_fillDefaultRoadAttributes
-%       fcn_ParseXODR_fillDefaultRoadType
-%       fcn_ParseXODR_fillDefaultRoadPlanView 
-%       fcn_ParseXODR_fillBlankFieldStructure 
-%       fcn_ParseXODR_fillDefaultRoadLanes
+%       None
 %
 % EXAMPLES:
-%      
-% See the script: script_test_fcn_ParseXODR_fillDefaultRoad
+%     
+%      output_struct = fcn_ParseXODR_fillBlankFieldStructure({'a','b','temp'})
+%
+%      % Produces the following:
+%      % output_struct = 
+%      %
+%      % struct with fields:
+%      %     
+%      %      a: ''
+%      %      b: ''
+%      %   temp: ''
+%
+% See the script: script_test_fcn_ParseXODR_fillBlankFieldStructure
 % for a full test suite.
 %
 % This function was written on 2024_03_06 by S. Brennan
@@ -61,7 +60,7 @@ function road = fcn_ParseXODR_fillDefaultRoad(varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==1 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -102,7 +101,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(0,1);
+        narginchk(1,2);
 
         % % Check the projection_vector input to be length greater than or equal to 1
         % fcn_DebugTools_checkInputsToFunctions(...
@@ -114,7 +113,7 @@ end
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -134,54 +133,14 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Initialize the empty road
-road   = cell(1, 1); % Initialize cell array
+% Create the starter structure
+output_struct = struct();
 
-% Create the nested structure inside the cell
-road{1, 1} = struct();
-
-% Fill the 'Attributes' 
-road{1, 1}.Attributes = fcn_ParseXODR_fillDefaultRoadAttributes;
-
-% create 'type' under road{1,1}
-road{1, 1}.type = fcn_ParseXODR_fillDefaultRoadType;
-
-% Create the 'planView' structure within road{1, 1}
-road{1, 1}.planView = fcn_ParseXODR_fillDefaultRoadPlanView;
-
-% Create the 'elevationProfile' structure within road{1, 1}
-road{1, 1}.elevationProfile = struct();
-road{1, 1}.elevationProfile.elevation = struct(); % Create the nested 'elevation' structure within 'elevationProfile'
-% Create the 'Attributes' substructure within 'elevation'
-road{1, 1}.elevationProfile.elevation.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-
-% Create the 'lateralProfile' structure within road{1, 1}
-road{1, 1}.lateralProfile = struct();
-road{1, 1}.lateralProfile.superelevation = struct(); % Create the nested 'elevation' structure within 'elevationProfile'
-% Create the 'Attributes' substructure within 'lateralProfile'
-road{1, 1}.lateralProfile.superelevation.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
-% Create the 'shape' substructure within 'lateralProfile'
-road{1, 1}.lateralProfile.shape = struct();
-road{1, 1}.lateralProfile.shape.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s','t'});
-
-% Create the 'lanes' structure
-road{1, 1}.lanes = fcn_ParseXODR_fillDefaultRoadLanes;
-
-% create attributes for object
-road{1,1}.objects.object{1}.Attributes.id = '';
-road{1,1}.objects.object{1}.Attributes.name = '';
-road{1,1}.objects.object{1}.Attributes.s = '';
-road{1,1}.objects.object{1}.Attributes.t = '';
-road{1,1}.objects.object{1}.Attributes.zoffset = '';
-road{1,1}.objects.object{1}.Attributes.hdg = '';
-road{1,1}.objects.object{1}.Attributes.roll = '';
-road{1,1}.objects.object{1}.Attributes.pitch = '';
-road{1,1}.objects.object{1}.Attributes.orientation = '';
-road{1,1}.objects.object{1}.Attributes.type = '';
-road{1,1}.objects.object{1}.Attributes.height = '';
-road{1,1}.objects.object{1}.Attributes.radius = '';
-road{1,1}.objects.object{1}.Attributes.validLength = '';
-road{1,1}.objects.object{1}.Attributes.dynamic = '';
+% Fill in the fields
+for ith_field = 1:length(fields)
+    field_name = fields{ith_field};
+    output_struct.(field_name) = '';
+end
 
 
 
