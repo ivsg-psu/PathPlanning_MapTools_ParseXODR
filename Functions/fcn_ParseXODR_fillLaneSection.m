@@ -1,45 +1,48 @@
-function roadType = fcn_ParseXODR_fillRoadType(speedLimit, varargin)
-%% fcn_ParseXODR_fillRoadType
-% Fills in the road type and speed limit for a road in an OpenDRIVE structure.
+function laneSection = fcn_ParseXODR_fillLaneSection(starter_laneSection, section_template, flag_shoulder, varargin)
+%% fcn_ParseXODR_fillLaneSection
+% fills in a lane section using the section template
 %
 % FORMAT:
 %
-%       roadType = fcn_ParseXODR_fillRoadType(roads, speedLimit)
+%       laneSection = fcn_ParseXODR_fillLaneSection(starter_laneSection,section_template, flag_shoulder)
 %
 % INPUTS:
 %
-%      speedLimit: The speed limit to be set for the road (in mph)
+%      starter_laneSection: a "starter" laneSection format, usually created
+%      by using the default structure when creating XODR files
+%
+%      section_template: a template defining lane marks, widths, and speeds
+%
+%      flag_shoulder: flag to ????
 %
 %      (OPTIONAL INPUTS)
 % 
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
-%      up code to maximize speed. 
+%      up code to maximize speed.
+%
 %
 % OUTPUTS:
 %
-%      roads: The updated OpenDRIVE road structure with road type and speed limit set
+%      laneSection: an XODR structure for the lane section area     
 %
 % DEPENDENCIES:
 %
-%      NA
+%       NA
 %
 % EXAMPLES:
+%      
+% See the script: script_test_fcn_ParseXODR_fillLaneSection
+% for a full test suite.
 %
-%      see script_ParseXODR_createScenario1_5.m for a comprehensive test
-%      suite.
-%
-% This function was written by Wushuang Bai, maintained by S. Brennan
+% This function was written on 2024_03_06 by S. Brennan
 % Questions or comments? sbrennan@psu.edu
 
 
 % Revision history:
-% 2023_11_10 - W. Bai
-% -- Added initial code structure
-% 2023_11_20 - W. Bai
-% -- Enhanced with additional comments
-% 2024_03_09 - S. Brennan
-% -- Simplified code to clearly ONLY fill in type
+% 2024_03_06 -  S. Brennan
+% -- start writing function
+
 
 %% Debugging and Input checks
 
@@ -47,7 +50,7 @@ function roadType = fcn_ParseXODR_fillRoadType(speedLimit, varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==2 && isequal(varargin{end},-1))
+if (nargin==4 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -88,27 +91,26 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(1,2);
-        
-        % % Check the left_or_right_or_center input to be a string
-        % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
-        %     error('The left_or_right_or_center input must be a string or character type');
-        % end
+        narginchk(3,4);
+
+        % % Check the projection_vector input to be length greater than or equal to 1
+        % fcn_DebugTools_checkInputsToFunctions(...
+        %     input_vectors, '2or3column_of_numbers');
 
     end
 end
 
+
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (3<= nargin)
+if (0==flag_max_speed) && (4<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
         flag_do_plots = 1;
     end
 end
-
 
 %% Solve for the circle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,17 +123,22 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Set the starting point of the road type attribute
-roadType.Attributes.s = '0';
+% Initialize the lane section
+laneSection = starter_laneSection;
 
-% Set the road type as 'town'
-roadType.Attributes.type = 'town';
+laneTypes = {'left','right','center'};
 
-% Set the maximum speed limit for the road
-roadType.speed.Attributes.max = num2str(speedLimit);
+for ith_type = 1:length(laneTypes)
+    current_type = laneTypes{ith_type};
+    
+    % Fill in lane details
+    laneSection = fcn_ParseXODR_fillLanes(laneSection, ...
+        current_type, section_template, flag_shoulder);
 
-% Set the unit for the speed limit (miles per hour)
-roadType.speed.Attributes.unit = 'mph';
+    % % Fill in the center lane details
+    % laneSection = fcn_ParseXODR_fillLanes(laneSection, ...
+    %     'center', 1, [], section_template.centerMarkStruct, [], flag_shoulder);
+end
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,19 +158,15 @@ if flag_do_plots
         flag_rescale_axis = 1;
     end        
 
-    hold on;
-    grid on;
+    hold on
+    grid on
     axis equal
-    % 
-    % % Plot the input vectors alongside the unit vectors
-    % N_vectors = length(input_vectors(:,1));
-    % for ith_vector = 1:N_vectors
-    %     h_plot = quiver(0,0,input_vectors(ith_vector,1),input_vectors(ith_vector,2),0,'-','LineWidth',3);
-    %     plot_color = get(h_plot,'Color');
-    %     quiver(0,0,unit_vectors(ith_vector,1),unit_vectors(ith_vector,2),0,'-','LineWidth',1,'Color',(plot_color+[1 1 1])/2,'MaxHeadSize',1);
-    % 
-    % end
-    % 
+    xlabel('East (m)')
+    ylabel('North (m)')
+
+
+  % NOTHING TO PLOT
+
 
     % Make axis slightly larger?
     if flag_rescale_axis

@@ -11,7 +11,11 @@ function header = fcn_ParseXODR_fillDefaultHeader(varargin)
 %
 % INPUTS:
 %
-%      (none)
+%      (OPTIONAL INPUTS)
+% 
+%      fig_num: a figure number to plot results. If set to -1, skips any
+%      input checking or debugging, no figures will be generated, and sets
+%      up code to maximize speed.
 %
 %
 % OUTPUTS:

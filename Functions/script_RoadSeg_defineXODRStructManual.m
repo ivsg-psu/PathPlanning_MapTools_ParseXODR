@@ -37,7 +37,7 @@ ODRStruct.OpenDRIVE.road{1}.Attributes.rule = 'RHT';
 % "planView" element, and can be of type line, arc, or spiral. OpenDRIVE
 % also supports cubic polynomials and parametric cubic polynomials, but
 % these are not used by highway designers and are thus not supported by the
-% rest of the PSU OpenDRIVE-MATLAB tool suite. 
+% rest of the PSU OpenDRIVE-MATLAB tool suite.
 %
 % Examples for each of the
 % three types are given here, assuming that we are going to create the
@@ -72,7 +72,7 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{1}.Attributes.hdg = '0';
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{1}.line = struct;
 
 % Now we'll create a second road geometry element. This one will be an arc
-% with radius 50 meters (thus curvature of 1/50 1/m). 
+% with radius 50 meters (thus curvature of 1/50 1/m).
 % Enter the path length of the geometry segment. All attributes are entered
 % as strings, even if numeric in value.
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length = '80';
@@ -89,7 +89,7 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.arc.Attributes.curvature = num2
 
 % The final element will be a spiral, which will straighten the road back
 % out from the 1/50 1/m curvature to zero curvature over 100 m of path
-% length. 
+% length.
 % Enter the path length of the geometry segment. All attributes are entered
 % as strings, even if numeric in value.
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{3}.Attributes.length = '100';
@@ -97,15 +97,15 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{3}.Attributes.length = '100';
 % we'll use the road segment function to determine the start location and
 % orientation of this element from the previous segment
 [x0,y0,h0] = fcn_RoadSeg_findXYfromST('arc',...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.x),...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.y),...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.hdg),...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.s),...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length),...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.s)+...
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length),...
-  0,... % zero since we want the coordinates at the centerline of the path
-  str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.arc.Attributes.curvature));  
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.x),...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.y),...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.hdg),...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.s),...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length),...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.s)+...
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.Attributes.length),...
+    0,... % zero since we want the coordinates at the centerline of the path
+    str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{2}.arc.Attributes.curvature));
 % Now, using the calculated values, we'll fill out the values of this
 % third spiral element
 ODRStruct.OpenDRIVE.road{1}.planView.geometry{3}.Attributes.s = '180';
@@ -119,7 +119,7 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{3}.spiral.Attributes.curvEnd = num
 % 20 m line, along a 50 m arc, and then along a 100 m spiral, ending up at
 % some (yet unknown) point in (E,N) space with a (yet unknown) non-zero
 % heading. If more geometry elements were to be added, the same process as
-% above would be employed repeatedly. 
+% above would be employed repeatedly.
 
 
 % Once the road reference line geometry is complete, only the total path
@@ -127,7 +127,7 @@ ODRStruct.OpenDRIVE.road{1}.planView.geometry{3}.spiral.Attributes.curvEnd = num
 % be computed by summing the length attributes of the geometry elements
 totalLength = 0;
 for geomElemInd = 1:length(ODRStruct.OpenDRIVE.road{1}.planView.geometry)
-  totalLength = totalLength + str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{geomElemInd}.Attributes.length);
+    totalLength = totalLength + str2double(ODRStruct.OpenDRIVE.road{1}.planView.geometry{geomElemInd}.Attributes.length);
 end
 ODRStruct.OpenDRIVE.road{1}.Attributes.length = num2str(totalLength);
 
@@ -137,7 +137,7 @@ ODRStruct.OpenDRIVE.road{1}.Attributes.length = num2str(totalLength);
 % has zero width itself but may have road markings with non-zero width. The
 % center lane is defined by default with a lateral offset of zero from the
 % road reference line but may be offset with various sections of offset
-% geometry. 
+% geometry.
 
 % We'll start by defining an example offset, which will shift the center
 % lane 1.5 meters to the left, starting at 20 meters along the reference
@@ -413,18 +413,14 @@ ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{5}.Attributes.s = '240';
 % and correct any errors that can be easily corrected
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 
-% Now check all of the work by calling the plotting utility on the
-% structure created to this point
-figure(1)
+%% Now check all of the work by calling the plotting utility 
+% using the structure created to this point
+fig_num = 1;
+figure(fig_num)
 clf
-hold on
-grid on
-axis tight
-axis equal
-xlabel('East (m)')
-ylabel('North (m)')
+
 % Plot the realistic looking road on the figure
-fcn_RoadSeg_plotRealisticRoad(ODRStruct,0.5,1);
+fcn_ParseXODR_plotXODRinENU(ODRStruct,0.5,1, fig_num);
 
 % Use the axis bounding box to find the extents of the data (this can be
 % replaced by more specific code since this could theoretically miss a
@@ -445,30 +441,30 @@ axis equal
 % Iterate through the road geometry element boundaries, and plot a red line
 % across the road at each boundary
 for i = 1:length(RoadSegmentStations)
-  [xRoadSeg,yRoadSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},RoadSegmentStations(i)*[1; 1],[-20; 20]);
-  hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
+    [xRoadSeg,yRoadSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},RoadSegmentStations(i)*[1; 1],[-20; 20]);
+    hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
 end
 % Iterate through the lane offset boundaries, and plot a green line across
 % the road at each boundary
 for i = 1:length(LaneOffsetStations)
-  [xOffsetSeg,yOffsetSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneOffsetStations(i)*[1; 1],[-15; 15]);
-  hOffsetSegs = plot(xOffsetSeg,yOffsetSeg,'--','linewidth',2,'color',[0.1 0.6 0]);
+    [xOffsetSeg,yOffsetSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneOffsetStations(i)*[1; 1],[-15; 15]);
+    hOffsetSegs = plot(xOffsetSeg,yOffsetSeg,'--','linewidth',2,'color',[0.1 0.6 0]);
 end
 % Iterate through the lane section boundaries, and plot a blue line across
 % the road at each boundary
 for i = 1:length(LaneSectionStations)
-  [xLaneSeg,yLaneSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneSectionStations(i)*[1; 1],[-10; 10]);
-  hLaneSegs = plot(xLaneSeg,yLaneSeg,':','linewidth',2,'color',[0.1 0 0.6]);
+    [xLaneSeg,yLaneSeg] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},LaneSectionStations(i)*[1; 1],[-10; 10]);
+    hLaneSegs = plot(xLaneSeg,yLaneSeg,':','linewidth',2,'color',[0.1 0 0.6]);
 end
 % Label the boundary types in the legend
 legend([hRoadSegs(1) hOffsetSegs(1) hLaneSegs(1)],...
-  {'Road Geometry Element Boundaries','Lane Offset Boundaries','Lane Section Boundaries'})
+    {'Road Geometry Element Boundaries','Lane Offset Boundaries','Lane Section Boundaries'})
 
 if flag_write_XODR_file
-  % Define a filename based on the time to avoid accidentally overwriting previous files
-  myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
-  % Write the XODR structure to an XML formatted file
-  struct2xml(ODRStruct,myFilename)
-  % Move the output file so that it has an XODR file extension
-  movefile([myFilename '.xml'],[myFilename '.xodr'])
+    % Define a filename based on the time to avoid accidentally overwriting previous files
+    myFilename = ['testXODR_' datestr(now,'yy-mm-ddTHH-MM-SS')];
+    % Write the XODR structure to an XML formatted file
+    struct2xml(ODRStruct,myFilename)
+    % Move the output file so that it has an XODR file extension
+    movefile([myFilename '.xml'],[myFilename '.xodr'])
 end

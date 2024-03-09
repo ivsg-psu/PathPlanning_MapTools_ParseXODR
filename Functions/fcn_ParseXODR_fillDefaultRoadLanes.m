@@ -128,9 +128,11 @@ end
 lanes = struct();
 
 % Create the 'laneOffset' structure within lanes
-lanes.laneOffset = struct();
+lanes.laneOffset = cell(1, 1);
+lanes.laneOffset{1,1} = struct();
+
 % Create the 'Attributes' substructure within 'laneOffset'
-lanes.laneOffset.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
+lanes.laneOffset{1,1}.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'a','b','c','d','s'});
 
 % Initialize the empty laneSection
 lanes.laneSection   = cell(1, 1); % Initialize cell array

@@ -341,26 +341,36 @@ roads = fcn_ParseXODR_fillDefaultRoadNetwork;
 % Remove unnecessary fields 'elevationProfile' and 'lateralProfile' from the road structure
 roads.OpenDRIVE.road{1} = rmfield(roads.OpenDRIVE.road{1},{'elevationProfile','lateralProfile'});
 
-
-% % Assign attributes to the first road in the structure. Set its ID, junction type,
-% % name, and driving rule (Right Hand Traffic, RHT).
-% roads.OpenDRIVE.road{1}.Attributes.id = num2str(numel(roads.OpenDRIVE.road) - 1);
-% roads.OpenDRIVE.road{1}.Attributes.junction = '-1';
-% roads.OpenDRIVE.road{1}.Attributes.name = ['Road ',roads.OpenDRIVE.road{1}.Attributes.id];
-% roads.OpenDRIVE.road{1}.Attributes.rule = 'RHT'; % Right Hand Traffic
-
 % Define a speed limit and fill in the road type for the road structure
-roads = fcn_ParseXODR_fillRoadType(roads,speedlimit);
+roads.OpenDRIVE.road{1}.type = fcn_ParseXODR_fillRoadType(speedlimit);
 
 % Retrieve the centerline of the road from the 'Lane' data and fill in the plan view for the road
-[roads,new_traversal] = fcn_ParseXODR_fillPlanView(roads,roadCenterLine,resampleStationInterval);
+% [roads,new_traversal] = fcn_ParseXODR_fillPlanView(roads,roadCenterLine,resampleStationInterval);
+[planView, totalStationLength] = fcn_ParseXODR_fillPlanViewViaLineSegments(roadCenterLine, resampleStationInterval, fig_num);
 
+% Update the road with the results
+roads.OpenDRIVE.road{1}.planView = planView;
+roads.OpenDRIVE.road{1}.Attributes.length = num2str(totalStationLength);
 
+%% View the results so far
+fig_num = 1;
+
+% Create a blank figure in which to plot the roads
+figure(fig_num)
+clf
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(roads,minPlotGap,flag_plot_road_geometry,fig_num);
 
 
 %% Start defining lane information
 % Initialize lane offset for the road
-roads.OpenDRIVE.road{1}.lanes.laneOffset = fcn_ParseXODR_fillLaneOffset(roads.OpenDRIVE.road{1}.lanes.laneOffset, 0,0,0,0,0);
+roads.OpenDRIVE.road{1}.lanes.laneOffset{1} = fcn_ParseXODR_fillLaneOffset(roads.OpenDRIVE.road{1}.lanes.laneOffset{1}, 0,0,0,0,0);
 
 %% Define lane sections
 % Lane sections are where the number of lanes or types of markings change
@@ -401,7 +411,7 @@ for ith_laneSection = 1:N_lane_sections
     flag_shoulder  = flag_shoulders(ith_laneSection,1);
 
     % Fill in a section template
-    section_template = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
+    section_template = fcn_ParseXODR_createStructForLaneSection(numOfLeftLanes(ith_laneSection,1),numOfRightLane,speedlimit);
 
     % Fill in markings
     if ith_laneSection == 2
@@ -411,24 +421,10 @@ for ith_laneSection = 1:N_lane_sections
     end
 
     % Fill in left lane details
-    if 0==numOfLeftLane
-        roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection}.left = [];
-    else
-        roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection}, ...
-            'left', numOfLeftLane, section_template.leftWidthStruct, section_template.leftMarkStruct, section_template.leftSpeedStruct, flag_shoulder);
-    end
-
-    % Fill in the right lane details
-    if 0==numOfRightLane
-        roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection}.right = [];
-    else
-        roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection}, ...
-            'right', numOfRightLane, section_template.rightWidthStruct, section_template.rightMarkStruct, section_template.rightSpeedStruct, flag_shoulder);
-    end
-
-    % Fill in the center lane details
-    roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection} = fcn_ParseXODR_fillLanes(roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection}, ...
-        'center', 1, [], section_template.centerMarkStruct, [], flag_shoulder);
+    starter_laneSection = roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection};
+    laneSection = fcn_ParseXODR_fillLaneSection(starter_laneSection, section_template, flag_shoulder);
+    roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection} = laneSection;
+        
 end
 
 
@@ -454,6 +450,8 @@ end
 %% Do final file conversion
 % Assign the formatted date and time to the 'date' attribute within the header
 ODRStruct.OpenDRIVE.header.Attributes.date = datetimeString;
+
+
 % Prepare the final output structure with header and road information
 outputStruct.OpenDRIVE.header = ODRStruct.OpenDRIVE.header;
 outputStruct.OpenDRIVE.road = ODRStruct.OpenDRIVE.road;

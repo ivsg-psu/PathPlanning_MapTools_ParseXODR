@@ -1,45 +1,48 @@
-function roadType = fcn_ParseXODR_fillRoadType(speedLimit, varargin)
-%% fcn_ParseXODR_fillRoadType
-% Fills in the road type and speed limit for a road in an OpenDRIVE structure.
+function [planView, totalStationLength] = fcn_ParseXODR_fillPlanViewViaLineSegments(roadCenterLine, interval, varargin)
+%% fcn_ParseXODR_fillPlanView
+% Populates the plan view section of an OpenDRIVE road structure given a
+% roadCenterline input and sampling interval. The roadCenterline is broken
+% into line segments that each define a short region of geometry, with the
+% region length given by the interval input value.
 %
 % FORMAT:
 %
-%       roadType = fcn_ParseXODR_fillRoadType(roads, speedLimit)
+%       [planView, totalStationLength] = fcn_ParseXODR_fillPlanViewViaLineSegments(roadCenterLine, interval, (fig_num))
 %
 % INPUTS:
 %
-%      speedLimit: The speed limit to be set for the road (in mph)
+%      roadCenterLine: the centerline coordinates defined as a sequence of
+%      points in Nx2 format containing [x y] values for each row
+%
+%      interval: Interval distance for sampling along the road
 %
 %      (OPTIONAL INPUTS)
 % 
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
-%      up code to maximize speed. 
+%      up code to maximize speed.
 %
 % OUTPUTS:
 %
-%      roads: The updated OpenDRIVE road structure with road type and speed limit set
+%      planView: Updated roads structure with plan view information
+%
+%      totalStationLength: the total path length of the roadCenterLine
 %
 % DEPENDENCIES:
 %
-%      NA
+%      fcn_ParseXODR_fillDefaultRoadPlanView
 %
 % EXAMPLES:
 %
 %      see script_ParseXODR_createScenario1_5.m for a comprehensive test
 %      suite.
 %
-% This function was written by Wushuang Bai, maintained by S. Brennan
+% This function was written by S. Brennan
 % Questions or comments? sbrennan@psu.edu
 
-
 % Revision history:
-% 2023_11_10 - W. Bai
+% 2024_03_06 - S. Brennan
 % -- Added initial code structure
-% 2023_11_20 - W. Bai
-% -- Enhanced with additional comments
-% 2024_03_09 - S. Brennan
-% -- Simplified code to clearly ONLY fill in type
 
 %% Debugging and Input checks
 
@@ -47,7 +50,7 @@ function roadType = fcn_ParseXODR_fillRoadType(speedLimit, varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==2 && isequal(varargin{end},-1))
+if (nargin==3 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -88,7 +91,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(1,2);
+        narginchk(2,3);
         
         % % Check the left_or_right_or_center input to be a string
         % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
@@ -121,17 +124,29 @@ end
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Set the starting point of the road type attribute
-roadType.Attributes.s = '0';
+% Convert road centerline to traversal structure
+input_traversal = fcn_Path_convertPathToTraversalStructure(roadCenterLine);
+new_stations    = (0:interval:input_traversal.Station(end))';
+new_traversal   = fcn_Path_newTraversalByStationResampling(input_traversal, new_stations);
+new_traversal.segmentLength = diff(new_traversal.Station);
 
-% Set the road type as 'town'
-roadType.Attributes.type = 'town';
+% Initialize the planView
+planView = fcn_ParseXODR_fillDefaultRoadPlanView(-1);
 
-% Set the maximum speed limit for the road
-roadType.speed.Attributes.max = num2str(speedLimit);
+% Write the new traversal data into the OpenDRIVE structure
+for ith_laneSegment = 1:length(new_traversal.segmentLength)
+    planView.geometry{ith_laneSegment}.Attributes.hdg = num2str(real(new_traversal.Yaw(ith_laneSegment)));
+    planView.geometry{ith_laneSegment}.Attributes.length = num2str(new_traversal.segmentLength(ith_laneSegment));
+    planView.geometry{ith_laneSegment}.Attributes.s = num2str(new_traversal.Station(ith_laneSegment));
+    planView.geometry{ith_laneSegment}.Attributes.x = num2str(new_traversal.X(ith_laneSegment));
+    planView.geometry{ith_laneSegment}.Attributes.y = num2str(new_traversal.Y(ith_laneSegment));
+    planView.geometry{ith_laneSegment}.line = struct;
+end
 
-% Set the unit for the speed limit (miles per hour)
-roadType.speed.Attributes.unit = 'mph';
+% Update the total length of the road
+totalStationLength = new_traversal.Station(end);
+
+
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,3 +209,4 @@ end % Ends main function
 %
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+

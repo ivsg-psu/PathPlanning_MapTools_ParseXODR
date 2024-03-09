@@ -1,7 +1,8 @@
-function [roads, new_traversal] = fcn_ParseXODR_fillPlanView(roads, roadCenterLine, interval)
+function [planView totalStationLength] = fcn_ParseXODR_fillPlanView(roads, roadCenterLine, interval)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % fcn_ParseXODR_fillPlanView
-% Populates the plan view section of an OpenDRIVE road structure.
+% Populates the plan view section of an OpenDRIVE road structure given a
+% roadCenterline input and sampling interval.
 %
 % FORMAT:
 %
@@ -17,7 +18,7 @@ function [roads, new_traversal] = fcn_ParseXODR_fillPlanView(roads, roadCenterLi
 %
 % OUTPUTS:
 %
-%      roads: Updated roads structure with plan view information
+%      planView: Updated roads structure with plan view information
 %
 %      new_traversal: Resampled traversal structure based on the interval
 %
