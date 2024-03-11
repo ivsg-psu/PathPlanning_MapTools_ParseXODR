@@ -3,8 +3,8 @@ function [editedPredecessorStruct,editedSuccessorStruct] = fcn_addLaneLink(prede
 % this <link> to a <lane> element. 
 
 % INPUTS:
-% predecessorStruct: this is a MATLAB struct loaded from the predecessor road xodr file by fcn_RoadSeg_convertXODRtoMATLABStruct
-% successorStruct: this is a MATLAB struct loaded from the successor road xodr file by fcn_RoadSeg_convertXODRtoMATLABStruct
+% predecessorStruct: this is a MATLAB struct loaded from the predecessor road xodr file by fcn_ParseXODR_convertXODRtoMATLABStruct
+% successorStruct: this is a MATLAB struct loaded from the successor road xodr file by fcn_ParseXODR_convertXODRtoMATLABStruct
 % connectionType: this is either 'predecessor' or 'successor'. Format:
 % string
 

@@ -18,8 +18,8 @@ function fcn_combineRoads(predecessorRoad,successorRoad)
 % 20230412 added comments
 % 20230420 updated code for two way, two lane
 
-predecessorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(predecessorRoad);
-successorStruct = fcn_RoadSeg_convertXODRtoMATLABStruct(successorRoad);
+predecessorStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(predecessorRoad);
+successorStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(successorRoad);
 
 %% update the id in <road> for successor road. (not needed for predecessor)
 successorStruct.OpenDRIVE.road{1}.Attributes.id = str2double(successorStruct.OpenDRIVE.road{1}.Attributes.id) + 1;

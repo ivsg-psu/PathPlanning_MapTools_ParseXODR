@@ -18,7 +18,7 @@ function fileName = fcn_modifyLaneWidths(road_num, lane_ID, lane_width, lane_sOf
 % 20230615 added feature to modify lane width as per station
 
 % This function converts the XML file into a MATLAB struct.
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct(filePath);
+roadData = fcn_ParseXODR_convertXODRtoMATLABStruct(filePath);
 
 % Get all 'laneSection' elements from the struct.
 % Each laneSection represents a segment of the road that has a constant

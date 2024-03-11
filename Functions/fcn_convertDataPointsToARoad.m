@@ -16,7 +16,7 @@ function fullFileName = fcn_convertDataPointsToARoad(enuData,outputFileName,vara
 %       fullFileName: The name of the generated .xodr file representing the road, with extension.
 %
 % DEPENDENCIES:
-%       - fcn_RoadSeg_convertXODRtoMATLABStruct
+%       - fcn_ParseXODR_convertXODRtoMATLABStruct
 %       - fcn_Path_convertPathToTraversalStructure
 %       - fcn_Path_newTraversalByStationResampling
 %       - fcn_RoadSeg_XODRSegmentChecks
@@ -95,7 +95,7 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Load template xodr file
-roadData = fcn_RoadSeg_convertXODRtoMATLABStruct('RoadTemplate.xodr');  
+roadData = fcn_ParseXODR_convertXODRtoMATLABStruct('RoadTemplate.xodr');  
 
 % convert from path to traversal
 input_traversal = fcn_Path_convertPathToTraversalStructure(enuData);

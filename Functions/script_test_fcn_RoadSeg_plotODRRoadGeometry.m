@@ -4,19 +4,19 @@ close all
 
 % Make sure that the xml to structure dependency file is available
 % addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Functions'));
-string_path = which("fcn_RoadSeg_convertXODRtoMATLABStruct");
-if isempty(string_path) % ~exist('fcn_RoadSeg_convertXODRtoMATLABStruct','file')
-    error('Path not correctly set for fcn_RoadSeg_convertXODRtoMATLABStruct');
-    % addpath(uigetdir('.','Provide missing path to fcn_RoadSeg_convertXODRtoMATLABStruct'));
+string_path = which("fcn_ParseXODR_convertXODRtoMATLABStruct");
+if isempty(string_path) % ~exist('fcn_ParseXODR_convertXODRtoMATLABStruct','file')
+    error('Path not correctly set for fcn_ParseXODR_convertXODRtoMATLABStruct');
+    % addpath(uigetdir('.','Provide missing path to fcn_ParseXODR_convertXODRtoMATLABStruct'));
 end
 
 % Load an example file with a file selection dialog
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct;
+%ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct;
 
 % Load an example file from a static file path
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('testTrack_outerTrack_noReferenceRoad.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack_noReferenceRoad.xodr');
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 

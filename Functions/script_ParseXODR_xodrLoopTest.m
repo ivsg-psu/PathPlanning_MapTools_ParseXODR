@@ -5,7 +5,7 @@
 %
 % DEPENDENCIES:
 % Various functions including:
-% - fcn_RoadSeg_convertXODRtoMATLABStruct
+% - fcn_ParseXODR_convertXODRtoMATLABStruct
 % - fcn_convertODRstructToXODRFile
 %
 % This script was written by Wushuang
@@ -25,7 +25,7 @@ addpath(genpath([pwd,'\']));
 % This section processes a road with a straightforward linear shape.
 
 % Read the XODR (OpenDRIVE format) file for the line-shaped road and convert it to a MATLAB structure.
-road = fcn_RoadSeg_convertXODRtoMATLABStruct('testXODR_23-03-29T20-32-27_100m_line.xodr');
+road = fcn_ParseXODR_convertXODRtoMATLABStruct('testXODR_23-03-29T20-32-27_100m_line.xodr');
 
 % Convert the MATLAB structure back to an XODR file, potentially for verification or other purposes.
 outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'lineShape'); 
@@ -34,7 +34,7 @@ outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'lineShape');
 % This section processes a road with an arc shape.
 
 % Read the XODR file for the arc-shaped road and convert it to a MATLAB structure.
-road = fcn_RoadSeg_convertXODRtoMATLABStruct('testXODR_23-03-29T20-37-43_100m_arc.xodr');
+road = fcn_ParseXODR_convertXODRtoMATLABStruct('testXODR_23-03-29T20-37-43_100m_arc.xodr');
 
 % Convert the MATLAB structure back to an XODR file.
 outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'arcShape'); 
@@ -43,7 +43,7 @@ outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'arcShape');
 % This section processes a road with a spiral shape.
 
 % Read the XODR file for the spiral-shaped road and convert it to a MATLAB structure.
-road = fcn_RoadSeg_convertXODRtoMATLABStruct('testXODR_23-03-29T20-40-32_spiral.xodr');
+road = fcn_ParseXODR_convertXODRtoMATLABStruct('testXODR_23-03-29T20-40-32_spiral.xodr');
 
 % Convert the MATLAB structure back to an XODR file.
 outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'spiralShape'); 
@@ -52,7 +52,7 @@ outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'spiralShape');
 % This section processes a more complex road, which might include features like highways, shoulders, driving lanes, and lane markers.
 
 % Read the XODR file for the comprehensive road and convert it to a MATLAB structure.
-road = fcn_RoadSeg_convertXODRtoMATLABStruct('RR_RoadMarkChange_20230926_removeUserdata.xodr');
+road = fcn_ParseXODR_convertXODRtoMATLABStruct('RR_RoadMarkChange_20230926_removeUserdata.xodr');
 
 % Convert the MATLAB structure back to an XODR file.
 outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'roadMarkChange'); 
@@ -62,7 +62,7 @@ outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'roadMarkChange')
 % changes from one to two 
 
 % Read the XODR file for the comprehensive road and convert it to a MATLAB structure.
-road = fcn_RoadSeg_convertXODRtoMATLABStruct('RR_20230926_1LaneTo2Lane.xodr');
+road = fcn_ParseXODR_convertXODRtoMATLABStruct('RR_20230926_1LaneTo2Lane.xodr');
 
 % Convert the MATLAB structure back to an XODR file.
 outputFileName = fcn_ParseXODR_convertODRstructToXODRFile(road,'1Laneto2Lane'); 

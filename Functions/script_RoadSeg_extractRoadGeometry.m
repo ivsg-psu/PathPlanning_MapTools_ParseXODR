@@ -16,18 +16,15 @@ clearvars
 close all
 
 % Load an example file with a file selection dialog
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct;
+%ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct;
 
 % Load an example file from a static file path
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('ODRViewerEx.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_150m_double_curve_barrels_repeat.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
+%ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('ODRViewerEx.xodr');
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_150m_double_curve_barrels_repeat.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
-
-% Add the path for the XODR plotting library
-%addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_PlotXODR/'));
 
 % Create a new figure
 hRoad = figure(1);

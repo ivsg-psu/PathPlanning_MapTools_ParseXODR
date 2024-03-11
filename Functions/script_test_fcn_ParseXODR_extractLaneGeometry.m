@@ -29,20 +29,20 @@ ylabel('North (m)')
 
 % Load an example file from a static file path
 % Ex_Simple_Lane_Offset
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
 
 % Ex_Simple_Lane_Offset_Reversed
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
 
 % Ex_Complex_Lane_Offset
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
 
 % workzone_100m_Lane_Offset
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
 
 % ODR Viewer Example File
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);

@@ -83,7 +83,177 @@ setenv('MATLABFLAG_PARSEXODR_FLAG_CHECK_INPUTS','1');
 setenv('MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG','0');
 
 
-%%
+%% Converting from XODR to MATLAB Struct
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                          _   _
+%  / ____|                        | | (_)
+% | |     ___  _ ____   _____ _ __| |_ _ _ __   __ _
+% | |    / _ \| '_ \ \ / / _ \ '__| __| | '_ \ / _` |
+% | |___| (_) | | | \ V /  __/ |  | |_| | | | | (_| |
+%  \_____\___/|_| |_|\_/ \___|_|   \__|_|_| |_|\__, |
+%                                               __/ |
+%   __                      __   ______  _____ |___/_
+%  / _|                     \ \ / / __ \|  __ \|  __ \
+% | |_ _ __ ___  _ __ ___    \ V / |  | | |  | | |__) |
+% |  _| '__/ _ \| '_ ` _ \    > <| |  | | |  | |  _  /
+% | | | | | (_) | | | | | |  / . \ |__| | |__| | | \ \
+% |_| |_|  \___/|_|_|_| |_|_/_/_\_\____/|_____/|_| _\_\     _____ _                   _
+% | |        |  \/  |   /\|__   __| |        /\   |  _ \   / ____| |                 | |
+% | |_ ___   | \  / |  /  \  | |  | |       /  \  | |_) | | (___ | |_ _ __ _   _  ___| |_
+% | __/ _ \  | |\/| | / /\ \ | |  | |      / /\ \ |  _ <   \___ \| __| '__| | | |/ __| __|
+% | || (_) | | |  | |/ ____ \| |  | |____ / ____ \| |_) |  ____) | |_| |  | |_| | (__| |_
+%  \__\___/  |_|  |_/_/    \_\_|  |______/_/    \_\____/  |_____/ \__|_|   \__,_|\___|\__|
+% See: https://patorjk.com/software/taag/#p=display&f=Big&t=Converting%20%0Afrom%20XODR%0Ato%20MATLAB%20Struct
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+fig_num = 1; % Optional
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr', fig_num);
+assert(isstruct(ODRStruct));
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr', fig_num);
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr', fig_num);
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr', fig_num);
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr', fig_num);
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr', fig_num);
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack.xodr', fig_num);
+
+
+
+%% Converting from MATLAB Struct to XODR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                          _   _
+%  / ____|                        | | (_)
+% | |     ___  _ ____   _____ _ __| |_ _ _ __   __ _
+% | |    / _ \| '_ \ \ / / _ \ '__| __| | '_ \ / _` |
+% | |___| (_) | | | \ V /  __/ |  | |_| | | | | (_| |
+%  \_____\___/|_| |_|\_/ \___|_|   \__|_|_| |_|\__, |
+%                                               __/ |
+%   __                       __  __       _____|___/              ____     _____ _                   _
+%  / _|                     |  \/  |   /\|__   __| |        /\   |  _ \   / ____| |                 | |
+% | |_ _ __ ___  _ __ ___   | \  / |  /  \  | |  | |       /  \  | |_) | | (___ | |_ _ __ _   _  ___| |_
+% |  _| '__/ _ \| '_ ` _ \  | |\/| | / /\ \ | |  | |      / /\ \ |  _ <   \___ \| __| '__| | | |/ __| __|
+% | | | | | (_) | | | | | | | |  | |/ ____ \| |  | |____ / ____ \| |_) |  ____) | |_| |  | |_| | (__| |_
+% |_| |_|  \___/|_|_|_|_|_|_|_|  |_/_/    \_\_|  |______/_/    \_\____/  |_____/ \__|_|   \__,_|\___|\__|
+% | |        \ \ / / __ \|  __ \|  __ \
+% | |_ ___    \ V / |  | | |  | | |__) |
+% | __/ _ \    > <| |  | | |  | |  _  /
+% | || (_) |  / . \ |__| | |__| | | \ \
+%  \__\___/  /_/ \_\____/|_____/|_|  \_\
+% See: https://patorjk.com/software/taag/#p=display&f=Big&t=Converting%20%0Afrom%20MATLAB%20Struct%0Ato%20XODR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+fig_num = 1; % Optional
+
+% Load an example file from a static file path
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack.xodr');
+
+% Set up file info
+% Set the base name for the output scenario file
+scenarioName = 'Example_scenario';
+
+% Define the save directory
+XODR_save_directory = fullfile(cd,'Data',filesep,'XODR_outputs');
+
+% Get the current date and time in a specific format ('YYYY_MM_DDTHH_MM_SS')
+% and convert it to a string. 'T' is a literal character.
+datetimeString = char(datetime('now', 'TimeZone', 'local', 'Format', 'yyyy_MM_dd''T''HH_mm_ss'));
+
+% Concatenate the scenario name with the current date and time to form the output file name
+outputFileName = strcat(scenarioName,'_',datetimeString);
+
+% Name the subdirectory for storage
+if exist(XODR_save_directory,'dir')~=7
+    warning('backtrace','on')
+    warning('Unable to find storage directory %s for XODR file - quitting.',XODR_save_directory);
+    error('Unable to find directory: %s',XODR_save_directory);
+end
+
+% Add the save directory to the filename
+full_filename = fullfile(XODR_save_directory,outputFileName);
+
+% Convert and save the OpenDRIVE structure to an .xodr file with the specified output file name
+fcn_ParseXODR_convertODRstructToXODRFile(ODRStruct, full_filename, fig_num);
+
+%% Plotting the XODR Struct in ENU
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  _____  _       _   _   _              __   ______  _____  _____     _____ _                   _
+% |  __ \| |     | | | | (_)             \ \ / / __ \|  __ \|  __ \   / ____| |                 | |
+% | |__) | | ___ | |_| |_ _ _ __   __ _   \ V / |  | | |  | | |__) | | (___ | |_ _ __ _   _  ___| |_
+% |  ___/| |/ _ \| __| __| | '_ \ / _` |   > <| |  | | |  | |  _  /   \___ \| __| '__| | | |/ __| __|
+% | |    | | (_) | |_| |_| | | | | (_| |  / . \ |__| | |__| | | \ \   ____) | |_| |  | |_| | (__| |_
+% |_|    |_|\___/ \__|\__|_|_| |_|\__, | /_/ \_\____/|_____/|_|  \_\ |_____/ \__|_|   \__,_|\___|\__|
+%                                  __/ |
+%                                 |___/
+%  _         ______ _   _ _    _
+% (_)       |  ____| \ | | |  | |
+%  _ _ __   | |__  |  \| | |  | |
+% | | '_ \  |  __| | . ` | |  | |
+% | | | | | | |____| |\  | |__| |
+% |_|_| |_| |______|_| \_|\____/
+%
+% See: https://patorjk.com/software/taag/#p=display&v=0&f=Big&t=Plotting%20XODR%20Struct%0Ain%20ENU%20
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Load an example file from a static file path
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack.xodr');
+
+% Check the structure
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+% Basic demo - no centerline will be plotted
+fig_num = 1;
+figure(fig_num)
+clf
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+
+% Basic demo - with centerline plotted
+fig_num = 2;
+figure(fig_num)
+clf
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = 1;
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+
+%% XODR Templates
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% __   ______  _____  _____    _______                   _       _
+% \ \ / / __ \|  __ \|  __ \  |__   __|                 | |     | |
+%  \ V / |  | | |  | | |__) |    | | ___ _ __ ___  _ __ | | __ _| |_ ___  ___
+%   > <| |  | | |  | |  _  /     | |/ _ \ '_ ` _ \| '_ \| |/ _` | __/ _ \/ __|
+%  / . \ |__| | |__| | | \ \     | |  __/ | | | | | |_) | | (_| | ||  __/\__ \
+% /_/ \_\____/|_____/|_|  \_\    |_|\___|_| |_| |_| .__/|_|\__,_|\__\___||___/
+%                                                 | |
+%                                                 |_|
+% See: https://patorjk.com/software/taag/#p=display&f=Big&t=XODR%20Templates
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%% Patch operations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %   _____      _       _        ____                       _   _                 
@@ -100,12 +270,12 @@ setenv('MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG','0');
 % Show how to load an XML XODR structure into MATLAB
 
 % Load an example file from a static file path
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
-% ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
-ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
-%ODRStruct = fcn_RoadSeg_convertXODRtoMATLABStruct('109_WahbaLoop_WaddleIntersectionWithI99.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+%ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('109_WahbaLoop_WaddleIntersectionWithI99.xodr');
 
 % Check the structure
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);

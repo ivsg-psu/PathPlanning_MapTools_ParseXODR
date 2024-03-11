@@ -290,12 +290,6 @@ N_lane_sections = 3;
 
 %% Convert to XODR structure
 
-% Set the base name for the output scenario file
-scenarioName = 'scenario1_5';
-
-% Define the save directory
-XODR_save_directory = fullfile(cd,'Data',filesep,'XODR_outputs');
-
 % Define the speed limit for this road
 speedlimit = 25;
 
@@ -305,6 +299,13 @@ roadCenterLine = roadCenterENU;
 % Define how far apart the road is resampled
 resampleStationInterval = 10;
 
+
+%% Set up file info
+% Set the base name for the output scenario file
+scenarioName = 'scenario1_5';
+
+% Define the save directory
+XODR_save_directory = fullfile(cd,'Data',filesep,'XODR_outputs');
 
 % Get the current date and time in a specific format ('YYYY_MM_DDTHH_MM_SS')
 % and convert it to a string. 'T' is a literal character.
@@ -411,7 +412,7 @@ for ith_laneSection = 1:N_lane_sections
     flag_shoulder  = flag_shoulders(ith_laneSection,1);
 
     % Fill in a section template
-    section_template = fcn_ParseXODR_createStructForLaneSection(numOfLeftLanes(ith_laneSection,1),numOfRightLane,speedlimit);
+    section_template = fcn_ParseXODR_createStructForLaneSection(numOfLeftLane,numOfRightLane,speedlimit);
 
     % Fill in markings
     if ith_laneSection == 2
@@ -420,7 +421,7 @@ for ith_laneSection = 1:N_lane_sections
         section_template.leftMarkStruct(1).Attributes.type = 'solid broken';
     end
 
-    % Fill in left lane details
+    % Fill in lane section details
     starter_laneSection = roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection};
     laneSection = fcn_ParseXODR_fillLaneSection(starter_laneSection, section_template, flag_shoulder);
     roads.OpenDRIVE.road{1}.lanes.laneSection{ith_laneSection} = laneSection;
