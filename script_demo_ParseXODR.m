@@ -251,7 +251,10 @@ fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=XODR%20Templates
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Fill a default road network
+roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork([]);
 
+%% 
 
 %% Patch operations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
