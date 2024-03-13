@@ -11,7 +11,11 @@ clc;
 
 %% BASIC test - no figure output, 'right'
 
-lane = fcn_ParseXODR_fillDefaultRoadLane('right',[]);
+
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('right',flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(lane,'Attributes'));
@@ -21,7 +25,10 @@ assert(isfield(lane,'speed'));
 
 %% BASIC test - no figure output, 'left' (note, NOT case sensitive)
 
-lane = fcn_ParseXODR_fillDefaultRoadLane('Left',[]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('Left',flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(lane,'Attributes'));
@@ -31,7 +38,10 @@ assert(isfield(lane,'speed'));
 
 %% BASIC test - no figure output, 'center' (note, NOT case sensitive)
 
-lane = fcn_ParseXODR_fillDefaultRoadLane('CENTER',[]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('CENTER',flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(lane,'Attributes'));
@@ -42,13 +52,30 @@ assert(~isfield(lane,'speed'));
 
 %% BASIC test - fast mode, 'right'
 
-lane = fcn_ParseXODR_fillDefaultRoadLane('right',-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('right',flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(lane,'Attributes'));
 assert(isfield(lane,'width'));
 assert(isfield(lane,'roadMark'));
 assert(isfield(lane,'speed'));
+
+
+%% BASIC test - fast mode, 'center', only required fields
+
+flag_initialize_only_required_fields = 1;
+fig_num = -1;
+
+lane = fcn_ParseXODR_fillDefaultRoadLane('center',flag_initialize_only_required_fields,fig_num);
+
+% Check that the key elements are there
+assert(isfield(lane,'Attributes'));
+assert(~isfield(lane,'width'));
+assert(~isfield(lane,'roadMark'));
+assert(~isfield(lane,'speed'));
 
 %% UNUSED
 % %% Test 2: many vectors

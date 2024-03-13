@@ -11,14 +11,20 @@ clc;
 
 %% BASIC test - no figure output
 
-planView = fcn_ParseXODR_fillDefaultRoadPlanView([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+planView = fcn_ParseXODR_fillDefaultRoadPlanView(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(planView,'geometry'));
 
 %% BASIC test - fast mode
 
-planView = fcn_ParseXODR_fillDefaultRoadPlanView(-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+planView = fcn_ParseXODR_fillDefaultRoadPlanView(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(planView,'geometry'));

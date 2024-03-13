@@ -7,12 +7,19 @@ function laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(varargin)
 %
 % FORMAT:
 %
-%       laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection
+%       laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(... 
+%       {flag_initialize_only_required_fields},...
+%       {fig_num});
+%
 %
 % INPUTS:
 %
 %      (OPTIONAL INPUTS)
 % 
+%      flag_initialize_only_required_fields: If set to 1, only populates
+%      the minimimum required fields. Default is 0 - populates all features
+%      commonly used in mapping.
+%
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
 %      up code to maximize speed.
@@ -42,6 +49,8 @@ function laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(varargin)
 % Revision history:
 % 2024_03_06 -  S. Brennan
 % -- start writing function
+% 2024_03_13 -  S. Brennan
+% -- added flag_initialize_only_required_fields option
 
 
 %% Debugging and Input checks
@@ -50,7 +59,7 @@ function laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==1 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -91,7 +100,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(0,1);
+        narginchk(0,2);
 
         % % Check the projection_vector input to be length greater than or equal to 1
         % fcn_DebugTools_checkInputsToFunctions(...
@@ -100,10 +109,20 @@ if 0==flag_max_speed
     end
 end
 
+
+% Does user want to specify flag_initialize_only_required_fields?
+flag_initialize_only_required_fields = 0; % Default is to load all common fields
+if (1<= nargin)
+    temp = varargin{1};
+    if ~isempty(temp)
+        flag_initialize_only_required_fields = temp;
+    end
+end
+
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -127,17 +146,27 @@ end
 laneSection = struct();
 
 % Fill the lane Attributes
-laneSection.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'s','singleSide'});
+if 1~=flag_initialize_only_required_fields
+    % OPTIONAL
+    laneSection.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'s','singleSide'});
+else
+    laneSection.Attributes = fcn_ParseXODR_fillBlankFieldStructure({'s'});
+end
 
-% create left lane
-laneSection.left.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('left');
+% OPTIONAL
+if 1~=flag_initialize_only_required_fields
+    % create left lane
+    laneSection.left.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('left');
+end
 
 % create center lane
-laneSection.center.lane = fcn_ParseXODR_fillDefaultRoadLane('center');
+laneSection.center.lane = fcn_ParseXODR_fillDefaultRoadLane('center',flag_initialize_only_required_fields,-1);
 
-% create right lane
-laneSection.right.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('right');
-
+% OPTIONAL
+if 1~=flag_initialize_only_required_fields
+    % create right lane
+    laneSection.right.lane{1,1} = fcn_ParseXODR_fillDefaultRoadLane('right');
+end
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

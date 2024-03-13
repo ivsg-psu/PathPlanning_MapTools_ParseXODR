@@ -7,12 +7,21 @@ function OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(varargin)
 %
 % FORMAT:
 %
-%       OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE
+%       OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(...
+%       {flag_initialize_only_required_fields},...
+%       {fig_num});
 %
 % INPUTS:
 %
-%      (none)
+%      (OPTIONAL INPUTS)
+% 
+%      flag_initialize_only_required_fields: If set to 1, only populates
+%      the minimimum required fields. Default is 0 - populates all features
+%      commonly used in mapping.
 %
+%      fig_num: a figure number to plot results. If set to -1, skips any
+%      input checking or debugging, no figures will be generated, and sets
+%      up code to maximize speed.
 %
 % OUTPUTS:
 %
@@ -42,7 +51,8 @@ function OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(varargin)
 % Revision history:
 % 2024_03_06 -  S. Brennan
 % -- start writing function
-
+% 2024_03_13 -  S. Brennan
+% -- added flag_initialize_only_required_fields option
 
 %% Debugging and Input checks
 
@@ -50,7 +60,7 @@ function OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==1 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -91,7 +101,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(0,1);
+        narginchk(0,2);
 
         % % Check the projection_vector input to be length greater than or equal to 1
         % fcn_DebugTools_checkInputsToFunctions(...
@@ -100,10 +110,21 @@ if 0==flag_max_speed
     end
 end
 
+
+% Does user want to specify flag_initialize_only_required_fields?
+flag_initialize_only_required_fields = 0; % Default is to load all common fields
+if (1<= nargin)
+    temp = varargin{1};
+    if ~isempty(temp)
+        flag_initialize_only_required_fields = temp;
+    end
+end
+
+
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -127,8 +148,8 @@ end
 % Create the empty OpenDRIVE structure
 OpenDRIVE = struct();
 
-OpenDRIVE.header = fcn_ParseXODR_fillDefaultHeader(-1);
-OpenDRIVE.road   = fcn_ParseXODR_fillDefaultRoad(-1);
+OpenDRIVE.header = fcn_ParseXODR_fillDefaultHeader(flag_initialize_only_required_fields, -1);
+OpenDRIVE.road   = fcn_ParseXODR_fillDefaultRoad(flag_initialize_only_required_fields, -1);
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

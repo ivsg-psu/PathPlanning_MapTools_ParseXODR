@@ -1,58 +1,34 @@
-% script_test_fcn_ParseXODR_fillDefaultRoadAttributes
-% Exercises the function: fcn_ParseXODR_fillDefaultRoadAttributes
+% script_test_fcn_ParseXODR_compareTwoXODRStructs.m
+% Exercises the function: fcn_ParseXODR_compareTwoXODRStructs.m
 
 % Revision history:
-% 2024_03_06 - S. Brennan
+% 2024_03_13 - S. Brennan
 % -- wrote the code
+% -- added flag_initialize_only_required_fields option
 
 close all;
 clc;
 
 
-%% BASIC test - no figure output
 
-flag_initialize_only_required_fields = [];
-fig_num = [];
+%% BASIC test - two simple structures that are exactly same, VERBOSE
+fig_num = 1;
 
-Attributes = fcn_ParseXODR_fillDefaultRoadAttributes(flag_initialize_only_required_fields,fig_num);
+clear first_struct second_struct template_structure
 
-
-% Check that the key elements are there
-assert(isfield(Attributes,'id'));
-assert(isfield(Attributes,'junction'));
-assert(isfield(Attributes,'length'));
-assert(isfield(Attributes,'name'));
-assert(isfield(Attributes,'rule'));
-
-%% BASIC test - fast mode
-
-flag_initialize_only_required_fields = [];
-fig_num = -1;
-
-Attributes = fcn_ParseXODR_fillDefaultRoadAttributes(flag_initialize_only_required_fields,fig_num);
-
-
-% Check that the key elements are there
-assert(isfield(Attributes,'id'));
-assert(isfield(Attributes,'junction'));
-assert(isfield(Attributes,'length'));
-assert(isfield(Attributes,'name'));
-assert(isfield(Attributes,'rule'));
-
-%% BASIC test - fast mode with only required attributes
+first_struct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr', fig_num);
+second_struct = first_struct;
 
 flag_initialize_only_required_fields = 1;
 fig_num = -1;
+template_structure = fcn_ParseXODR_fillDefaultRoadNetwork(flag_initialize_only_required_fields,fig_num);
 
-Attributes = fcn_ParseXODR_fillDefaultRoadAttributes(flag_initialize_only_required_fields,fig_num);
-
+error_tolerance = []; % Use the default
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoXODRStructs(first_struct, second_struct,template_structure, error_tolerance, flag_verbose_mode);
 
 % Check that the key elements are there
-assert(isfield(Attributes,'id'));
-assert(isfield(Attributes,'junction'));
-assert(isfield(Attributes,'length'));
-assert(~isfield(Attributes,'name'));
-assert(~isfield(Attributes,'rule'));
+assert(structs_are_same);
 
 
 %% UNUSED

@@ -1,5 +1,5 @@
 function header = fcn_ParseXODR_fillDefaultHeader(varargin)
-%% fcn_ParseXODR_fillDefaultOpenDRIVE
+%% fcn_ParseXODR_fillDefaultHeader
 % Fills the default OpenDRIVE structure. This is the header under the
 % top-most structure in the XODR specification, for example:
 %
@@ -7,12 +7,18 @@ function header = fcn_ParseXODR_fillDefaultHeader(varargin)
 %
 % FORMAT:
 %
-%       header = fcn_ParseXODR_fillDefaultHeader
+%       header = fcn_ParseXODR_fillDefaultHeader(... 
+%       {flag_initialize_only_required_fields},...
+%       {fig_num});
 %
 % INPUTS:
 %
 %      (OPTIONAL INPUTS)
 % 
+%      flag_initialize_only_required_fields: If set to 1, only populates
+%      the minimimum required fields. Default is 0 - populates all features
+%      commonly used in mapping.
+%
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
 %      up code to maximize speed.
@@ -53,7 +59,8 @@ function header = fcn_ParseXODR_fillDefaultHeader(varargin)
 % Revision history:
 % 2024_03_06 -  S. Brennan
 % -- start writing function
-
+% 2024_03_13 -  S. Brennan
+% -- added flag_initialize_only_required_fields option
 
 %% Debugging and Input checks
 
@@ -61,7 +68,7 @@ function header = fcn_ParseXODR_fillDefaultHeader(varargin)
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==1 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -102,7 +109,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(0,1);
+        narginchk(0,2);
 
         % % Check the projection_vector input to be length greater than or equal to 1
         % fcn_DebugTools_checkInputsToFunctions(...
@@ -111,10 +118,20 @@ if 0==flag_max_speed
     end
 end
 
+% Does user want to specify flag_initialize_only_required_fields?
+flag_initialize_only_required_fields = 0; % Default is to load all common fields
+if (1<= nargin)
+    temp = varargin{1};
+    if ~isempty(temp)
+        flag_initialize_only_required_fields = temp;
+    end
+end
+
+
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (1<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -143,16 +160,23 @@ header = struct();
 
 % Create the 'Attributes' substructure within 'header'
 header.Attributes = struct();
-header.Attributes.date = char(current_time);
-header.Attributes.east = '0';
-header.Attributes.name = 'HDmap';
-header.Attributes.north = '0';
+if flag_initialize_only_required_fields==0
+    header.Attributes.date = char(current_time);
+    header.Attributes.east = '0';
+    header.Attributes.name = 'HDmap';
+    header.Attributes.north = '0';
+end
+
+% Required
 header.Attributes.revMajor = '1';
 header.Attributes.revMinor = '6';
-header.Attributes.south = '0';
-header.Attributes.vendor = 'PSU-IVSG';
-header.Attributes.version = '1';
-header.Attributes.west = '0';
+
+if flag_initialize_only_required_fields==0
+    header.Attributes.south = '0';
+    header.Attributes.vendor = 'PSU-IVSG';
+    header.Attributes.version = '1';
+    header.Attributes.west = '0';
+end
 
 
 %% Plot the results (for debugging)?

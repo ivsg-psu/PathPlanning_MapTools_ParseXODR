@@ -11,7 +11,10 @@ clc;
 
 %% BASIC test - no figure output
 
-laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(laneSection,'Attributes'));
@@ -21,13 +24,29 @@ assert(isfield(laneSection,'right'));
 
 %% BASIC test - fast mode
 
-laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(laneSection,'Attributes'));
 assert(isfield(laneSection,'left'));
 assert(isfield(laneSection,'center'));
 assert(isfield(laneSection,'right'));
+
+%% BASIC test - fast mode, only required elements
+
+flag_initialize_only_required_fields = 1;
+fig_num = -1;
+
+laneSection = fcn_ParseXODR_fillDefaultRoadLaneSection(flag_initialize_only_required_fields,fig_num);
+
+% Check that the key elements are there
+assert(isfield(laneSection,'Attributes'));
+assert(~isfield(laneSection,'left'));
+assert(isfield(laneSection,'center'));
+assert(~isfield(laneSection,'right'));
 
 
 %% UNUSED

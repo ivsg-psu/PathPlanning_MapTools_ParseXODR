@@ -11,7 +11,21 @@ clc;
 
 %% BASIC test - no figure output
 
-OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(flag_initialize_only_required_fields,fig_num);
+
+% Check that the key elements are there
+assert(isfield(OpenDRIVE,'header'));
+assert(isfield(OpenDRIVE,'road'));
+
+%% BASIC test - fast mode
+
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+OpenDRIVE = fcn_ParseXODR_fillDefaultOpenDRIVE(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(OpenDRIVE,'header'));

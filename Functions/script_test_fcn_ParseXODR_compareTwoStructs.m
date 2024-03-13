@@ -10,10 +10,15 @@ clc;
 
 
 %% BASIC test - two simple structures that are the same
-first_struct.a = 2;
-first_struct.b = 2;
-first_struct.c = first_struct;
-first_struct.d = first_struct;
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
 
 second_struct = first_struct;
 
@@ -23,10 +28,15 @@ structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct);
 assert(structs_are_same);
 
 %% BASIC test - fast mode
-first_struct.a = 2;
-first_struct.b = 2;
-first_struct.c = first_struct;
-first_struct.d = first_struct;
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
 
 second_struct = first_struct;
 
@@ -36,13 +46,18 @@ structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,[
 assert(structs_are_same);
 
 %% BASIC test - two simple structures that are not the same
-first_struct.a = 2;
-first_struct.b = 2;
-first_struct.c = first_struct;
-first_struct.d = first_struct;
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
 
 second_struct = first_struct;
-second_struct.d.c.a = 1;
+second_struct.level_1_struct2.level_2_struct.var = 6;
 
 structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct);
 
@@ -50,12 +65,18 @@ structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct);
 assert(~structs_are_same);
 
 %% BASIC test - two simple structures that are the same, VERBOSE
-first_struct.a = 2;
-first_struct.b = 2;
-first_struct.c = first_struct;
-first_struct.d = first_struct;
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
 
 second_struct = first_struct;
+
 
 template_structure = [];
 flag_verbose_mode = 1;
@@ -65,13 +86,18 @@ structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,t
 assert(structs_are_same);
 
 %% BASIC test - two simple structures that are not the same, VERBOSE
-first_struct.a = 2;
-first_struct.b = 2;
-first_struct.c = first_struct;
-first_struct.d = first_struct;
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
 
 second_struct = first_struct;
-second_struct.d.c.a = 1;
+second_struct.level_1_struct2.level_2_struct.var = 6;
 
 template_structure = [];
 flag_verbose_mode = 1;
@@ -80,6 +106,163 @@ structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,t
 % Check that the key elements are there
 assert(~structs_are_same);
 
+%% BASIC test - two simple structures that are not the same, but same in template, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = first_struct;
+second_struct.level_1_struct2.level_2_struct.var = 6;
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(structs_are_same);
+
+%% BASIC test - two simple structures that are not the same, and different in template, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = first_struct;
+second_struct.level_1_a = 3;
+second_struct.level_1_struct2.level_2_struct.var = 6;
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(~structs_are_same);
+
+%% BASIC test - two simple structures that are the same, and template has extra field, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = first_struct;
+% second_struct.level_1_a = 3;
+% second_struct.level_1_struct2.level_2_struct.var = 6;
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_c = 7;  % <--- EXTRA FIELD
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(~structs_are_same);
+
+%% BASIC test - two simple structures that are different because only 1 is missing field relative to template, template, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = first_struct;
+second_struct = rmfield(second_struct,'level_1_b');
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(~structs_are_same);
+
+%% BASIC test - two simple structures that are different because one has value that is different, template, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = first_struct;
+second_struct.level_1_b = 7;
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(~structs_are_same);
+
+%% BASIC test - two simple structures that completely different, template, VERBOSE
+clear first_struct second_struct template_structure
+
+first_struct.level_1_a = 2;
+first_struct.level_1_b = 2;
+first_struct.level_1_struct1.level_2_x = 3;
+first_struct.level_1_struct1.level_2_y = 5;
+first_struct.level_1_struct2.level_2_i = 5;
+first_struct.level_1_struct2.level_2_j = 'abc';
+first_struct.level_1_struct2.level_2_struct.var = 5;
+
+second_struct = 42; % Not even a structure
+
+template_structure.level_1_a = 2;
+template_structure.level_1_b = 2;
+template_structure.level_1_struct1.level_2_x = 3;
+template_structure.level_1_struct1.level_2_y = 5;
+template_structure.level_1_struct2.level_2_i = 5;
+
+flag_verbose_mode = 1;
+structs_are_same = fcn_ParseXODR_compareTwoStructs(first_struct, second_struct,template_structure,flag_verbose_mode);
+
+% Check that the key elements are there
+assert(~structs_are_same);
 %% UNUSED
 % %% Test 2: many vectors
 % fig_num = 2;

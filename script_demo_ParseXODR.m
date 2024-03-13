@@ -252,7 +252,9 @@ fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Fill a default road network
-roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork(flag_initialize_only_required_fields,fig_num);
 
 %% 
 

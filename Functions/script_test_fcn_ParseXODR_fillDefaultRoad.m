@@ -11,7 +11,10 @@ clc;
 
 %% BASIC test - no figure output
 
-road = fcn_ParseXODR_fillDefaultRoad([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+road = fcn_ParseXODR_fillDefaultRoad(flag_initialize_only_required_fields,fig_num);
 
 
 % Check that the road is an array of cell elements
@@ -28,7 +31,10 @@ assert(isfield(road{1},'objects'));
 
 %% BASIC test - fast mode
 
-road = fcn_ParseXODR_fillDefaultRoad(-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+road = fcn_ParseXODR_fillDefaultRoad(flag_initialize_only_required_fields,fig_num);
 
 % Check that the road is an array of cell elements
 assert(iscell(road));
@@ -42,6 +48,24 @@ assert(isfield(road{1},'lateralProfile'));
 assert(isfield(road{1},'lanes'));
 assert(isfield(road{1},'objects'));
 
+%% BASIC test - fast mode, only required fields
+
+flag_initialize_only_required_fields = 1;
+fig_num = -1;
+
+road = fcn_ParseXODR_fillDefaultRoad(flag_initialize_only_required_fields,fig_num);
+
+% Check that the road is an array of cell elements
+assert(iscell(road));
+
+% Check that the key elements are there
+assert(isfield(road{1},'Attributes'));
+assert(~isfield(road{1},'type'));
+assert(isfield(road{1},'planView'));
+assert(~isfield(road{1},'elevationProfile'));
+assert(~isfield(road{1},'lateralProfile'));
+assert(isfield(road{1},'lanes'));
+assert(~isfield(road{1},'objects'));
 
 %% UNUSED
 % %% Test 2: many vectors

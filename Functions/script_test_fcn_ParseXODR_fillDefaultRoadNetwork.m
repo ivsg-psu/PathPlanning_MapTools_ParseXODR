@@ -11,14 +11,18 @@ clc;
 
 %% BASIC test - no figure output
 
-roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(roadNetwork,'OpenDRIVE'));
 
 %% BASIC test - fast mode
 
-roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork(-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+roadNetwork = fcn_ParseXODR_fillDefaultRoadNetwork(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(roadNetwork,'OpenDRIVE'));

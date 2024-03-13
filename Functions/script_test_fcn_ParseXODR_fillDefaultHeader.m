@@ -11,17 +11,34 @@ clc;
 
 %% BASIC test - no figure output
 
-header = fcn_ParseXODR_fillDefaultHeader([]);
+flag_initialize_only_required_fields = [];
+fig_num = [];
+
+header = fcn_ParseXODR_fillDefaultHeader(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(header,'Attributes'));
 
 %% BASIC test - fast mode
 
-header = fcn_ParseXODR_fillDefaultHeader(-1);
+flag_initialize_only_required_fields = [];
+fig_num = -1;
+
+header = fcn_ParseXODR_fillDefaultHeader(flag_initialize_only_required_fields,fig_num);
 
 % Check that the key elements are there
 assert(isfield(header,'Attributes'));
+
+%% BASIC test - fast mode with only required elements
+
+flag_initialize_only_required_fields = 1;
+fig_num = -1;
+
+header = fcn_ParseXODR_fillDefaultHeader(flag_initialize_only_required_fields,fig_num);
+
+% Check that the key elements are there
+assert(isfield(header,'Attributes'));
+
 %% UNUSED
 % %% Test 2: many vectors
 % fig_num = 2;

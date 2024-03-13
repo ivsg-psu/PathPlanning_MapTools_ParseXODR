@@ -1,31 +1,31 @@
 function structs_are_same = ...
-    fcn_ParseXODR_compareTwoStructs(...
+    fcn_ParseXODR_compareTwoXODRStructs(...
     struct_1, ...
     struct_2, ...
+    struct_template,...
     varargin)
-%% fcn_ParseXODR_compareTwoStructs
-% compares two structures
+%% fcn_ParseXODR_compareTwoXODRStructs
+% compares two XODR structures relative to a template
 %
 % FORMAT:
 %
 % structs_are_same = ...
-% fcn_ParseXODR_compareTwoStructs(...
+% fcn_ParseXODR_compareTwoXODRStructs(...
 % struct_1, ...
 % struct_2, ...
-% {template_struct},...
+% struct_template,...
+% {error_tolerance},...
 % {flag_be_verbose},...
 % {search_depth},...
 % {fig_num})
 %
 % INPUTS:
 %
-%       struct_1: the first structure to compare
-% 
-%       struct_2: the second structure to compare.
+%      struct_1: the first structure to compare
 %
-%      (OPTIONAL INPUTS)
+%      struct_2: the second structure to compare.
 %
-%      template_struct: a structure that acts as a template for both
+%      struct_template: a structure that acts as a template for both
 %      inputs that defines which fields are compared for equality.
 %      Specifically, the template is used to define which fields must 1) be
 %      in both struct_1 and struct_2 AND 2) these fields and only these
@@ -35,10 +35,17 @@ function structs_are_same = ...
 %      exactly the same in the template fields, but not the same in
 %      non-template fields, then they are considered equal - even if other
 %      non-template fields are not the same.
-% 
+%
+%      (OPTIONAL INPUTS)
+%
+%      error_tolerance: the allowable difference in meters between position
+%      specifications in one XODR file versus the other for the two
+%      definitions to be considered equivalent. If not specified, default
+%      is 0.1 meters (10 cm)
+%
 %      flag_be_verbose: set to 1 to print to the screen the comparisons
-% 
-%      depth: current depth of the search
+%
+%      depth: current depth of the search (used in recursion)
 %
 %      fig_num: a figure number to plot the results.
 %
@@ -52,15 +59,16 @@ function structs_are_same = ...
 %      fcn_DebugTools_checkInputsToFunctions
 %
 % EXAMPLES:
-%      
-% See the script: script_test_fcn_ParseXODR_compareTwoStructs
+%
+% See the script: script_test_fcn_ParseXODR_compareTwoXODRStructs
 % for a full test suite.
 %
-% This function was written on 2024_03_12 by S. Brennan
-% Questions or comments? sbrennan@psu.edu 
+% This function was written on 2024_03_13 by S. Brennan using
+% fcn_ParseXODR_compareTwoXODRStructs as a starter
+% Questions or comments? sbrennan@psu.edu
 
 % Revision history:
-% 2024_03_12 - S. Brennan
+% 2024_03_13 - S. Brennan
 % -- wrote the code
 
 %% Debugging and Input checks
@@ -69,7 +77,7 @@ function structs_are_same = ...
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==6 && isequal(varargin{end},-1))
+if (nargin==7 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -96,49 +104,48 @@ end
 
 %% check input arguments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   _____                   _       
-%  |_   _|                 | |      
-%    | |  _ __  _ __  _   _| |_ ___ 
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
 %    | | | '_ \| '_ \| | | | __/ __|
 %   _| |_| | | | |_) | |_| | |_\__ \
 %  |_____|_| |_| .__/ \__,_|\__|___/
-%              | |                  
-%              |_| 
+%              | |
+%              |_|
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(2,6);
+        narginchk(3,7);
 
         % % Check the lane_centerlines_start input to have 1 column
         % fcn_DebugTools_checkInputsToFunctions(...
         %     lane_centerlines_start, '1column_of_numbers');
-        % 
+        %
         % % Check the lane_centerlines_end input to have 1 column and same
         % % number of rows as the start values
         % fcn_DebugTools_checkInputsToFunctions(...
         %     lane_centerlines_end, '1column_of_numbers',length(lane_centerlines_start(:,1)));
-        
+
 
     end
 end
 
-% Does user want to specify station_tolerance?
-flag_use_template = 0; % Default is to have no template
-if (3<= nargin) 
+% Does user want to specify error_tolerance?
+error_tolerance = 0.1; % Default is 10 cm
+if (4<= nargin)
     temp = varargin{1};
     if ~isempty(temp)
-        struct_template = temp;
-        flag_use_template = 1; 
+        error_tolerance = temp; 
     end
 end
 
 % Does user want to specify flag_be_verbose?
 flag_be_verbose = 0; % Default is to have no template
 variable_name = '';
-if (4<= nargin) 
+if (5<= nargin)
     temp = varargin{2};
     if ~isempty(temp)
         if temp~=0
@@ -154,7 +161,7 @@ end
 
 % Does user want to specify depth?
 search_depth = 0; % Default is to have no depth
-if (5<= nargin) 
+if (6<= nargin)
     temp = varargin{3};
     if ~isempty(temp)
         search_depth = temp;
@@ -165,7 +172,7 @@ end
 % Does user want to specify fig_num?
 fig_num = []; %#ok<NASGU>
 flag_do_plots = 0;
-if (0==flag_max_speed) && (6<= nargin) 
+if (0==flag_max_speed) && (7<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp; %#ok<NASGU>
@@ -176,21 +183,20 @@ end
 
 %% Solve for the circle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   __  __       _       
-%  |  \/  |     (_)      
-%  | \  / | __ _ _ _ __  
-%  | |\/| |/ _` | | '_ \ 
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
 %  | |  | | (_| | | | | |
 %  |_|  |_|\__,_|_|_| |_|
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Need to test for line, arc, spiral
+
 
 % Structures are the same until proven otherwise!
 structs_are_same = true;
-
-% Grab input variable names
-input1_name = inputname(1);
-input2_name = inputname(2);
 
 % Print leading tabs
 if flag_be_verbose
@@ -202,7 +208,7 @@ if ~isstruct(struct_1) || ~isstruct(struct_2)
     % Print results
     if flag_be_verbose && (0==search_depth)
         fprintf(1,'\n\nONE INPUT IS NOT A STRUCTURE: \n');
-        if ~isstruct(struct_1) 
+        if ~isstruct(struct_1)
             fprintf(1,'Input 1 ');
             fcn_DebugTools_cprintf('*Red','<--- NOT A STRUCTURE\n');
         end
@@ -232,144 +238,149 @@ if ~isstruct(struct_1) || ~isstruct(struct_2)
 else
     % This is a structure
 
-    % Grab the fields in both structures
-    fields_in_1 = fieldnames(struct_1);
-    fields_in_2 = fieldnames(struct_2);
-
-    % Define which reference structure to use
-    if flag_use_template == 1
-        % Use the template
-        reference_fields = fieldnames(struct_template);
-    else
-        % Use the common fields
-        reference_fields = intersect(fields_in_1,fields_in_2);
-    end
+    % Use the template to define which fields to check
+    reference_fields = fieldnames(struct_template);
 
     % List what is being used as reference
     if flag_be_verbose && (0==search_depth)
-        fprintf(1,'\n\nCHECKING ENTIRE STRUCTURE: using ');
-        if flag_use_template
-            fprintf(1,'template fields. ');
-        else
-            fprintf(1,'common fields. ');
-        end
+        fprintf(1,'\n\nCHECKING ENTIRE STRUCTURE: using template fields. ');
     elseif flag_be_verbose
         fprintf(1,'Checking structure: %s ',variable_name);
     end
 
     % Are the two structures absolutely identical?
-    if (flag_use_template == 0) && (isequal(struct_1, struct_2))
-        if flag_be_verbose
-            fprintf(1,'<--Entire structure is absolutely identical.\n');
-        end
-    else
-        % They are not absolutely identical - loop through subfields to
-        % check each.
-        if flag_be_verbose
-            fprintf(1,'<--Structures are not absolutely identical.\n');  
-            fcn_INTERNAL_printTabs(search_depth);
-            fprintf(1,'Iterating through fields to find difference:\n');
-        end
+    % Loop through subfields to check each.
+    if flag_be_verbose
+        fprintf(1,'<--Structures are not absolutely identical.\n');
+        fcn_INTERNAL_printTabs(search_depth);
+        fprintf(1,'Iterating through fields to find difference:\n');
+    end
 
-        % Loop through reference fields to check which are in agreement
-        for ith_field = 1:length(reference_fields)
-            field_name = reference_fields{ith_field};
+    % Loop through reference fields to check which are in agreement
+    for ith_field = 1:length(reference_fields)
+        field_name = reference_fields{ith_field};
 
-            % Check that field exists in both structures
-            if ~isfield(struct_1,field_name) || ~isfield(struct_2,field_name)
-                if ~isfield(struct_1,field_name)
-                    fcn_INTERNAL_printTabs(search_depth);
-                    fprintf(1,'Field: %s ',field_name);
-                    fcn_DebugTools_cprintf('*Red','<--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 1 \n');
-                end
-                if ~isfield(struct_2,field_name)
-                    fcn_INTERNAL_printTabs(search_depth);
-                    fprintf(1,'Field: %s ',field_name);
-                    fcn_DebugTools_cprintf('*Red','<--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 2 \n');
-                end
+        % Check that field exists in both structures
+        if ~isfield(struct_1,field_name) || ~isfield(struct_2,field_name)
+            if ~isfield(struct_1,field_name)
+                fcn_INTERNAL_printTabs(search_depth);
+                fprintf(1,'Field: %s ',field_name);
+                fcn_DebugTools_cprintf('*Red','<--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 1 \n');
+            end
+            if ~isfield(struct_2,field_name)
+                fcn_INTERNAL_printTabs(search_depth);
+                fprintf(1,'Field: %s ',field_name);
+                fcn_DebugTools_cprintf('*Red','<--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 2 \n');
+            end
+            structs_are_same = false;
+
+        else
+            % Both structures have field that is searched for in reference - check them
+            if length(struct_1.(field_name)) ~= length(struct_2.(field_name))
+                fcn_INTERNAL_printTabs(search_depth);
+                fprintf(1,'Field: %s ',field_name);
+                fcn_DebugTools_cprintf('*Red','<--- FIELDS HAVE DIFFERENT LENGTHS \n');
                 structs_are_same = false;
 
             else
-                % Both structures have field that is searched for in reference - check them
-                if flag_be_verbose
-                    % Verbose mode
-                    fcn_INTERNAL_printTabs(search_depth);
-                    fprintf(1,'Field: %s \n',field_name);
-                    if flag_use_template
-                        sustructures_are_same = fcn_ParseXODR_compareTwoStructs(...
-                            struct_1.(field_name), ...
-                            struct_2.(field_name), ...
-                            struct_template.(field_name),...
-                            field_name,...
-                            search_depth+1,...
-                            []);
-                    else
-                        sustructures_are_same = fcn_ParseXODR_compareTwoStructs(...
-                            struct_1.(field_name), ...
-                            struct_2.(field_name), ...
-                            [],...
-                            field_name,...
-                            search_depth+1,...
-                            []);
-                    end
+
+                % Check if the input is a cell array. If so, we need to
+                % pull out the data from this carefully. The template
+                % will only every have 1 input value. NOTE: this
+                % assumes that the ordering is the same on the fields -
+                % this might not always be true.
+                if iscell(struct_template.(field_name))
+                    % Loop through the structures
+                    for ith_iteration = 1:length(struct_1.(field_name))
+
+                        input1 = struct_1.(field_name){ith_iteration};
+                        input2 = struct_2.(field_name){ith_iteration};
+                        input_template = struct_template.(field_name){1};
+
+                        if flag_be_verbose
+                            % Verbose mode
+                            fcn_INTERNAL_printTabs(search_depth);
+                            fprintf(1,'Field: %s \n',field_name);
+                            sustructures_are_same = fcn_ParseXODR_compareTwoXODRStructs(...
+                                input1, ...
+                                input2, ...
+                                input_template,...
+                                error_tolerance,...
+                                field_name,...
+                                search_depth+1,...
+                                []);
+                        else
+                            % NOT verbose
+                            sustructures_are_same = fcn_ParseXODR_compareTwoXODRStructs(...
+                                input1, ...
+                                input2, ...
+                                input_template,...
+                                error_tolerance,...
+                                0,...
+                                search_depth+1,...
+                                []);
+
+                        end % Ends if statement on verbose
+
+
+                        if ~sustructures_are_same
+                            structs_are_same = false;
+                        end
+                    end % Ends loop through cells
                 else
-                    % NOT verbose
-                    if flag_use_template
-                        sustructures_are_same = fcn_ParseXODR_compareTwoStructs(...
-                            struct_1.(field_name), ...
-                            struct_2.(field_name), ...
-                            struct_template.(field_name),...
-                            0,...
+
+                    % NOT Cell arrays
+                    input1 = struct_1.(field_name);
+                    input2 = struct_2.(field_name);
+                    input_template = struct_template.(field_name);
+
+                    if flag_be_verbose
+                        % Verbose mode
+                        fcn_INTERNAL_printTabs(search_depth);
+                        fprintf(1,'Field: %s \n',field_name);
+                        sustructures_are_same = fcn_ParseXODR_compareTwoXODRStructs(...
+                            input1, ...
+                            input2, ...
+                            input_template,...
+                            error_tolerance,...
+                            field_name,...
                             search_depth+1,...
                             []);
                     else
-                        sustructures_are_same = fcn_ParseXODR_compareTwoStructs(...
-                            struct_1.(field_name), ...
-                            struct_2.(field_name), ...
-                            [],...
+                        % NOT verbose
+                        sustructures_are_same = fcn_ParseXODR_compareTwoXODRStructs(...
+                            input1, ...
+                            input2, ...
+                            input_template,...
+                            error_tolerance,...
                             0,...
                             search_depth+1,...
                             []);
+
+                    end % Ends if statement on verbose
+
+
+                    if ~sustructures_are_same
+                        structs_are_same = false;
                     end
-                end % Ends if statement on verbose
+                end % Ends if statement checking if cell arrays
+            end % Ends if statement checking if lengths are same
+        end % Ends if statement checking if both have field we are looking for
 
+    end % Ends looping through fields
+end % Ends if statement checking of both are structures
 
-                if ~sustructures_are_same
-                    structs_are_same = false;
-                end
-
-            end % Ends if statement to check that both fields exist
-        end
-
-        % Check fields that are not in template?
-        if 1==0  % flag_use_template
-            % Check struct_1
-            sustructures_are_same = fcn_INTERNAL_checkSubstructure(struct_1, reference_fields, input1_name, flag_be_verbose, search_depth);
-            if ~sustructures_are_same
-                structs_are_same = false;
-            end
-
-            % Check struct_2
-            sustructures_are_same = fcn_INTERNAL_checkSubstructure(struct_2, reference_fields, input2_name, flag_be_verbose, search_depth);
-            if ~sustructures_are_same
-                structs_are_same = false;
-            end
-        end
-
-    end
-
-end
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   _____       _                 
-%  |  __ \     | |                
-%  | |  | | ___| |__  _   _  __ _ 
+%   _____       _
+%  |  __ \     | |
+%  | |  | | ___| |__  _   _  __ _
 %  | |  | |/ _ \ '_ \| | | |/ _` |
 %  | |__| |  __/ |_) | |_| | (_| |
 %  |_____/ \___|_.__/ \__,_|\__, |
 %                            __/ |
-%                           |___/ 
+%                           |___/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if flag_do_plots
     % Not implemented yet
@@ -400,23 +411,3 @@ for ith_tab = 1:search_depth
 end % Ends fcn_INTERNAL_printTabs
 end
 
-%% fcn_INTERNAL_checkSubstructure
-function sustructures_are_same = fcn_INTERNAL_checkSubstructure(input_name, reference_fields, flag_be_verbose,search_depth)
-
-if flag_be_verbose
-    fprintf(1,'Checking %s for structure 1\n',input_name);
-    fcn_INTERNAL_printTabs(search_depth);
-end
-
-% Loop through common reference fields in 1
-for ith_field = 1:length(reference_fields)
-    field_name = reference_fields{ith_field};
-    sustructures_are_same = fcn_ParseXODR_compareTwoStructs(...
-        struct_1.(field_name), ...
-        struct_2.(field_name), ...
-        template_struct.(field_name),...
-        flag_be_verbose,...
-        search_depth+1,...
-        fig_num);
-end
-end % Ends fcn_INTERNAL_checkSubstructure
