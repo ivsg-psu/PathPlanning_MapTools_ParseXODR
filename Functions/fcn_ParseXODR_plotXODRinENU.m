@@ -36,7 +36,8 @@ function fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,varargin)
 % See the script: script_test_fcn_ParseXODR_plotXODRinENU
 % for a full test suite.
 %
-% This function was written on 2024_03_06 by S. Brennan
+% This function was written on 2024_03_06 by S. Brennan using the starter
+% developed by Prof. Craig Beal
 % Questions or comments? sbrennan@psu.edu
 
 

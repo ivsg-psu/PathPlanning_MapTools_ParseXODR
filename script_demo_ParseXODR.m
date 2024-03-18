@@ -14,6 +14,9 @@
 % Revision history:
 % 2023_03_06 - S.Brennan
 % -- Created master demo script by copy/pasting from Craig's sub-scripts
+% 2023_03_14 - S.Brennan
+% -- Updated the PathClass dependency
+
 
 %% Prep the workspace
 clearvars
@@ -51,9 +54,9 @@ library_folders{ith_library} = {'Functions','Data'};
 library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_GeomTools_GeomClassLibrary/archive/refs/tags/GeometryClass_v2024_01_29.zip';
                                 
 ith_library = ith_library+1;
-library_name{ith_library}    = 'PathClass_v2023_10_18';
+library_name{ith_library}    = 'PathClass_v2024_03_14';
 library_folders{ith_library} = {'Functions'};                                
-library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_PathTools_PathClassLibrary/archive/refs/tags/PathClass_v2023_10_18.zip';
+library_url{ith_library}     = 'https://github.com/ivsg-psu/PathPlanning_PathTools_PathClassLibrary/archive/refs/tags/PathClass_v2024_03_14.zip';
 
 ith_library = ith_library+1;
 library_name{ith_library}    = 'GPSClass_v2023_06_29';
@@ -63,7 +66,7 @@ library_url{ith_library}     = 'https://github.com/ivsg-psu/FieldDataCollection_
 
 
 %% Clear paths and folders, if needed
-if 1==0
+if 1==1
     clear flag_ParseXODR_Folders_Initialized;
     fcn_INTERNAL_clearUtilitiesFromPathAndFolders;
 end

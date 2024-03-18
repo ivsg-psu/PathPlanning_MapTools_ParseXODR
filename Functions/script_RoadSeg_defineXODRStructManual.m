@@ -435,6 +435,11 @@ ODRStruct.OpenDRIVE.header.Attributes.north = num2str(axlims(4));
 % Restore the proportionality of the axes
 axis equal
 
+
+
+
+
+
 % Run a function to return the various segment boundaries for the road geometry
 [RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.road{1});
 
