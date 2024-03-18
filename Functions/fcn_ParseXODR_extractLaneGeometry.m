@@ -4,7 +4,7 @@ function [stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_ex
 %
 % FORMAT:
 %
-%       [sPts,tLeft,tCenter,tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad,maxPlotGap, (fig_num))
+%       [stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad,maxPlotGap, (fig_num))
 %
 % INPUTS:
 %
@@ -23,12 +23,12 @@ function [stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_ex
 %
 % OUTPUTS:
 %
-%      sPts: a vector of s coordinates that define the spacing for the
+%      stationPoints: a vector of s coordinates that define the spacing for the
 %         matrices of t coordinates, taking into account the specified
 %         maximum plotting gap
 %      tLeft: a matrix of t coordinates associated with lane boundaries to
 %         the left of the center lane line of the road
-%      tCenter: a vector of t coordinates associated with the center lane
+%      transverseCenterOffsets: a vector of t coordinates associated with the center lane
 %         line of the road
 %      tRight: a matrix of t coordinates associated with lane boundaries to
 %         the right of the center lane line of the road
@@ -155,12 +155,10 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 tLeft = nan(length(stationPoints),10);
 tRight = nan(length(stationPoints),10);
 
-% Set up a cell array to store the indices of the station points associated
-% with each lane segment
-stationIndices = {};
 
+% Show what we are doing in the workspze
 if flag_do_debug
-    fprintf(1,'Starting lane extraction routine for road %s\n',ODRRoad.Attributes.id);
+    fprintf(1,'Starting lane extraction routine for road ID: %s\n',ODRRoad.Attributes.id);
 end
 
 % Using the lane offset structure, determine whether there are any offsets
@@ -168,26 +166,37 @@ end
 if isfield(ODRRoad.lanes,'laneOffset')
     laneOffsetStructure = ODRRoad.lanes.laneOffset;
     transverseCenterOffsets = fcn_INTERNAL_extractLaneOffset(laneOffsetStructure, stationPoints, flag_do_debug);
+else
+    transverseCenterOffsets = 0*stationPoints;
 end
 
 % Get the lane linkages between sections. This loops through all the
 % laneSections and in each laneSection, finds which lane IDs in one section
-% are connected to which lane IDs in other sections
+% are connected to which lane IDs in other sections. This produces two
+% matricies wherein the rows indicate the presence and ordering of lanes in
+% a section, and the column numbering indicates the ID of lanes that are
+% active.
 [laneLinksLeft, laneLinksRight] = fcn_INTERNAL_extractLaneLinkagesFromLanes(ODRRoad.lanes);
 
 if flag_do_debug
-    fprintf(1,'LaneLinksLeft: \n');    
+    fprintf(1,'LaneLinksLeft: \n');
     disp(laneLinksLeft);
-    fprintf(1,'LaneLinksRight: \n');    
+    fprintf(1,'LaneLinksRight: \n');
     disp(laneLinksRight);
 end
 
+% Set up a cell array to store the indices of the station points associated
+% with each lane segment
+stationIndices = {};
 
 % Iterate through all of the lane sections
 NlaneSections = length(ODRRoad.lanes.laneSection);
 for laneSectionIndex = 1:NlaneSections
+
     % Check for child lanes not in a left, center, or right container
     expected_fields = {'left','center','right','Attributes'};
+
+    %%% FUNCTIONALIZE START HERE
     current_fields = fieldnames(ODRRoad.lanes.laneSection{laneSectionIndex});
     [~,in_expected,in_tested] = setxor(expected_fields,current_fields);
     if ~isempty(in_tested)
@@ -195,25 +204,28 @@ for laneSectionIndex = 1:NlaneSections
             for ith_field = 1:length(in_tested)
                 bad_index = in_tested(ith_field);
                 unexpected_fieldName = current_fields{bad_index};
-                fprintf(1,'In road %s, lane segment %d contains a lane or field outside of the expected <left>,<center>, and <right> containers, called %s. Ignoring it.\n',...
+                fprintf(1,'In road ID: %s, lane segment %d contains a lane or field outside of the expected <left>,<center>, and <right> containers, called: %s. Ignoring it.\n',...
                     ODRRoad.Attributes.id,laneSectionIndex, unexpected_fieldName);
             end
         end
     end
-
+    % Now check if any are missing
     if ~isempty(in_expected)
         if flag_do_debug
             for ith_field = 1:length(in_expected)
                 bad_index = in_expected(ith_field);
                 unexpected_fieldName = current_fields{bad_index};
-                fprintf(1,'In road %s, lane segment %d is missing a lane within the expected <left>,<center>, and <right> containers, specifically %s. Ignoring it.\n',...
+                fprintf(1,'In road ID: %s, lane segment %d is missing a lane within the expected <left>,<center>, and <right> containers, specifically: %s. Ignoring it.\n',...
                     ODRRoad.Attributes.id,laneSectionIndex, unexpected_fieldName);
             end
         end
     end
+    %%% END FUNCTIONALIZE
 
+    %%% MOVE INTO FUNCTION
     % Determine the start and end points of the lane section
     laneSecStart = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.Attributes.s);
+
     % The station coordinate of the lane section end will be the start of
     % the next lane section, unless it's the last lane section. If that's
     % the case, use the station coordinate of the end of the road (the
@@ -223,97 +235,12 @@ for laneSectionIndex = 1:NlaneSections
     else
         laneSecEnd = str2double(ODRRoad.lanes.laneSection{laneSectionIndex+1}.Attributes.s);
     end
+    %%% END MOVE
 
-
-
-    %%% REPLACE HERE
-    if isfield(ODRRoad.lanes.laneSection{laneSectionIndex},'left')
-        % Iterate through all of the left lane elements
-        NleftLanesInCurrentLaneSection = length(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane);
-        for leftLaneIdx = 1:NleftLanesInCurrentLaneSection
-            % Get the lane index from the XODR structure
-            laneID = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.Attributes.id);
-            laneDataIndex = find(laneLinksLeft(laneSectionIndex,:) == laneID);
-            if ~isempty(laneDataIndex)
-                if flag_do_debug
-                    fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSectionIndex);
-                end
-                Nwidths = length(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width);
-                if ~iscell(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width)
-                    ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width};
-                end
-                for widthIdx = 1:Nwidths
-                    a = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.a);
-                    b = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.b);
-                    c = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.c);
-                    d = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.d);
-                    sOffset = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx}.Attributes.sOffset);
-                    widthStart = laneSecStart + sOffset;
-                    if widthIdx == Nwidths
-                        widthEnd = laneSecEnd;
-                    else
-                        widthEnd = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.left.lane{leftLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
-                    end
-                    % Determine which of the indices in the s-direction are affected by
-                    % this offset descriptor
-                    stationIndices{laneSectionIndex} = find(stationPoints >= widthStart & stationPoints <= widthEnd); %#ok<AGROW>
-                    % Now calculate the t coordinate of the left line at each of the
-                    % affected points
-                    ds = stationPoints(stationIndices{laneSectionIndex})-widthStart;
-                    tLeft(stationIndices{laneSectionIndex},laneDataIndex) = a + b*ds + c*ds.^2 + d*ds.^3;
-                    if flag_do_debug
-                        fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
-                    end
-                end
-            end
-        end
-    end
-    %%% END REPLACE
-
-    %%% REPLACE HERE
-    if isfield(ODRRoad.lanes.laneSection{laneSectionIndex},'right')
-        % Iterate through all of the right lane elements
-        NrightLanes = length(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane);
-        for rightLaneIdx = 1:NrightLanes
-            % Get the lane index from the XODR structure
-            laneID = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.Attributes.id);
-            laneDataIndex = find(laneLinksRight(laneSectionIndex,:) == -laneID); % negative here due to the sign of the lanes on the right
-            if ~isempty(laneDataIndex)
-
-                if flag_do_debug
-                    fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSectionIndex);
-                end
-                Nwidths = length(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width);
-                if ~iscell(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width)
-                    ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width = {ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width};
-                end
-                for widthIdx = 1:Nwidths
-                    a = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.a);
-                    b = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.b);
-                    c = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.c);
-                    d = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.d);
-                    sOffset = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx}.Attributes.sOffset);
-                    widthStart = laneSecStart + sOffset;
-                    if widthIdx == Nwidths
-                        widthEnd = laneSecEnd;
-                    else
-                        widthEnd = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.right.lane{rightLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
-                    end
-                    % Determine which of the indices in the s-direction are affected by
-                    % this offset descriptor
-                    stationIndices{laneSectionIndex} = find(stationPoints >= widthStart & stationPoints <= widthEnd); %#ok<AGROW>
-                    % Now calculate the t coordinate of the left line at each of the
-                    % affected points
-                    ds = stationPoints(stationIndices{laneSectionIndex})-widthStart;
-                    tRight(stationIndices{laneSectionIndex},laneDataIndex) = -(a + b*ds + c*ds.^2 + d*ds.^3);
-                    if flag_do_debug
-                        fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
-                    end
-                end
-            end
-        end
-    end
-    %%% END REPLACEMENT
+    % Calculate the transverse coordinates of the outside (away from
+    % center) lane position for each of the lanes
+    [tLeft, stationIndices]  = fcn_INTERNAL_extractLaneBoundariesFromLaneSection(tLeft,  ODRRoad.lanes.laneSection{laneSectionIndex},  'left', laneLinksLeft,  laneSectionIndex, NlaneSections, laneSecStart, laneSecEnd,  stationPoints, stationIndices, 1, flag_do_debug);
+    [tRight, stationIndices] = fcn_INTERNAL_extractLaneBoundariesFromLaneSection(tRight, ODRRoad.lanes.laneSection{laneSectionIndex}, 'right', laneLinksRight, laneSectionIndex, NlaneSections, laneSecStart, laneSecEnd,  stationPoints, stationIndices, -1, flag_do_debug);
 
 end
 
@@ -335,8 +262,9 @@ for i = 1:length(stationIndices)
         tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
     end
 end
+
 % Add any centerline offset that exists for the lanes
-tLeft = tLeft + transverseCenterOffsets;
+tLeft = tLeft   + transverseCenterOffsets;
 tRight = tRight + transverseCenterOffsets;
 
 % Provide some indication of completion
@@ -374,60 +302,29 @@ if flag_do_plots
     title('XY view')
 
 
+    % Plot the reference line:
     % Obtain the reference line for the road by converting a line with
     % t-coordinate of zero for each of the test station points into (E,N)
     % coordinates
     [xRef,yRef] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,zeros(size(stationPoints)));
-
-    % Determine the number of lanes in the given road
-    NlanesL = size(tLeft,2);
-    NlanesR = size(tRight,2);
-
     % Now convert each of the paths (a two-column matrix of (X,Y) points) into
     % a traversal structure consistent with the PSU path library
     roadRef.traversal{1} = fcn_Path_convertPathToTraversalStructure([xRef yRef]);
-    [xCenter,yCenter] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,transverseCenterOffsets);
-    laneDataCenter.traversal{1} = fcn_Path_convertPathToTraversalStructure([xCenter yCenter]);
-
     % Use the PSU path traversals plotting utility to plot the reference line and the center lane
     hRef = fcn_Path_plotTraversalsXY(roadRef,fig_num);
-    hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,fig_num);
     % Set the line properties of the plotted lines
     set(hRef,'linewidth',2,'linestyle',':','marker','none','color',[0.6 0.6 0.6]);
+
+
+    % Plot the center line using same process
+    [xCenter,yCenter] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,transverseCenterOffsets);
+    laneDataCenter.traversal{1} = fcn_Path_convertPathToTraversalStructure([xCenter yCenter]);
+    hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,fig_num);
     set(hCenter,'linewidth',2,'linestyle','-.','marker','none','color','k');
 
-
-    if NlanesL > 0
-        % Preallocate the (X,Y) lane boundary matrices for speed
-        xLeft = nan(size(tLeft));
-        yLeft = nan(size(tLeft));
-        % Now convert each of the paths (a two-column matrix of (X,Y) points) into
-        % a traversal structure consistent with the PSU path library
-        for laneIdx = 1:NlanesL
-            [xLeft(:,laneIdx),yLeft(:,laneIdx)] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,tLeft(:,laneIdx));
-            laneDataLeft.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xLeft(:,laneIdx) yLeft(:,laneIdx)]);
-        end
-        % Use the PSU path traversals plotting utility to plot the lane boundaries
-        hLeft = fcn_Path_plotTraversalsXY(laneDataLeft,fig_num);
-        % Set the line properties of the plotted line
-        set(hLeft,'linewidth',1,'linestyle','-','marker','.');
-    end
-
-    if NlanesR > 0
-        % Preallocate the (X,Y) lane boundary matrices for speed
-        xRight = nan(size(tRight));
-        yRight = nan(size(tRight));
-        % Now convert each of the paths (a two-column matrix of (X,Y) points) into
-        % a traversal structure consistent with the PSU path library
-        for laneIdx = 1:NlanesR
-            [xRight(:,laneIdx),yRight(:,laneIdx)] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,tRight(:,laneIdx));
-            laneDataRight.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xRight(:,laneIdx) yRight(:,laneIdx)]);
-        end
-        % Use the PSU path traversals plotting utility to plot the lane boundaries
-        hRight = fcn_Path_plotTraversalsXY(laneDataRight,fig_num);
-        % Set the line properties of the plotted line
-        set(hRight,'linewidth',1,'linestyle','-','marker','.');
-    end
+    % Plot the left and right side lanes
+    fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tLeft,   1, fig_num);
+    fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tRight, -1, fig_num);
 
     % Make axis slightly larger?
     if flag_rescale_axis
@@ -439,6 +336,7 @@ if flag_do_plots
         axis([temp(1)-percent_larger*axis_range_x, temp(2)+percent_larger*axis_range_x,  temp(3)-percent_larger*axis_range_y, temp(4)+percent_larger*axis_range_y]);
     end
 
+    %% St coordinates plotting
     % Plot the lane lines in (s,t) coordinates for illustrative/debugging
     % purposes
     figure(fig_num+1)
@@ -447,21 +345,20 @@ if flag_do_plots
     grid on
 
     title('St coordinate view');
+    xlabel('S coordinate [m]')
+    ylabel('t coordinate [m]')
+
+    % Plot the centerline
     hC = plot(stationPoints,transverseCenterOffsets,'k--','linewidth',1.5);
     plotHandles = hC;
     plotLabels = {'Center Lane'};
-    if NlanesL > 0
-        hL = plot(stationPoints,tLeft,'r--','linewidth',1.5);
-        plotHandles = [plotHandles; hL];
-        plotLabels{end+1} = 'Left Lanes';
-    end
-    if NlanesR > 0
-        hR = plot(stationPoints,tRight,'b--','linewidth',1.5);
-        plotHandles = [plotHandles; hR];
-        plotLabels{end+1} = 'Right Lanes';
-    end
-    xlabel('s coordinate')
-    ylabel('t coordinate')
+
+    % Plot the left side
+    [plotHandles, plotLabels] = fcn_INTERNAL_plotLaneSidesSt(stationPoints, tLeft, 1, plotHandles, plotLabels);
+
+    % Plot the right side
+    [plotHandles, plotLabels] = fcn_INTERNAL_plotLaneSidesSt(stationPoints, tRight, -1, plotHandles, plotLabels);
+
     legend(plotHandles,plotLabels)
 
 
@@ -494,6 +391,98 @@ end % Ends main function
 %
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+
+%% fcn_INTERNAL_plotLaneSidesXY
+function fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tSide, multiplier_for_side, fig_num)
+
+transverse_nudge = 1; % Units are meters
+station_nudge = 1; % Units are meters
+
+NlanesSide = size(tSide,2);
+if NlanesSide > 0
+    % Preallocate the (X,Y) lane boundary matrices for speed
+    xSide = nan(size(tSide));
+    ySide = nan(size(tSide));
+
+    % Now convert each of the paths (a two-column matrix of (X,Y) points) into
+    % a traversal structure consistent with the PSU path library
+    xText = cell(NlanesSide,1);
+    yText = cell(NlanesSide,1);
+    for laneIdx = 1:NlanesSide
+        [xSide(:,laneIdx),ySide(:,laneIdx)] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,stationPoints,tSide(:,laneIdx));
+        laneDataLeft.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xSide(:,laneIdx) ySide(:,laneIdx)]);
+
+        % Find the location where to number the lane
+        % TO do this, find where lanes appear using the NaN values. Any
+        % place changing from NaN to a numeric value is where a lane is
+        % appearing
+        locations_nan = [1; isnan(laneDataLeft.traversal{laneIdx}.X)];
+        indicies_changing_from_nan_to_numeric = find(diff(locations_nan)<0);
+
+        station_points_for_text = stationPoints(indicies_changing_from_nan_to_numeric) + station_nudge;
+        transverse_points_for_text = tSide(indicies_changing_from_nan_to_numeric,laneIdx) - multiplier_for_side*transverse_nudge;
+        [xText{laneIdx},yText{laneIdx}] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRRoad,station_points_for_text,transverse_points_for_text);
+    end
+
+    % Use the PSU path traversals plotting utility to plot the lane boundaries
+    hLeft = fcn_Path_plotTraversalsXY(laneDataLeft,fig_num);
+    % Set the line properties of the plotted line
+    set(hLeft,'linewidth',1,'linestyle','-','marker','.');
+
+    % Add text labels 
+    for laneIdx = 1:NlanesSide
+        if multiplier_for_side==1
+            text(xText{laneIdx},yText{laneIdx},sprintf('L%.0d',laneIdx));
+        else
+            text(xText{laneIdx},yText{laneIdx},sprintf('R%.0d',laneIdx));
+        end
+    end
+
+end
+end % Ends fcn_INTERNAL_plotLaneSidesXY
+
+%% fcn_INTERNAL_plotLaneSidesSt
+function [plotHandles, plotLabels] = fcn_INTERNAL_plotLaneSidesSt(stationPoints, tSide, multiplier_for_side, plotHandles, plotLabels)
+
+transverse_nudge = 1; % Units are meters
+station_nudge = 1; % Units are meters
+
+if multiplier_for_side==1
+    color_type = 'b--'; % Left
+    legend_label = 'Left Lanes';
+else
+    color_type = 'r--'; % Right
+    legend_label = 'Right Lanes';
+end
+
+NlanesSide = size(tSide,2);
+if NlanesSide > 0    
+    hPlot = plot(stationPoints,tSide,color_type,'linewidth',1.5);
+    plotHandles = [plotHandles; hPlot(1)];
+    plotLabels{end+1} = legend_label;
+
+
+    for laneIdx = 1:NlanesSide
+        % Find the location where to number the lane
+        % TO do this, find where lanes appear using the NaN values. Any
+        % place changing from NaN to a numeric value is where a lane is
+        % appearing
+        locations_nan = [1; isnan(tSide(:,laneIdx))];
+        indicies_changing_from_nan_to_numeric = find(diff(locations_nan)<0);
+
+        station_points_for_text = stationPoints(indicies_changing_from_nan_to_numeric) + station_nudge;
+        transverse_points_for_text = tSide(indicies_changing_from_nan_to_numeric,laneIdx) - multiplier_for_side*transverse_nudge;
+
+        if multiplier_for_side==1
+            text(station_points_for_text,transverse_points_for_text,sprintf('L%.0d',laneIdx));
+        else
+            text(station_points_for_text,transverse_points_for_text,sprintf('R%.0d',laneIdx));
+        end
+    end
+
+end
+end % Ends fcn_INTERNAL_plotLaneSidesSt
+
 
 %% fcn_INTERNAL_extractLaneOffset
 function tCenter = fcn_INTERNAL_extractLaneOffset(laneOffsetStructure, stationPoints, flag_do_debug)
@@ -563,7 +552,7 @@ laneLinksRight = [];
 for laneSectionIndex = 1:NlaneSections
     % Get the lane linkages between sections
     [laneLinksLeft,  leftLanesStarted]  = fcn_INTERNAL_extractLaneLinkageFromSide(lanes.laneSection{laneSectionIndex}, laneSectionIndex, 'left', leftLanesStarted, laneLinksLeft);
-    [laneLinksRight, rightLanesStarted] = fcn_INTERNAL_extractLaneLinkageFromSide(lanes.laneSection{laneSectionIndex}, laneSectionIndex, 'right', rightLanesStarted, laneLinksRight);    
+    [laneLinksRight, rightLanesStarted] = fcn_INTERNAL_extractLaneLinkageFromSide(lanes.laneSection{laneSectionIndex}, laneSectionIndex, 'right', rightLanesStarted, laneLinksRight);
 end % ends looping through laneSections
 
 end  % ends fcn_INTERNAL_extractLaneLinkagesFromLanes
@@ -581,13 +570,17 @@ switch lower(sideString)
         error('Unknown side type given.')
 end
 
+% Pass the flag through - this is the default unless it is changed in the
+% code that follows
+flagLanesStarted = flagLanesStartedPreviously;
+
 if isfield(laneSection,sideString)
     % Determine the number of side lanes there are in the current section
     NsideLanesInCurrentLaneSection = length(laneSection.(sideString).lane);
     if ~flagLanesStartedPreviously
         % Code to run only for lane segments following the first definition of
         % side lanes
-         
+
         flagLanesStarted = 1; % Set the flag that side lanes have started
 
         % Initialize the current section with incrementally increasing lane
@@ -595,8 +588,6 @@ if isfield(laneSection,sideString)
         updatedLaneLinks(laneSectionIndex,:) = 1:NsideLanesInCurrentLaneSection;
 
     else
-        % Pass the flag through - it has already started
-        flagLanesStarted = flagLanesStartedPreviously;
 
         % Initialize any new rows with NaN values, including the one for the
         % current section
@@ -642,4 +633,48 @@ else % Field is not found
 end
 end % Ends fcn_INTERNAL_extractLaneLinkageFromSide
 
-%%
+%% fcn_INTERNAL_extractLaneBoundariesFromLaneSection
+function [tLeft, stationIndices] = fcn_INTERNAL_extractLaneBoundariesFromLaneSection(tLeft, laneSection, sideString, laneLinksLeft, laneSectionIndex, NlaneSections, laneSecStart, laneSecEnd, stationPoints, stationIndices, side_multiplier, flag_do_debug)
+if isfield(laneSection,sideString)
+    % Iterate through all of the left lane elements
+    NleftLanesInCurrentLaneSection = length(laneSection.(sideString).lane);
+    for leftLaneIdx = 1:NleftLanesInCurrentLaneSection
+        % Get the lane index from the XODR structure
+        laneID = str2double(laneSection.(sideString).lane{leftLaneIdx}.Attributes.id);
+        laneDataIndex = find(laneLinksLeft(laneSectionIndex,:) == side_multiplier*laneID);
+        if ~isempty(laneDataIndex)
+            if flag_do_debug
+                fprintf(1,'   Processing lane number %d in lane section %d\n',laneID,laneSectionIndex);
+            end
+            Nwidths = length(laneSection.(sideString).lane{leftLaneIdx}.width);
+            if ~iscell(laneSection.(sideString).lane{leftLaneIdx}.width)
+                laneSection.(sideString).lane{leftLaneIdx}.width = {laneSection.(sideString).lane{leftLaneIdx}.width};
+            end
+            for widthIdx = 1:Nwidths
+                a = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx}.Attributes.a);
+                b = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx}.Attributes.b);
+                c = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx}.Attributes.c);
+                d = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx}.Attributes.d);
+                sOffset = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx}.Attributes.sOffset);
+                widthStart = laneSecStart + sOffset;
+                if widthIdx == Nwidths
+                    widthEnd = laneSecEnd;
+                else
+                    widthEnd = str2double(laneSection.(sideString).lane{leftLaneIdx}.width{widthIdx+1}.Attributes.sOffset);
+                end
+                % Determine which of the indices in the s-direction are affected by
+                % this offset descriptor
+                stationIndices{laneSectionIndex} = find(stationPoints >= widthStart & stationPoints <= widthEnd); %#ok<AGROW>
+                % Now calculate the t coordinate of the left line at each of the
+                % affected points
+                ds = stationPoints(stationIndices{laneSectionIndex})-widthStart;
+                tLeft(stationIndices{laneSectionIndex},laneDataIndex) = side_multiplier*(a + b*ds + c*ds.^2 + d*ds.^3);
+                if flag_do_debug
+                    fprintf(1,'   Determined lane %d edge from stations %d to %d\n',laneID,widthStart,widthEnd);
+                end
+            end
+        end
+    end
+end
+
+end % Ends fcn_INTERNAL_extractLaneBoundariesFromLaneSection
