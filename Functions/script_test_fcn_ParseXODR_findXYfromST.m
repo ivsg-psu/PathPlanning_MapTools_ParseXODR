@@ -1,3 +1,4 @@
+%% script_test_fcn_ParseXODR_findXYfromST.m
 % A script to test the execution of fcn_ParseXODR_findXYfromST
 
 % This script was written by C. Beal
@@ -26,7 +27,7 @@ axis equal
 
 % Run the function with the plotting enabled by sending in the figure
 % handle
-[x1,y1,h1] = fcn_RoadSeg_findXYfromST('arc',x0,y0,h0,s0,l0,s,0,K0);
+[x1,y1,h1] = fcn_ParseXODR_findXYfromST('arc',x0,y0,h0,s0,l0,s,0,K0);
  
 % Plot the results returned from the function
 figure(fHand)
@@ -44,7 +45,7 @@ s = (s0:0.5:l0)';
 t = linspace(1,4,length(s));
 
 % Run the function without plotting
-[x2,y2,h2] = fcn_RoadSeg_findXYfromST('spiral',x0,y0,h0,s0,l0,s,t,K0,KF);
+[x2,y2,h2] = fcn_ParseXODR_findXYfromST('spiral',x0,y0,h0,s0,l0,s,t,K0,KF);
 
 % Plot the results returned from the function
 figure(fHand)

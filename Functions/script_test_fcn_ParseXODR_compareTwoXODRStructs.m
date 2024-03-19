@@ -7,7 +7,6 @@
 % -- added flag_initialize_only_required_fields option
 
 close all;
-clc;
 
 
 

@@ -1,153 +1,261 @@
-%% script_test_fcn_ParseXODR_extractLaneGeometry
-% Script to test the parsing of lane geometries from an xODR structure,
-% using the various functions from this library as well as the PSU path
-% library (for converting to traversals and plotting)
-
-% This script was written by C. Beal and maintained by S. Brennan
-% Questions or comments? sbrennan@psu.edu
-
+% script_test_fcn_ParseXODR_extractLaneGeometry2
+% Script to extract LaneGeometry in an XODR file.
+% Tests function fcn_ParseXODR_extractLaneGeometry
+%
+% This script was written by S. Brennan from
+% "script_test_fcn_ParseXODR_plotXODRinENU" written by C. Beal Questions or comments?
+% sbrennan@psu.edu
+%
 % Revision history:
-%     2022_04_01
+%     2024_03_18
 %     -- wrote the code
-%     2022-05-07
-%     -- revised the code to use newly created functions for parsing lanes
-%     as well as existing functions within the PSU path library
-%     2024_03_09 - S. Brennan
-%     -- renamed function from fcn_ParseXODR_extractLaneGeometry
 
-clearvars
 close all
 
 
+%% workzone_100m_Lane_Offset
+fig_num = 1;
+figure(fig_num)
+clf
 
-% Load an example file from a static file path
-% Ex_Simple_Lane_Offset
-% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
-
-% Ex_Simple_Lane_Offset_Reversed
-% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
-
-% Ex_Complex_Lane_Offset
-% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
-
-% workzone_100m_Lane_Offset
-% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
-
-% ODR Viewer Example File
-% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
-ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
-
-% Check the structure
+example_file = 'workzone_100m_Lane_Offset.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 
-% Set up a plot for the lane lines in (E,N) coordinates
-figure(1)
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==3);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==2);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+%% Ex_Complex_Lane_Offset
+fig_num = 2;
+figure(fig_num)
 clf
-hold on
-grid on
-axis equal
-xlabel('East (m)')
-ylabel('North (m)')
-title('XY view')
 
-Nroads = length(ODRStruct.OpenDRIVE.road);
-for roadInd = 1:Nroads
-    current_road = ODRStruct.OpenDRIVE.road{roadInd};
-
-    % Extract the path coordinate lane information from the XODR file for the
-    % first road in the specified XODR file
-    [sPts,tLeft,tCenter,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1);
-
-    % Obtain the reference line for the road by converting a line with
-    % t-coordinate of zero for each of the test station points into (E,N)
-    % coordinates
-    [xRef,yRef] = fcn_RoadSeg_findXYfromSTandODRRoad(current_road,sPts,zeros(size(sPts)));
-
-    % Determine the number of lanes in the given road
-    NlanesL = size(tLeft,2);
-    NlanesR = size(tRight,2);
-
-    % Now convert each of the paths (a two-column matrix of (X,Y) points) into
-    % a traversal structure consistent with the PSU path library
-    roadRef.traversal{1} = fcn_Path_convertPathToTraversalStructure([xRef yRef]);
-    [xCenter,yCenter] = fcn_RoadSeg_findXYfromSTandODRRoad(current_road,sPts,tCenter);
-    laneDataCenter.traversal{1} = fcn_Path_convertPathToTraversalStructure([xCenter yCenter]);
-
-    % Use the PSU path traversals plotting utility to plot the reference line and the center lane
-    hRef = fcn_Path_plotTraversalsXY(roadRef,1);
-    hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,1);
-    % Set the line properties of the plotted lines
-    set(hRef,'linewidth',2,'linestyle',':','marker','none','color',[0.6 0.6 0.6]);
-    set(hCenter,'linewidth',2,'linestyle','-.','marker','none','color','k');
+example_file = 'Ex_Complex_Lane_Offset.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 
 
-    if NlanesL > 0
-        % Preallocate the (X,Y) lane boundary matrices for speed
-        xLeft = nan(size(tLeft));
-        yLeft = nan(size(tLeft));
-        % Now convert each of the paths (a two-column matrix of (X,Y) points) into
-        % a traversal structure consistent with the PSU path library
-        for laneIdx = 1:NlanesL
-            [xLeft(:,laneIdx),yLeft(:,laneIdx)] = fcn_RoadSeg_findXYfromSTandODRRoad(current_road,sPts,tLeft(:,laneIdx));
-            laneDataLeft.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xLeft(:,laneIdx) yLeft(:,laneIdx)]);
-        end
-        % Use the PSU path traversals plotting utility to plot the lane boundaries
-        hLeft = fcn_Path_plotTraversalsXY(laneDataLeft,1);
-        % Set the line properties of the plotted line
-        set(hLeft,'linewidth',1,'linestyle','-','marker','.');
-    end
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
 
-    if NlanesR > 0
-        % Preallocate the (X,Y) lane boundary matrices for speed
-        xRight = nan(size(tRight));
-        yRight = nan(size(tRight));
-        % Now convert each of the paths (a two-column matrix of (X,Y) points) into
-        % a traversal structure consistent with the PSU path library
-        for laneIdx = 1:NlanesR
-            [xRight(:,laneIdx),yRight(:,laneIdx)] = fcn_RoadSeg_findXYfromSTandODRRoad(current_road,sPts,tRight(:,laneIdx));
-            laneDataRight.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xRight(:,laneIdx) yRight(:,laneIdx)]);
-        end
-        % Use the PSU path traversals plotting utility to plot the lane boundaries
-        hRight = fcn_Path_plotTraversalsXY(laneDataRight,1);
-        % Set the line properties of the plotted line
-        set(hRight,'linewidth',1,'linestyle','-','marker','.');
-    end
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==4);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==4);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+%% Ex_Simple_Lane_Offset_Reversed
+fig_num = 3;
+figure(fig_num)
+clf
+
+example_file = 'Ex_Simple_Lane_Offset_Reversed.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 
 
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
 
-    if 1 == roadInd
-        % For the first road, plot the lane lines in (s,t) coordinates for illustrative/debugging
-        % purposes
-        figure(2)
-        clf
-        hold on
-        grid on
+flag_plot_road_geometry = [];
 
-        title('Road 1 St coordinate view');
-        hC = plot(sPts,tCenter,'k--','linewidth',1.5);
-        plotHandles = hC;
-        plotLabels = {'Center Lane'};
-        if NlanesL > 0
-            hL = plot(sPts,tLeft,'r--','linewidth',1.5);
-            plotHandles = [plotHandles; hL];
-            plotLabels{end+1} = 'Left Lanes';
-        end
-        if NlanesR > 0
-            hR = plot(sPts,tRight,'b--','linewidth',1.5);
-            plotHandles = [plotHandles; hR];
-            plotLabels{end+1} = 'Right Lanes';
-        end
-        xlabel('s coordinate')
-        ylabel('t coordinate')
-        legend(plotHandles,plotLabels)
-    else
-        figure(2)
-        hC = plot(sPts,tCenter,'k--','linewidth',1.5);
-        if NlanesL > 0
-            hL = plot(sPts,tLeft,'r--','linewidth',1.5);
-        end
-        if NlanesR > 0
-            hR = plot(sPts,tRight,'b--','linewidth',1.5);
-        end
-    end
-end
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==3);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==3);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+%% Ex_Simple_Lane_Offset
+fig_num = 4;
+figure(fig_num)
+clf
+
+example_file = 'Ex_Simple_Lane_Offset.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==3);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==3);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+%% Ex_Simple_Lane_Gains
+fig_num = 5;
+figure(fig_num)
+clf
+
+example_file = 'Ex_Simple_Lane_Gains.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==3);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==3);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+
+%% workzone_50m_curve_barrels
+fig_num = 6;
+figure(fig_num)
+clf
+
+example_file = 'workzone_50m_curve_barrels.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==2);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==2);
+
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');
+
+%% testTrack_outerTrack
+fig_num = 7;
+figure(fig_num)
+clf
+
+example_file = 'testTrack_outerTrack.xodr';
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
+ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+
+
+% Choose a minimum spacing of the points defining the road geometries
+minPlotGap = 0.2; % (m)
+
+flag_plot_road_geometry = [];
+
+% Call the export function
+current_road = ODRStruct.OpenDRIVE.road{1};
+
+% Extract the path coordinate lane information from the XODR file for the
+% first road in the specified XODR file
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+
+
+assert(length(stationPoints(:,1))>1);
+assert(length(stationPoints(1,:))==1);
+assert(length(tLeft(:,1))>1);
+assert(length(tLeft(1,:))==2);
+assert(length(transverseCenterOffsets(:,1))>1);
+assert(length(transverseCenterOffsets(1,:))==1);
+assert(length(tRight(:,1))>1);
+assert(length(tRight(1,:))==2);
+% Call the plotting function
+fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num);
+title(sprintf('%s',example_file),'Interpreter','none');

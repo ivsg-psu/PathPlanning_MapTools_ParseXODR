@@ -58,7 +58,7 @@ function [x,y,h] = fcn_RoadSeg_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,varargin
 % Questions or comments? cbeal@bucknell.edu
 
 % Revision history:
-%     2022_03_20
+%     2022_03_20 - C. Beal
 %     -- wrote the code
 
 flag_do_debug = 0; % Flag to plot the results for debugging

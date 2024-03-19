@@ -97,7 +97,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Compute the x and y coordinates from the provided vector of s coordinates
-x = (sin(K0*s(:) + h0) - sin(h0))/K0 + x0;
+x = ( sin(K0*s(:) + h0) - sin(h0))/K0 + x0;
 y = (-cos(K0*s(:) + h0) + cos(h0))/K0 + y0;
 
 % Check to see if the user has provided a figure handle to plot into. If

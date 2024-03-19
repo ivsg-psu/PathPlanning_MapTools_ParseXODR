@@ -185,6 +185,10 @@ if flag_do_debug
     disp(laneLinksRight);
 end
 
+% Find the stations where each lane section starts and ends
+[laneSecStart,laneSecEnd] = fcn_INTERNAL_extractLaneStationStartEndFromLanes(...
+    ODRRoad.lanes, lengthOfRoad);
+
 % Set up a cell array to store the indices of the station points associated
 % with each lane segment
 stationIndices = {};
@@ -192,55 +196,54 @@ stationIndices = {};
 % Iterate through all of the lane sections
 NlaneSections = length(ODRRoad.lanes.laneSection);
 for laneSectionIndex = 1:NlaneSections
+    currentLaneSection = ODRRoad.lanes.laneSection{laneSectionIndex};
 
     % Check for child lanes not in a left, center, or right container
-    expected_fields = {'left','center','right','Attributes'};
+    required_fields = {'left','center','right','Attributes'};
+    optional_fields = {'userData'};
+    flag_verbose = flag_do_debug;
+    flag_good_match = fcn_ParseXODR_checkStructureFields(currentLaneSection, required_fields, optional_fields, flag_verbose);
 
-    %%% FUNCTIONALIZE START HERE
-    current_fields = fieldnames(ODRRoad.lanes.laneSection{laneSectionIndex});
-    [~,in_expected,in_tested] = setxor(expected_fields,current_fields);
-    if ~isempty(in_tested)
-        if flag_do_debug
-            for ith_field = 1:length(in_tested)
-                bad_index = in_tested(ith_field);
-                unexpected_fieldName = current_fields{bad_index};
-                fprintf(1,'In road ID: %s, lane segment %d contains a lane or field outside of the expected <left>,<center>, and <right> containers, called: %s. Ignoring it.\n',...
-                    ODRRoad.Attributes.id,laneSectionIndex, unexpected_fieldName);
-            end
-        end
-    end
-    % Now check if any are missing
-    if ~isempty(in_expected)
-        if flag_do_debug
-            for ith_field = 1:length(in_expected)
-                bad_index = in_expected(ith_field);
-                unexpected_fieldName = current_fields{bad_index};
-                fprintf(1,'In road ID: %s, lane segment %d is missing a lane within the expected <left>,<center>, and <right> containers, specifically: %s. Ignoring it.\n',...
-                    ODRRoad.Attributes.id,laneSectionIndex, unexpected_fieldName);
-            end
-        end
-    end
-    %%% END FUNCTIONALIZE
+    if flag_do_debug && (0==flag_good_match)
+        fprintf(1,'In road ID: %s, lane segment %d contains a lane or field outside of the required or optional fields.\n',...
+            ODRRoad.Attributes.id,laneSectionIndex);
 
-    %%% MOVE INTO FUNCTION
-    % Determine the start and end points of the lane section
-    laneSecStart = str2double(ODRRoad.lanes.laneSection{laneSectionIndex}.Attributes.s);
-
-    % The station coordinate of the lane section end will be the start of
-    % the next lane section, unless it's the last lane section. If that's
-    % the case, use the station coordinate of the end of the road (the
-    % length) to determine the end of the section
-    if laneSectionIndex == NlaneSections
-        laneSecEnd = str2double(ODRRoad.Attributes.length);
-    else
-        laneSecEnd = str2double(ODRRoad.lanes.laneSection{laneSectionIndex+1}.Attributes.s);
     end
-    %%% END MOVE
+
+   
 
     % Calculate the transverse coordinates of the outside (away from
-    % center) lane position for each of the lanes
-    [tLeft, stationIndices]  = fcn_INTERNAL_extractLaneBoundariesFromLaneSection(tLeft,  ODRRoad.lanes.laneSection{laneSectionIndex},  'left', laneLinksLeft,  laneSectionIndex, NlaneSections, laneSecStart, laneSecEnd,  stationPoints, stationIndices, 1, flag_do_debug);
-    [tRight, stationIndices] = fcn_INTERNAL_extractLaneBoundariesFromLaneSection(tRight, ODRRoad.lanes.laneSection{laneSectionIndex}, 'right', laneLinksRight, laneSectionIndex, NlaneSections, laneSecStart, laneSecEnd,  stationPoints, stationIndices, -1, flag_do_debug);
+    % center) lane position for each of the lanes.
+    % Left side:
+    [tLeft, stationIndices]  = ...
+        fcn_INTERNAL_extractLaneBoundariesFromLaneSection(...
+        tLeft,  ...
+        currentLaneSection,...
+        'left',...
+        laneLinksLeft,...
+        laneSectionIndex,...
+        NlaneSections,...
+        laneSecStart(laneSectionIndex,1),...
+        laneSecEnd(laneSectionIndex,1),...
+        stationPoints,...
+        stationIndices,...
+        1,...
+        flag_do_debug);
+    % Right side:
+    [tRight, stationIndices] = ...
+        fcn_INTERNAL_extractLaneBoundariesFromLaneSection(...
+        tRight, ...
+        currentLaneSection,...
+        'right', ...
+        laneLinksRight,...
+        laneSectionIndex,...
+        NlaneSections,...
+        laneSecStart(laneSectionIndex,1),...
+        laneSecEnd(laneSectionIndex,1),...
+        stationPoints,...
+        stationIndices,...
+        -1,...
+        flag_do_debug);
 
 end
 
@@ -391,6 +394,32 @@ end % Ends main function
 %
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+%% fcn_INTERNAL_findEndLaneSection
+function [laneSecStart,laneSecEnd] = fcn_INTERNAL_extractLaneStationStartEndFromLanes(...
+    lanes, roadLength)
+
+NlaneSections = length(lanes.laneSection);
+laneSecStart = zeros(NlaneSections,1);
+laneSecEnd   = zeros(NlaneSections,1);
+
+for laneSectionIndex = 1:NlaneSections
+
+    % Determine the start and end points of the lane section
+    laneSecStart(laneSectionIndex,1) = str2double(lanes.laneSection{laneSectionIndex}.Attributes.s);
+
+    % The station coordinate of the lane section end will be the start
+    % of the next lane section, unless it's the last lane section. If
+    % that's the case, use the station coordinate of the end of the
+    % road (the length) to determine the end of the section
+    if laneSectionIndex == NlaneSections
+        laneSecEnd(laneSectionIndex,1) = roadLength;
+    else
+        laneSecEnd(laneSectionIndex,1) = str2double(lanes.laneSection{laneSectionIndex+1}.Attributes.s);
+    end
+end
+end % ends fcn_INTERNAL_findEndLaneSection
+
+
 
 %% fcn_INTERNAL_plotLaneSidesXY
 function fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tSide, multiplier_for_side, fig_num)
