@@ -1,4 +1,4 @@
-function [x,y,h] = fcn_ParseXODR_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,varargin)
+function [x,y,h] = fcn_ParseXODR_findXYfromST(geomType,initial_values,St_coordinates,varargin)
 %% fcn_ParseXODR_findXYfromST
 % Script to determine the X,Y and heading coordinates along a segment of a
 % road defined in the XODR standard. Unlike the arc and spiral specific
@@ -14,16 +14,23 @@ function [x,y,h] = fcn_ParseXODR_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,vararg
 %
 %       geomtype: a string containing 'line', 'arc', or 'spiral' to denote
 %         the type of path and therefore the appropriate computation
-%       x0: a scalar parameter denoting the x-coordinate of the path at
-%         the s = 0 point
-%       y0: a scalar parameter denoting the y-coordinate of the path at
-%         the s = 0 point
-%       h0: a scalar parameter denoting the heading of the path at the
-%         s = 0 point
-%       s0: a scalar parameter denoting the start point of the path in s
-%         coordinates
-%       l0: a scalar parameter denoting the maximum extent of the path, in
-%         station coordinates, relative to s = 0
+%
+%       initial_values: a (5x1) or (1x5) vector containing the following,
+%       in order:
+%
+%          x0: a scalar parameter denoting the x-coordinate of the path at
+%            the s = 0 point
+%          y0: a scalar parameter denoting the y-coordinate of the path at
+%            the s = 0 point
+%          h0: a scalar parameter denoting the heading of the path at the
+%            s = 0 point
+%          s0: a scalar parameter denoting the start point of the path in s
+%            coordinates
+%          l0: a scalar parameter denoting the maximum extent of the path, in
+%            station coordinates, relative to s = 0
+%
+%      St_coordinates: a (Nx2) vector containing the following columns: 
+%
 %       s: a vector of station coordinates along the path at which to
 %         compute the x,y coordinates. s is NOT assumed to start at zero.
 %       t: a vector of station coordinates perpendicular to the path at
@@ -59,10 +66,12 @@ function [x,y,h] = fcn_ParseXODR_findXYfromST(geomType,x0,y0,h0,s0,l0,s,t,vararg
 % Questions or comments? cbeal@bucknell.edu or sbrennan@psu.edu
 
 % Revision history:
-%     2022_03_20 - C. Beal
-%     -- wrote the code
-%     2024_03_19 - S. Brennan
-%     -- renamed to fcn_ParseXODR_findXYfromST
+% 2022_03_20 - C. Beal
+% -- wrote the code
+% 2024_03_19 - S. Brennan
+% -- renamed to fcn_ParseXODR_findXYfromST
+% -- grouped inputs and outputs for clarity
+% -- functionalized the final transverse calculation across methods
 
 %% Debugging and Input checks
 
@@ -160,49 +169,76 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Grab the initial values
+%       x0: a scalar parameter denoting the x-coordinate of the path at
+%         the s = 0 point
+x0 = initial_values(1);
+
+%       y0: a scalar parameter denoting the y-coordinate of the path at
+%         the s = 0 point
+y0 = initial_values(2);
+
+%       h0: a scalar parameter denoting the heading of the path at the
+%         s = 0 point
+h0 = initial_values(3);
+
+%       s0: a scalar parameter denoting the start point of the path in s
+%         coordinates
+s0 = initial_values(4);
+
+%       l0: a scalar parameter denoting the maximum extent of the path, in
+%         station coordinates, relative to s = 0
+l0 = initial_values(5);
+
+% Grab the St coordinates
+s = St_coordinates(:,1);
+t = St_coordinates(:,2);
 
 switch geomType
-  case 'line'
-    % Add together the contribution to the x position of the initial x,y
-    % coordinate, the travel down the road line, and the offset from the
-    % centerline of the line (defined as the heading + pi/2) given the s,t
-    % coordinate system
-    x = x0 + (s(:)-s0).*cos(h0);
-    y = y0 + (s(:)-s0).*sin(h0);
+    case 'line'
+        % See for example: https://github.com/pageldev/libOpenDRIVE/blob/master/src/Geometries/Line.cpp
 
-    % The heading stays the same along all points of a line segment, so
-    % return a vector of the same size as x and y, populated with h0
-    h = h0*ones(length(s),1);
+        % Add together the contribution to the x position of the initial x,y
+        % coordinate, the travel down the road line, and the offset from the
+        % centerline of the line (defined as the heading + pi/2) given the s,t
+        % coordinate system
+        x = x0 + (s(:)-s0).*cos(h0);
+        y = y0 + (s(:)-s0).*sin(h0);
 
-    % Offset the x and y coordinates by the projection along t (which is
-    % aligned at the heading plus pi/2)
-    x = x + t(:).*cos(h+pi/2);
-    y = y + t(:).*sin(h+pi/2);
+        % The heading stays the same along all points of a line segment, so
+        % return a vector of the same size as x and y, populated with h0
+        h = h0*ones(length(s),1);
 
-    
-  case 'arc'
-    % Find the points along the path assuming t = 0
-    [x,y] = fcn_RoadSeg_findXYfromXODRArc(s(:)-s0,h0,x0,y0,K0);
+        % Offset the x and y coordinates by the projection along t (which is
+        % aligned at the heading plus pi/2)
+        x = x + t(:).*cos(h+pi/2);
+        y = y + t(:).*sin(h+pi/2);
 
-    % Compute the heading at the specified points
-    h = K0*(s(:) - s0) + h0;
 
-    % Offset the x and y coordinates by the projection along t (which is
-    % aligned at the heading plus pi/2)
-    x = x + t(:).*cos(h+pi/2);
-    y = y + t(:).*sin(h+pi/2);
-    
-  case 'spiral'
-    % Find the point along the path with t = 0
-    [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s(:)-s0,l0,h0,x0,y0,K0,KF);
+    case 'arc'
+        % Find the points along the path assuming t = 0
+        [x,y] = fcn_RoadSeg_findXYfromXODRArc(s(:)-s0,h0,x0,y0,K0);
 
-    % Compute the heading at the specified points
-    h = (KF-K0)/l0*(s(:)-s0).^2/2 + K0*(s(:)-s0) + h0;
+        % Compute the heading at the specified points
+        h = K0*(s(:) - s0) + h0;
 
-    % Offset the x and y coordinates by the projection along t (which is
-    % aligned at the heading plus pi/2)
-    x = x + t(:).*cos(h+pi/2);
-    y = y + t(:).*sin(h+pi/2);
+        % Offset the x and y coordinates by the projection along t (which is
+        % aligned at the heading plus pi/2)
+        x = x + t(:).*cos(h+pi/2);
+        y = y + t(:).*sin(h+pi/2);
+        
+
+    case 'spiral'
+        % Find the point along the path with t = 0
+        [x,y] = fcn_RoadSeg_findXYfromXODRSpiral(s(:)-s0,l0,h0,x0,y0,K0,KF);
+
+        % Compute the heading at the specified points
+        h = (KF-K0)/l0*(s(:)-s0).^2/2 + K0*(s(:)-s0) + h0;
+
+        % Offset the x and y coordinates by the projection along t (which is
+        % aligned at the heading plus pi/2)
+        x = x + t(:).*cos(h+pi/2);
+        y = y + t(:).*sin(h+pi/2);
 end
 
 %% Plot the results (for debugging)?
@@ -234,7 +270,7 @@ if flag_do_plots
     title('XY view')
 
 
-    
+
 
     % Make axis slightly larger?
     if flag_rescale_axis

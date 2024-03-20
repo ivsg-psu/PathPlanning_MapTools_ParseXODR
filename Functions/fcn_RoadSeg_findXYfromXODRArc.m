@@ -100,6 +100,11 @@ end
 x = ( sin(K0*s(:) + h0) - sin(h0))/K0 + x0;
 y = (-cos(K0*s(:) + h0) + cos(h0))/K0 + y0;
 
+% const double angle_at_s = (s - s0) * curvature - M_PI / 2;
+% const double r = 1 / curvature;
+% const double xs = r * (std::cos(hdg0 + angle_at_s) - std::sin(hdg0)) + x0;
+% const double ys = r * (std::sin(hdg0 + angle_at_s) + std::cos(hdg0)) + y0;
+
 % Check to see if the user has provided a figure handle to plot into. If
 % so, add the X,Y points to the plot
 if 6 == nargin && isgraphics(varargin{1})
