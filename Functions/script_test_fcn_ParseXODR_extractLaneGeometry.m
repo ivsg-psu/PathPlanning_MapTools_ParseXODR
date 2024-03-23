@@ -1,4 +1,4 @@
-% script_test_fcn_ParseXODR_extractLaneGeometry2
+% script_test_fcn_ParseXODR_extractLaneGeometry
 % Script to extract LaneGeometry in an XODR file.
 % Tests function fcn_ParseXODR_extractLaneGeometry
 %
@@ -20,7 +20,7 @@ clf
 
 example_file = 'workzone_100m_Lane_Offset.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -55,7 +55,7 @@ clf
 
 example_file = 'Ex_Complex_Lane_Offset.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -90,7 +90,7 @@ clf
 
 example_file = 'Ex_Simple_Lane_Offset_Reversed.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -125,7 +125,7 @@ clf
 
 example_file = 'Ex_Simple_Lane_Offset.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -160,7 +160,7 @@ clf
 
 example_file = 'Ex_Simple_Lane_Gains.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -196,7 +196,7 @@ clf
 
 example_file = 'workzone_50m_curve_barrels.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries
@@ -232,7 +232,7 @@ clf
 
 example_file = 'testTrack_outerTrack.xodr';
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 
 % Choose a minimum spacing of the points defining the road geometries

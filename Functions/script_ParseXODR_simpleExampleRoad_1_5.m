@@ -16,7 +16,7 @@
 % -- scripted procedure
 
 clear;
-close all; clc;
+close all; 
 
 %%
 %   _____                           _      __   _____
@@ -431,7 +431,7 @@ end
 
 %% Check results
 % Perform checks and adjustments on the road segment, ensuring it adheres to OpenDRIVE standards
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(roads);
+ODRStruct = fcn_ParseXODR_checkXODR(roads);
 
 
 %% Add objects

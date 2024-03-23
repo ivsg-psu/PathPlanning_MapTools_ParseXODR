@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
     <header revMajor="1" revMinor="4" name="" version="1" date="2023-08-09T11:03:09" north="2.3474254676646146e+2" south="-2.3475559763289175e+2" east="3.1561072725592550e+2" west="-3.1558351822824568e+2" vendor="MathWorks">
-        <geoReference><![CDATA[+proj=tmerc +lat_0=0.0002753759838587158 +lon_0=0.00149550944528596 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +geoidgrids=egm96_15.gtx +vunits=m +no_defs ]]></geoReference>
         <userData>
             <vectorScene program="RoadRunner" version="R2022a Update 1 (1.4.1.c40ee10fc8)"/>
         </userData>

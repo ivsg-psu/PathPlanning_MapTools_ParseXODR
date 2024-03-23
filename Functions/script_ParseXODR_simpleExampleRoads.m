@@ -52,7 +52,7 @@ ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{1}.right.lane{1}.width.Attributes.
 ODRStruct.OpenDRIVE.road{1}.lanes.laneSection{1}.right.lane{1}.width.Attributes.d = '0';
 
 % Performing checks on the road segment structure.
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 % Converting the OpenDRIVE structure to an XODR file format.
 fcn_ParseXODR_convertODRstructToXODRFile(ODRStruct,'simpleExampleRoad_line');

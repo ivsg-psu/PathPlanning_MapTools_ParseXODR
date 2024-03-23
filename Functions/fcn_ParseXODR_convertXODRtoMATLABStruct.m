@@ -1,8 +1,8 @@
 function [ODRStruct, fullPath] = fcn_ParseXODR_convertXODRtoMATLABStruct(varargin)
-% fcn_ParseXODR_convertXODRtoMATLABStruct
-% A function to convert XODR descriptions of a road system and associated
-% objects into a nested MATLAB structure. If no input is given in fullPath,
-% a prompt is given for user to enter the file.
+%% fcn_ParseXODR_convertXODRtoMATLABStruct
+% Converts XODR descriptions of a road system and associated objects into a
+% nested MATLAB structure. If no input is given in fullPath, a prompt is
+% given for user to enter the file.
 %
 % FORMAT:
 %
@@ -49,6 +49,7 @@ function [ODRStruct, fullPath] = fcn_ParseXODR_convertXODRtoMATLABStruct(varargi
 % -- added fig_num
 % -- fixed bug where output is not returned if user does not enter at
 % prompt
+
 
 
 %% Debugging and Input checks
@@ -395,7 +396,7 @@ for roadInd = 1:Nroads
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if flag_do_plots
     % Check the structure
-    ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+    ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
     % Create a blank figure in which to plot the roads
     figure(fig_num)

@@ -10,9 +10,20 @@
 %     2024_03_08
 %     -- wrote the code
 
-clearvars
+close all
 
-%% Load an example file from a static file path
+% Make sure that the xml to structure dependency file is available
+% addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_ParseXODR/Functions'));
+string_path = which("fcn_ParseXODR_convertXODRtoMATLABStruct");
+if isempty(string_path) % ~exist('fcn_ParseXODR_convertXODRtoMATLABStruct','file')
+    error('Path not correctly set for fcn_ParseXODR_convertXODRtoMATLABStruct');
+    % addpath(uigetdir('.','Provide missing path to fcn_ParseXODR_convertXODRtoMATLABStruct'));
+end
+
+
+%% Basic demo - no centerline
+fig_num = 1;
+
 ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
@@ -20,12 +31,11 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr'
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack_noReferenceRoad.xodr');
 
-%% Check the structure
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
 
-%% Basic demo - no centerline
-fig_num = 1;
+% Check the structure
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 % Create a blank figure in which to plot the roads
 figure(fig_num)
@@ -41,6 +51,19 @@ fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num
 
 %% Basic demo - with centerline
 fig_num = 2;
+
+ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Gains.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Simple_Lane_Offset_Reversed.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('Ex_Complex_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_100m_Lane_Offset.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_barrels.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack.xodr');
+% ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('testTrack_outerTrack_noReferenceRoad.xodr');
+
+
+% Check the structure
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 % Create a blank figure in which to plot the roads
 figure(fig_num)

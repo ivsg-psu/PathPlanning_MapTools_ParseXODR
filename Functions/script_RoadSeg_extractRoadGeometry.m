@@ -24,7 +24,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_150m_double_curve_
 % ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct('workzone_50m_curve_objects.xodr');
 
 % Check the structure
-ODRStruct = fcn_RoadSeg_XODRSegmentChecks(ODRStruct);
+ODRStruct = fcn_ParseXODR_checkXODR(ODRStruct);
 
 % Create a new figure
 hRoad = figure(1);
@@ -43,17 +43,19 @@ Npts = ceil(lRoad/maxRoadGap);
 sPts = linspace(0,lRoad,Npts)';
 % Compute the east and north coordinates from the series of station
 % coordinates and an associated vector of zero t-coordinates
-[eRef,nRef] = fcn_RoadSeg_findXYfromSTandODRRoad(ODRStruct.OpenDRIVE.road{1},sPts,zeros(size(sPts)));
+[eRef,nRef] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRStruct.OpenDRIVE.road{1}.planView.geometry, sPts, zeros(size(sPts)));
+
+
 % Plot the road segment in the previously addressed figure
 hRef = plot(eRef,nRef,'-.','linewidth',1,'color',[0.5 0.5 0.5]);
 
 % Define the max gap between points on the object outline, in meters
 maxObjectVertexGap = 0.05;
 % Convert the XODR objects to patch objects in an array
-objectArray = fcn_RoadSeg_convertXODRObjectsToPatchObjects(ODRStruct,maxObjectVertexGap);
+objectArray = fcn_ParseXODR_convertXODRObjectsToPatchObjects(ODRStruct,maxObjectVertexGap);
 
 % Add the path for the patch objects plotting library
 % addpath(genpath('/Users/cbeal/Documents/MATLAB/DOT_MapAssoc/'));
 
 % Plot the patch objects on top of the (previously plotted) roadway figure
-fcn_Patch_plotPatch(objectArray,hRoad);
+fcn_ParseXODR_plotPatch(objectArray,hRoad);

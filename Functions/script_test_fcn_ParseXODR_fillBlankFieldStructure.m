@@ -6,7 +6,7 @@
 % -- wrote the code
 
 close all;
-clc;
+
 
 
 %% BASIC test - no figure output
