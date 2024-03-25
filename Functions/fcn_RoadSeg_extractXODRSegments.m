@@ -87,19 +87,26 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Determine the end point of the road
-RoadEndStation = str2double(ODRRoad.Attributes.length);
+
 % Determine the number of geometry elements in the reference line of the
 % current road
 NgeomElems = length(ODRRoad.planView.geometry);
+
 % Preallocate a vector for the stations of the geometry element bounds
 RoadSegmentStations = zeros(NgeomElems+1,1);
-% Set the end station
-RoadSegmentStations(end) = RoadEndStation;
-% Iterate through the geometry and pull out the start station
+
+% Iterate through the geometry and pull out the start stations for each
+% plan geometry
 for geomInd = 1:NgeomElems
     RoadSegmentStations(geomInd) = str2double(ODRRoad.planView.geometry{geomInd}.Attributes.s);
 end
+
+% Determine the end point of the road
+RoadEndStation = str2double(ODRRoad.Attributes.length);
+
+% Set the last station
+RoadSegmentStations(end) = RoadEndStation;
+
 
 % Determine whether there are any offsets to the center lane in the
 % current road

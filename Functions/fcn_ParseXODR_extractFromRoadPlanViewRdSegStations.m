@@ -1,26 +1,26 @@
-function [xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints, varargin)
-%% fcn_ParseXODR_extractXYfromSTandCenterline 
-% given the planView geometry and station points, gives the XY points of
-% the centerline when the transvers points, tPts, are zero or empty. If
-% they are non-zero, calculates the XY positions of the tPts.
+function roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, varargin)
+%% fcn_ParseXODR_extractFromRoadPlanViewRdSegStations 
+% Given a road's planView, extracts the road segment stations as a [N x 2]
+% vector where row 1 corresponds to the first geometric section, row 2 is
+% the second section, etc. Each row lists the stations for the geometric
+% description as [roadSegmentStart roadSegmentEnd]. 
+% 
+% NOTE: The ends of each station are calculated by the "length" parameter
+% in the planView description for each geometry, and hence the station for
+% the end of one segment may not actually be the station for the start of
+% the next segment.
 %
 % FORMAT:
 %
-%       [xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad,stationPoints,tPts)
+%       roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, (fig_num))
 %
 % INPUTS:
 %
 %      planView_geometry: the geometry portion of the planView subfield in
 %      the Road description. This geometry defines the centerline reference
 %      for plotting.
-%
-%      stationPoints: a vector of s coordinates for points at which to
-%      determine the X,Y coordinates
 % 
 % (OPTIONAL INPUTS)
-%
-%      tPts: a vector of t coordinates for points at which to determine
-%         the X,Y coordinates
 %
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
@@ -28,40 +28,28 @@ function [xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geome
 %
 % OUTPUTS:
 %
-%       xPts: a vector of x coordinates for points at which the s and t
-%         coordinates are provided as input
-%
-%       yPts: a vector of y coordinates for points at which the s and t
-%         coordinates are provided as input
+%       roadSegmentStations: a [N x 2] vector where N is the number of
+%       road segments in the planView, each row is ordered in the sequence
+%       of segment 1, segment 2, etc, and each row corresponds to
+%       [roadSegmentStart roadSegmentEnd] for that road segment
 %
 %
 % DEPENDENCIES:
 %
-%      fcn_ParseXODR_extractXYfromSTandGeometries
-%      fcn_ParseXODR_extractFromRoadPlanViewRdSegStations
-%      fcn_ParseXODR_extractXYfromSTCurves (2nd level)
+%      (none)
 %
 % EXAMPLES:
 %
-%       See the script: script_test_fcn_ParseXODR_extractXYfromSTandCenterline
+%       See the script: script_test_fcn_ParseXODR_extractFromRoadPlanViewRdSegStations
 %       for a full test suite.
 %
-% This function was originally written by C. Beal and currently supported
-% by S. Brennan
-% Questions or comments? cbeal@bucknell.edu or sbrennan@psu.edu
+% This function was by S. Brennan
+% Questions or comments? sbrennan@psu.edu
 
 % Revision history:
-% 2022_05_07 - C. Beal
-% -- wrote the orginal form, fcn_RoadSeg_findXYfromSTandODRRoad
-% 2024_03_21 - S. Brennan
-% -- original write of fcn_ParseXODR_extractXYfromSTandCenterline
-% -- fixed bug where points are output as 1xN instead of Nx1
 % 2024_03_24 - S. Brennan
-% -- renamed to fcn_ParseXODR_extractFromRoadPlanViewXY
+% -- original write of function
 
-% TO-DO
-% 2024_03_21 - S. Brennan
-% -- FIX THE LOOP ONCE THE FUNCTION IS VECTORIZED
 
 %% Debugging and Input checks
 
@@ -69,7 +57,7 @@ function [xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geome
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==4 && isequal(varargin{end},-1))
+if (nargin==2 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -111,7 +99,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(2,4);
+        narginchk(1,2);
 
         % % Check the left_or_right_or_center input to be a string
         % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
@@ -121,32 +109,11 @@ if 0==flag_max_speed
     end
 end
 
-% Does user want to specify tPts?
-tPts = []; 
-if (3<= nargin)
-    temp = varargin{1};
-    if ~isempty(temp)
-        tPts = temp;
-    end
-end
-% If user did not enter the points, then use 0
-if isempty(tPts)
-    tPts = 0*stationPoints;
-end
-% Make sure tPts is correct length
-if 0==flag_max_speed
-    if flag_check_inputs == 1
-        if length(tPts(:,1))~=length(stationPoints(:,1))
-            error('Transverse points must be same length as the station points.');
-        end
-    end
-end
-
 
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (4<= nargin)
+if (0==flag_max_speed) && (2<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
@@ -166,46 +133,25 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Initialize X and Y points
-xPts = nan(size(tPts));
-yPts = nan(size(tPts));
 
 %% Extract the roadSectionStations
-roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, -1);
-
-% URHERE - TO-DO - rename this function
-% fcn_ParseXODR_extractFromRoadPlanViewAndSTtoXY
-
-%% Extract the XY points
 % Determine the number of road sections in the specified road in
 % order to plot the lanes over the road geometry
-NroadSections = length(roadSegmentStations(:,1));
+NroadSections = length(planView_geometry);
 
-% Iterate over all of the road sections to determine the lane
-% boundaries in (E,N) coordinates
+% Initialize a vector for the road segment stations
+roadSegmentStations = zeros(NroadSections,2);
+
 for roadSectionIndex = 1:NroadSections
   % Determine the starting and ending points of the current road segment in
   % s coordinates
-  segStart = roadSegmentStations(roadSectionIndex,1);
-  segEnd   = roadSegmentStations(roadSectionIndex,2);
+  roadSegmentStart = str2double(planView_geometry{roadSectionIndex}.Attributes.s);
+  roadSegmentEnd = roadSegmentStart + str2double(planView_geometry{roadSectionIndex}.Attributes.length);
   
-    % Determine the indices of the lane station points that lie within each
-  % road geometry segment
-  if roadSectionIndex == NroadSections
-    sInds = find(stationPoints >= segStart & stationPoints <= segEnd);
-  else
-    sInds = find(stationPoints >= segStart & stationPoints < segEnd);
-  end
-  
-  if ~isempty(sInds)
-      % Convert the path coordinates to obtain the (X,Y) coordinates of each of
-      % the calculated lane boundaries. NOTE: the function is vectorized to
-      % allow columns of transverse points, not just Nx1
-      
-      [xPts(sInds,:),yPts(sInds,:)] = fcn_ParseXODR_extractXYfromSTandGeometries(planView_geometry{roadSectionIndex},stationPoints(sInds),tPts(sInds,:));
-      
-  end
+  roadSegmentStations(roadSectionIndex,:) = [roadSegmentStart, roadSegmentEnd];
 end
+
+
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -242,19 +188,19 @@ if flag_do_plots
     ylabel('North (m)')
     title('XY view')
 
-    % Plot road reference line in solid blue
-    roadStationPoints = (min(stationPoints):0.1:max(stationPoints))';
-    [xPts_roadReferenceLine,yPts_roadReferenceLine] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, roadStationPoints);
-    plot(xPts_roadReferenceLine,yPts_roadReferenceLine,'b-','LineWidth',3);
-
-    % Plot the results
-    for ith_column = 1:length(xPts(1,:))
-        % Get current color
-        current_color = color_ordering(mod(ith_column,N_colors)+1,:);
-
-        % Plot results as dots
-        plot(xPts(:,ith_column),yPts(:,ith_column),'.','MarkerSize',30,'Color',current_color);
-    end
+    % % Plot road reference line in solid blue
+    % roadStationPoints = (min(stationPoints):0.1:max(stationPoints))';
+    % [xPts_roadReferenceLine,yPts_roadReferenceLine] = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, roadStationPoints);
+    % plot(xPts_roadReferenceLine,yPts_roadReferenceLine,'b-','LineWidth',3);
+    % 
+    % % Plot the results
+    % for ith_column = 1:length(xPts(1,:))
+    %     % Get current color
+    %     current_color = color_ordering(mod(ith_column,N_colors)+1,:);
+    % 
+    %     % Plot results as dots
+    %     plot(xPts(:,ith_column),yPts(:,ith_column),'.','MarkerSize',30,'Color',current_color);
+    % end
 
     % Make axis slightly larger?
     if flag_rescale_axis

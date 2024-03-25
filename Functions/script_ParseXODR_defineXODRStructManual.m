@@ -453,6 +453,7 @@ for i = 1:length(RoadSegmentStations)
     
     hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
 end
+
 % Iterate through the lane offset boundaries, and plot a green line across
 % the road at each boundary
 for i = 1:length(LaneOffsetStations)

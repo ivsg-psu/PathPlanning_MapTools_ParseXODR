@@ -221,7 +221,7 @@ for roadInd = 1:Nroads
         end
 
         if isfield(current_geometries{geomInd},'line')
-            % Calculate the segment endpoint location and heading for the fijnal
+            % Calculate the segment endpoint location and heading for the final
             % segment. All other segments will have the endpoint tested as the
             % initial point of the following segment
             %if geomInd == NgeomElems(roadInd)
@@ -238,12 +238,7 @@ for roadInd = 1:Nroads
 
             % Make sure any headings are bounded between 0 and 2*pi to avoid
             % issues with multiple solutions in the following calcs
-            while hCurrent > 2*pi
-                hCurrent = hCurrent - 2*pi;
-            end
-            while hCurrent < 0
-                hCurrent = hCurrent + 2*pi;
-            end
+            hCurrent = mod(hCurrent,2*pi);
             
             % Determine the s values associated with the critical angles in the x
             % and y directions

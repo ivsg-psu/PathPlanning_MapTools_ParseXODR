@@ -47,13 +47,13 @@ function [stationPoints, tLeft, transverseCenterOffsets, tRight] = fcn_ParseXODR
 % Questions or comments? cbeal@bucknell.edu or sbrennan@psu.edu
 
 % Revision history:
-%     2022_05_04 - C. Beal
-%     -- wrote the code
-%     2022_05_07
-%     -- debugged the cumsum approach at the end to take into account the
-%     unsorted lanes that occur when lanes disappear/appear
-%     2024_03_09 - S. Brennan
-%     -- renamed function from fcn_ParseXODR_extractLaneGeometry
+% 2022_05_04 - C. Beal
+% -- wrote the code
+% 2022_05_07
+% -- debugged the cumsum approach at the end to take into account the
+% unsorted lanes that occur when lanes disappear/appear
+% 2024_03_09 - S. Brennan
+% -- renamed function from fcn_ParseXODR_extractLaneGeometry
 
 %% Debugging and Input checks
 

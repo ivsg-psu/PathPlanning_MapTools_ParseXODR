@@ -156,19 +156,13 @@ NgeomElems = zeros(Nroads,1);
 % Iterate through all of the roads
 for roadInd = 1:Nroads
     current_road = roads{roadInd};
-    current_geometries = current_road.planView.geometry;
+    planView_geometry = current_road.planView.geometry;
+    roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, -1);
+    sVals = roadSegmentStations(:,1);
 
     % Determine the number of geometry segments in the active road
-    NgeomElems(roadInd) = length(current_geometries);
+    NgeomElems(roadInd) = length(planView_geometry);
 
-    % Create a blank vector of segment station start values to fill
-    sVals = zeros(NgeomElems(roadInd),1);
-
-    % Iterate through all of the geometry segments
-    for geomInd = 1:NgeomElems(roadInd)
-        % populate the station start vector for each geometry
-        sVals(geomInd) = str2double(current_geometries{geomInd}.Attributes.s);
-    end
 
     % Check to see if there are any negative differences between subsequent
     % segments, indicating an out of order segment (by station)
@@ -181,7 +175,7 @@ for roadInd = 1:Nroads
         % Create an index vector in order by starting station
         [~,sortInds] = sort(sVals);
         % Create a temporary copy of the road geometry
-        temp = current_geometries;
+        temp = planView_geometry;
 
 
         % Iterate through the total number of geometry segments and copy
