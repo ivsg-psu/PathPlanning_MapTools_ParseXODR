@@ -1,6 +1,6 @@
-% script_test_fcn_ParseXODR_extractXYfromSTandCenterline
+% script_test_fcn_ParseXODR_extractFromRoadPlanView_STtoXY
 % Script to extract LaneGeometry in an XODR file.
-% Tests function fcn_ParseXODR_extractXYfromSTandCenterline
+% Tests function fcn_ParseXODR_extractFromRoadPlanView_STtoXY
 %
 % This script was written by S. Brennan from
 % "script_test_fcn_ParseXODR_plotXODRinENU" written by C. Beal Questions or comments?
@@ -43,7 +43,7 @@ stationPoints = linspace(0,lengthRoad,Npoints)';
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints);
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));
 assert(length(yPts(:,1))==length(stationPoints(:,1)));
@@ -81,7 +81,7 @@ stationPoints = linspace(0,lengthRoad,Npoints)';
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints,[],fig_num);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints,[],fig_num);
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));
 assert(length(yPts(:,1))==length(stationPoints(:,1)));
@@ -120,7 +120,7 @@ transversePoints = 5*cos(stationPoints*(2*pi/40));
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints,transversePoints,fig_num);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints,transversePoints,fig_num);
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));
 assert(length(yPts(:,1))==length(stationPoints(:,1)));
@@ -159,7 +159,7 @@ transversePoints = [5*cos(stationPoints*(2*pi/40)), 10*sin(stationPoints*(2*pi/3
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints,transversePoints,fig_num);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints,transversePoints,fig_num);
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));
 assert(length(yPts(:,1))==length(stationPoints(:,1)));
@@ -198,7 +198,7 @@ transversePoints = [5*cos(stationPoints*(2*pi/40)), 10*sin(stationPoints*(2*pi/3
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints,transversePoints,fig_num);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints,transversePoints,fig_num);
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));
 assert(length(yPts(:,1))==length(stationPoints(:,1)));
@@ -240,7 +240,7 @@ transversePoints = [5*cos(stationPoints*(2*pi/40)), 10*sin(stationPoints*(2*pi/3
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[xPts,yPts] = fcn_ParseXODR_extractXYfromSTandCenterline(planView_geometry, stationPoints,transversePoints,fig_num);
+[xPts,yPts] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(planView_geometry, stationPoints,transversePoints,fig_num);
 
 
 assert(length(xPts(:,1))==length(stationPoints(:,1)));

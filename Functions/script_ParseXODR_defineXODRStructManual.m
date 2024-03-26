@@ -444,27 +444,41 @@ axis equal
 
 
 % Run a function to return the various segment boundaries for the road geometry
-[RoadSegmentStations,LaneOffsetStations,LaneSectionStations] = fcn_RoadSeg_extractXODRSegments(ODRStruct.OpenDRIVE.road{1});
-
+roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(ODRStruct.OpenDRIVE.road{1}.planView.geometry);
 % Iterate through the road geometry element boundaries, and plot a red line
 % across the road at each boundary
-for i = 1:length(RoadSegmentStations)
-    [xRoadSeg,yRoadSeg] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRStruct.OpenDRIVE.road{1}.planView.geometry,RoadSegmentStations(i)*[1; 1],[-20; 20]);
+for i = 1:length(roadSegmentStations)
+    [xRoadSeg,yRoadSeg] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRStruct.OpenDRIVE.road{1}.planView.geometry,roadSegmentStations(i)*[1; 1],[-20; 20]);
     
     hRoadSegs = plot(xRoadSeg,yRoadSeg,'-.','linewidth',2,'color',[0.6 0 0.1]);
 end
 
+
+
 % Iterate through the lane offset boundaries, and plot a green line across
 % the road at each boundary
-for i = 1:length(LaneOffsetStations)
-    [xOffsetSeg,yOffsetSeg] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRStruct.OpenDRIVE.road{1}.planView.geometry,LaneOffsetStations(i)*[1; 1],[-15; 15]);
+current_road = ODRStruct.OpenDRIVE.road{1};
+road_length = str2double(current_road.Attributes.length);
+current_lanes = current_road.lanes;
+laneOffsetStations = fcn_ParseXODR_extractFromLanes_LaneOffsetStations(current_lanes, road_length);
+laneOffsetStations = [laneOffsetStations(:,1); laneOffsetStations(end,2)]; % Turn into a column vector of only start/end
+for i = 1:length(laneOffsetStations)
+    [xOffsetSeg,yOffsetSeg] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRStruct.OpenDRIVE.road{1}.planView.geometry,laneOffsetStations(i)*[1; 1],[-15; 15]);
     
     hOffsetSegs = plot(xOffsetSeg,yOffsetSeg,'--','linewidth',2,'color',[0.1 0.6 0]);
 end
+
+
 % Iterate through the lane section boundaries, and plot a blue line across
 % the road at each boundary
-for i = 1:length(LaneSectionStations)
-    [xLaneSeg,yLaneSeg] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRStruct.OpenDRIVE.road{1}.planView.geometry,LaneSectionStations(i)*[1; 1],[-10; 10]);    
+current_road = ODRStruct.OpenDRIVE.road{1};
+road_length = str2double(current_road.Attributes.length);
+current_lanes = current_road.lanes;
+laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneOffsetStations(current_lanes, road_length);
+laneSectionStations = [laneSectionStations(:,1); laneSectionStations(end,2)]; % Turn into a column vector of only start/end
+
+for i = 1:length(laneSectionStations)
+    [xLaneSeg,yLaneSeg] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRStruct.OpenDRIVE.road{1}.planView.geometry,laneSectionStations(i)*[1; 1],[-10; 10]);    
 
     hLaneSegs = plot(xLaneSeg,yLaneSeg,':','linewidth',2,'color',[0.1 0 0.6]);
 end

@@ -24,8 +24,8 @@ function objectPatches = fcn_ParseXODR_convertXODRObjectsToPatchObjects(ODRStruc
 %
 % EXAMPLES:
 %
-%       See the script: ????????.m for
-%       a full test suite.
+%       See the script: script_test_fcn_ParseXODR_convertXODRObjectsToPatchObjects
+%       for a full test suite.
 %
 % This function was written by C. Beal
 % Questions or comments? cbeal@bucknell.edu

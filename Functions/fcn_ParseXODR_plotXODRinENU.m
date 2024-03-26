@@ -196,8 +196,8 @@ if flag_do_plots
 
         % Determine the (E,N) coordinates associated with each of the road
         % extents
-        [E_LeftExtents,N_LeftExtents]   = fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,leftExtents);        
-        [E_RightExtents,N_RightExtents] = fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,rightExtents);
+        [E_LeftExtents,N_LeftExtents]   = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,leftExtents);        
+        [E_RightExtents,N_RightExtents] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,rightExtents);
 
         % Plot a dark gray patch to represent the road surface
         patch([E_LeftExtents; flipud(E_RightExtents)],...
@@ -219,14 +219,14 @@ if flag_do_plots
         if 1==flag_plot_road_geometry
             % Plot the geometry reference line by taking all the station points
             % and forcing the transverse points to be zero
-            [E_GeometryRef,N_GeometryRef] = fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,0*stationPoints);
+            [E_GeometryRef,N_GeometryRef] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,0*stationPoints);
             plot(E_GeometryRef,N_GeometryRef,'-','linewidth',3,'color',[0 1 0]);
         end
 
         % Now, plot the center lane as a double-yellow line, by offsetting the
         % center lane by 10 cm each direction from the center lane definition
-        [E_CenterLaneL,N_CenterLaneL] = fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,tCenter+0.1);
-        [E_CenterLaneR,N_CenterLaneR] = fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,tCenter-0.1);
+        [E_CenterLaneL,N_CenterLaneL] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,tCenter+0.1);
+        [E_CenterLaneR,N_CenterLaneR] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,tCenter-0.1);
         plot(E_CenterLaneL,N_CenterLaneL,'-','linewidth',3,'color',[0.8 0.6 0.1])
         plot(E_CenterLaneR,N_CenterLaneR,'-','linewidth',3,'color',[0.8 0.6 0.1])
 
@@ -239,7 +239,7 @@ if flag_do_plots
                     tLeftDrivingBoundary(i,1) = tLeft(i,[inds(i,laneIdx)]); %#ok<AGROW>
                 end
                 [eLeftLane,nLeftLane] = ...
-                    fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,tLeftDrivingBoundary);
+                    fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,tLeftDrivingBoundary);
                 if laneIdx == 2
                     plot(eLeftLane,nLeftLane,'-','linewidth',3,'color','white');
                 else
@@ -256,7 +256,7 @@ if flag_do_plots
                     tRightDrivingBoundary(i,1) = tRight(i,[inds(i,laneIdx)]); %#ok<AGROW>
                 end
                 [eRightLane,nRightLane] = ...
-                    fcn_ParseXODR_extractXYfromSTandCenterline(currentRoad.planView.geometry,stationPoints,tRightDrivingBoundary);
+                    fcn_ParseXODR_extractFromRoadPlanView_STtoXY(currentRoad.planView.geometry,stationPoints,tRightDrivingBoundary);
                 if laneIdx == 2
                     plot(eRightLane,nRightLane,'-','linewidth',3,'color','white');
                 else

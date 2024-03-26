@@ -1,10 +1,10 @@
-function roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(OpenDRIVEstruct, varargin)
-%% fcn_ParseXODR_extractRoadsFromOpenDRIVE
+function roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(OpenDRIVEstruct, varargin)
+%% fcn_ParseXODR_extractFromOpenDRIVE_Roads
 % Extracts the lane geometry defined in an XODR file
 %
 % FORMAT:
 %
-%       roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(OpenDRIVEstruct, (fig_num))
+%       roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(OpenDRIVEstruct, (fig_num))
 %
 % INPUTS:
 %
@@ -28,7 +28,7 @@ function roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(OpenDRIVEstruct, vararg
 %
 % EXAMPLES:
 %
-%       See the script: script_test_fcn_ParseXODR_extractRoadsFromOpenDRIVE.m for a
+%       See the script: script_test_fcn_ParseXODR_extractFromOpenDRIVE_Roads.m for a
 %       full test suite.
 %
 % This function was written by S. Brennan
@@ -37,6 +37,8 @@ function roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(OpenDRIVEstruct, vararg
 % Revision history:
 % 2024_03_23 - S. Brennan
 % -- wrote the code
+% 2024_03_26 - S. Brennan
+% -- renamed from fcn_ParseXODR_extractRoadsFromOpenDRIVE
      
 
 %% Debugging and Input checks

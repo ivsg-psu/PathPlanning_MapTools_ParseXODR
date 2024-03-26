@@ -1,6 +1,6 @@
-% script_test_fcn_ParseXODR_extractRoadsFromOpenDRIVE
+% script_test_fcn_ParseXODR_extractFromOpenDRIVE_Roads
 % Script to extract LaneGeometry in an XODR file.
-% Tests function fcn_ParseXODR_extractRoadsFromOpenDRIVE
+% Tests function fcn_ParseXODR_extractFromOpenDRIVE_Roads
 %
 % This script was written by S. Brennan from
 % "script_test_fcn_ParseXODR_plotXODRinENU" written by C. Beal Questions or comments?
@@ -19,7 +19,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -34,7 +34,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE,fig_num);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE,fig_num);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -49,7 +49,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -65,7 +65,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -81,7 +81,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -97,7 +97,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -114,7 +114,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==1);
@@ -130,7 +130,7 @@ ODRStruct = fcn_ParseXODR_convertXODRtoMATLABStruct(example_file);
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
 
 assert(iscell(roads));
 assert(length(roads)==2);

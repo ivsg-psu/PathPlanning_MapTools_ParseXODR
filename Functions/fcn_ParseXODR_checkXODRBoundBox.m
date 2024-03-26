@@ -181,7 +181,7 @@ else
 end
 
 %% Grab all the roads
-roads = fcn_ParseXODR_extractRoadsFromOpenDRIVE(ODRStruct_fixed.OpenDRIVE);
+roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct_fixed.OpenDRIVE);
 
 % Determine the number of roads in the map
 Nroads = length(roads);

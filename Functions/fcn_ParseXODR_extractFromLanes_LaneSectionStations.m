@@ -1,55 +1,57 @@
-function [ODRStruct_fixed, flag_warnings_were_found] = fcn_ParseXODR_checkXODRGeomOrdering(ODRStruct, varargin)
-%% fcn_ParseXODR_checkXODRGeomOrdering
-% A function to check that the geometric station progression within each
-% road of an ODRStruct is strictly increasing. If the station progression
-% is not increasing in the geometry orderings, the orderings are fixed
-% and a flag_warnings_were_found is set to 1.
+function laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, roadEndStation, varargin)
+%% fcn_ParseXODR_extractFromLanes_LaneSectionStations
+% Given a lanes structure, extracts the lane sections start/end stations as a [N x 2]
+% vector where row 1 corresponds to the first lane section, row 2 is
+% the second section, etc. Each row lists the stations for the geometric
+% description as [laneSectionStart laneSectionEnd].
+%
+% NOTE: The ends of each station are calculated by the "s" parameter
+% in the Attributes for each lane offset. By default, the end "s" value in
+% an lane section is the starting s-value of the next section. For the
+% last section, the offset is the road's end station.
+% the end of one segment may not actually be the station for the start of
+% the next segment.
 %
 % FORMAT:
 %
-%       ODRStruct = fcn_ParseXODR_checkXODRGeomOrdering(ODRStruct))
+%       laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, roadEndStation, (fig_num))
 %
 % INPUTS:
 %
-%      ODRStruct: a nested structure containing the XDOR map elements
+%      lanes: the lanes subfield for an XODRRoad
 %
-%      (OPTIONAL INPUTS)
+%      roadEndStation: the station coordinate that ends the road
+%      containining this lanes structure
+%
+% (OPTIONAL INPUTS)
 %
 %      fig_num: a figure number to plot results. If set to -1, skips any
 %      input checking or debugging, no figures will be generated, and sets
-%      up code to maximize speed. If set to positive value, also sets the
-%      results to be "verbose", e.g. to write messages to the screen at
-%      each testing stage.
+%      up code to maximize speed.
 %
 % OUTPUTS:
 %
-%      ODRStruct_fixed: a nested structure containing the XDOR map elements, with
-%         the proper characteristics confirmed
+%       laneSectionStations: a [N x 2] vector where N is the number of
+%       laneOffset segments in the lanes, each row is ordered in the sequence
+%       of segment 1, segment 2, etc, and each row corresponds to
+%       [laneSectionStart laneSectionEnd] for that laneOffset segment
 %
-%      flag_warnings_were_found: returns 1 if there was a fixable warning
-%      produced in the processing
 %
 % DEPENDENCIES:
 %
-%      None
+%      (none)
 %
 % EXAMPLES:
 %
-%       See the script: script_test_fcn_ParseXODR_checkXODRGeomOrdering for a
-%       full test suite.
+%       See the script: script_test_fcn_ParseXODR_extractFromLanes_LaneSectionStations
+%       for a full test suite.
 %
-% This function was orginally written by C. Beal as the function
-% fcn_RoadSeg_XODRSegmentChecks, now maintained by S. Brennan
-% Questions or comments? cbeal@bucknell.edu or sbrennan@psu.edu
+% This function was by S. Brennan
+% Questions or comments? sbrennan@psu.edu
 
 % Revision history:
-% 2022_03_20 - C. Beal
-% -- wrote the code
-% 2024_03_23 - S. Brennan
-% -- renamed the function to fcn_ParseXODR_checkXODRGeomOrdering
-% -- added fast mode and system-level debugging flags
-% -- added test script
-% -- added debug and function areas back in
+% 2024_03_24 - S. Brennan
+% -- original write of function
 
 
 %% Debugging and Input checks
@@ -58,7 +60,7 @@ function [ODRStruct_fixed, flag_warnings_were_found] = fcn_ParseXODR_checkXODRGe
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==2 && isequal(varargin{end},-1))
+if (nargin==3 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -83,8 +85,9 @@ else
 end
 
 
+
 %% check input arguments
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   _____                   _
 %  |_   _|                 | |
 %    | |  _ __  _ __  _   _| |_ ___
@@ -94,13 +97,12 @@ end
 %              | |
 %              |_|
 % See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(1,2);
+        narginchk(2,3);
 
         % % Check the left_or_right_or_center input to be a string
         % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
@@ -110,20 +112,20 @@ if 0==flag_max_speed
     end
 end
 
+
 % Does user want to specify fig_num?
 fig_num = []; % Default is to have no figure
 flag_do_plots = 0;
-flag_be_verbose = 0;
-if (0==flag_max_speed) && (2<= nargin)
+if (0==flag_max_speed) && (3<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp;
         flag_do_plots = 1;
-        flag_be_verbose = 1;
     end
 end
 
-%% Main code
+
+%% Solve for the circle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   __  __       _
 %  |  \/  |     (_)
@@ -133,65 +135,35 @@ end
 %  |_|  |_|\__,_|_|_| |_|
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ODRStruct_fixed = ODRStruct;
-
-flag_warnings_were_found = 0;
-
-% Check for out of order segments (by station) and reorder properly
-if flag_be_verbose
-    fprintf(1,'Checking XODR structure for road geometry segment order...\n');
-end
-
-% Grab all the roads
-roads = fcn_ParseXODR_extractFromOpenDRIVE_Roads(ODRStruct.OpenDRIVE);
-
-% Determine the number of roads in the map
-Nroads = length(roads);
-
-%% Check road geometries
-% Preallocate a vector to store the number of geometry segments in each
-% road
-NgeomElems = zeros(Nroads,1);
-
-% Iterate through all of the roads
-for roadInd = 1:Nroads
-    current_road = roads{roadInd};
-    planView_geometry = current_road.planView.geometry;
-    roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, -1);
-    sVals = roadSegmentStations(:,1);
-
-    % Determine the number of geometry segments in the active road
-    NgeomElems(roadInd) = length(planView_geometry);
 
 
-    % Check to see if there are any negative differences between subsequent
-    % segments, indicating an out of order segment (by station)
-    if any(sign(diff(sVals)) < 0)
-        flag_warnings_were_found = 1;
-        if flag_be_verbose
-            fprintf(1,'   Warning: XODR file is malformed. Road %s has geometry segments with non-monotonically increasing stations.\n',current_road.Attributes.id)
-        end
 
-        % Create an index vector in order by starting station
-        [~,sortInds] = sort(sVals);
-        % Create a temporary copy of the road geometry
-        temp = planView_geometry;
+% Determine whether there are any offsets to the center lane in the
+% current road
+if isfield(lanesStructure,'laneSection')
+    % Determine the number of lane offset descriptors in the road
+    NlaneSection = length(lanesStructure.laneSection);
 
+    % Preallocate a vector for the stations of the geometry element bounds
+    laneSectionStations = zeros(NlaneSection,2);
 
-        % Iterate through the total number of geometry segments and copy
-        % fixed order into the output
-        for geomInd = 1:NgeomElems(roadInd)
-            % Place the geometry from the temporary copy back into the original
-            % cell array of geometry elements, but in order by the sort indices
-            ODRStruct_fixed.OpenDRIVE.road{roadInd}.planView.geometry{geomInd} = temp{sortInds(geomInd)};
-        end
-        if flag_be_verbose
-            fprintf(1,'   Segments reordered. Checking downstream results recommended.\n');
+    % Iterate through all of the offset descriptors
+    for laneSectionIndex = 1:NlaneSection
+
+        % Determine the start point of the current offset descriptor
+        laneSectionStations(laneSectionIndex,1) = str2double(lanesStructure.laneSection{laneSectionIndex}.Attributes.s);
+
+        if laneSectionIndex>1
+            % Set the end point of the previous offset descriptor
+            laneSectionStations(laneSectionIndex-1,2) = laneSectionStations(laneSectionIndex,1);
         end
     end
-end
-if flag_be_verbose
-    fprintf(1,'   Road geometry segment order check complete.\n');
+
+    % Set the end station
+    laneSectionStations(end,2) = roadEndStation;
+
+else
+    laneSectionStations = [0 roadEndStation];
 end
 
 
@@ -217,13 +189,32 @@ if flag_do_plots
     grid on;
     axis equal
 
+    % Grab colors to use
+    try
+        color_ordering = orderedcolors('gem12');
+    catch
+        color_ordering = colororder;
+    end
+    N_colors = length(color_ordering(:,1)); %#ok<NASGU>
 
     % Set up labels and title
     xlabel('East (m)')
     ylabel('North (m)')
     title('XY view')
 
-
+    % % Plot road reference line in solid blue
+    % roadStationPoints = (min(stationPoints):0.1:max(stationPoints))';
+    % [xPts_roadReferenceLine,yPts_roadReferenceLine] = fcn_ParseXODR_extractFromLanes_LaneSectionStations(planView_geometry, roadStationPoints);
+    % plot(xPts_roadReferenceLine,yPts_roadReferenceLine,'b-','LineWidth',3);
+    %
+    % % Plot the results
+    % for ith_column = 1:length(xPts(1,:))
+    %     % Get current color
+    %     current_color = color_ordering(mod(ith_column,N_colors)+1,:);
+    %
+    %     % Plot results as dots
+    %     plot(xPts(:,ith_column),yPts(:,ith_column),'.','MarkerSize',30,'Color',current_color);
+    % end
 
     % Make axis slightly larger?
     if flag_rescale_axis
@@ -254,3 +245,4 @@ end % Ends main function
 %
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+

@@ -1,3 +1,4 @@
+%% script_test_fcn_ParseXODR_convertXODRObjectsToPatchObjects
 % Script to test the parsing of objects from an xODR structure, using the
 % various functions from this library as well as the PlotXODR library and
 % the patch object library (for plotting)
@@ -43,7 +44,7 @@ Npts = ceil(lRoad/maxRoadGap);
 sPts = linspace(0,lRoad,Npts)';
 % Compute the east and north coordinates from the series of station
 % coordinates and an associated vector of zero t-coordinates
-[eRef,nRef] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRStruct.OpenDRIVE.road{1}.planView.geometry, sPts, zeros(size(sPts)));
+[eRef,nRef] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRStruct.OpenDRIVE.road{1}.planView.geometry, sPts, zeros(size(sPts)));
 
 
 % Plot the road segment in the previously addressed figure

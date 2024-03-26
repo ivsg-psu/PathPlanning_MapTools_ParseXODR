@@ -1,10 +1,10 @@
-function [stationPoints, tLeft, transverseCenterOffsets, tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad,maxPlotGap, varargin)
+function [stationPoints, tLeft, transverseCenterOffsets, tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad, maxPlotGap, varargin)
 %% fcn_ParseXODR_extractLaneGeometry
 % Extracts the lane geometry defined in an XODR file
 %
 % FORMAT:
 %
-%       [stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad,maxPlotGap, (fig_num))
+%       [stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(ODRRoad, maxPlotGap, (fig_num))
 %
 % INPUTS:
 %
@@ -310,8 +310,8 @@ if flag_do_plots
     % Obtain the reference line for the road by converting a line with
     % t-coordinate of zero for each of the test station points into (E,N)
     % coordinates
-    % [xRef,yRef] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad.planView.geometry, stationPoints,zeros(size(stationPoints)));
-    [xRef,yRef] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad.planView.geometry, stationPoints);
+    % [xRef,yRef] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints,zeros(size(stationPoints)));
+    [xRef,yRef] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints);
 
     % Now convert each of the paths (a two-column matrix of (X,Y) points) into
     % a traversal structure consistent with the PSU path library
@@ -323,7 +323,7 @@ if flag_do_plots
 
 
     % Plot the center line using same process
-    [xCenter,yCenter] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad.planView.geometry, stationPoints,transverseCenterOffsets);
+    [xCenter,yCenter] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints,transverseCenterOffsets);
     laneDataCenter.traversal{1} = fcn_Path_convertPathToTraversalStructure([xCenter yCenter]);
     hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,fig_num);
     set(hCenter,'linewidth',2,'linestyle','-.','marker','none','color','k');
@@ -442,7 +442,7 @@ if NlanesSide > 0
     yText = cell(NlanesSide,1);
     for laneIdx = 1:NlanesSide
         % Calculate the side positions in XY
-        [xSide(:,laneIdx),ySide(:,laneIdx)] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad.planView.geometry, stationPoints,tSide(:,laneIdx));
+        [xSide(:,laneIdx),ySide(:,laneIdx)] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints,tSide(:,laneIdx));
 
         % Convert results to a traversal type
         laneDataLeft.traversal{laneIdx} = fcn_Path_convertPathToTraversalStructure([xSide(:,laneIdx) ySide(:,laneIdx)]);
@@ -457,7 +457,7 @@ if NlanesSide > 0
         station_points_for_text = stationPoints(indicies_changing_from_nan_to_numeric) + station_nudge;
         transverse_points_for_text = tSide(indicies_changing_from_nan_to_numeric,laneIdx) - multiplier_for_side*transverse_nudge;
         % Find the XY coordinates
-        [xText{laneIdx},yText{laneIdx}] = fcn_ParseXODR_extractXYfromSTandCenterline(ODRRoad.planView.geometry, station_points_for_text,transverse_points_for_text);        
+        [xText{laneIdx},yText{laneIdx}] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, station_points_for_text,transverse_points_for_text);        
     end
 
     % Use the PSU path traversals plotting utility to plot the lane boundaries
