@@ -174,7 +174,7 @@ yPts = nan(size(tPts));
 roadSegmentStations = fcn_ParseXODR_extractFromRoadPlanViewRdSegStations(planView_geometry, -1);
 
 % URHERE - TO-DO - rename this function
-% fcn_ParseXODR_extractFromRoadPlanViewAndSTtoXY
+% fcn_ParseXODR_extractFromRoadPlanView_STtoXY
 
 %% Extract the XY points
 % Determine the number of road sections in the specified road in
