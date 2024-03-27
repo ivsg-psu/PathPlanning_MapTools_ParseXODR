@@ -142,7 +142,12 @@ end
 % well as all of the lanes will be calculated. Note that these
 % s-coordinates form a grid in the s,t space upon which all of the x,y
 % points for continuous features such as lanes, etc. will be calculated
-lengthOfRoad = str2double(ODRRoad.Attributes.length);
+[lengthOfRoad,IDofRoad] = fcn_ParseXODR_extractFromRoad_LengthAndID(ODRRoad, -1);
+
+% Show what we are doing in the workspze
+if flag_do_debug
+    fprintf(1,'Starting lane extraction routine for road ID: %s\n',IDofRoad);
+end
 
 Npts = ceil(lengthOfRoad/maxPlotGap);
 stationPoints = linspace(0,lengthOfRoad,Npts)';
@@ -154,11 +159,8 @@ tLeft = nan(length(stationPoints),10);
 tRight = nan(length(stationPoints),10);
 
 
-% Show what we are doing in the workspze
-if flag_do_debug
-    fprintf(1,'Starting lane extraction routine for road ID: %s\n',ODRRoad.Attributes.id);
-end
 
+%% URHERE - replace the items below with external calls
 % Using the lane offset structure, determine whether there are any offsets
 % to the center lane in the current road
 if isfield(ODRRoad.lanes,'laneOffset')
@@ -207,7 +209,7 @@ for laneSectionIndex = 1:NlaneSections
 
     if flag_do_debug && (0==flag_good_match)
         fprintf(1,'In road ID: %s, lane segment %d contains a lane or field outside of the required or optional fields.\n',...
-            ODRRoad.Attributes.id,laneSectionIndex);
+            IDofRoad,laneSectionIndex);
 
     end
 
