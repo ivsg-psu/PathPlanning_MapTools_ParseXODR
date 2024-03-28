@@ -178,7 +178,7 @@ if flag_do_plots
 
         % First, extract the lane geometry in order to determine the extents of
         % the road
-        [stationPoints,tLeft,tCenter,tRight] = fcn_ParseXODR_extractLaneGeometry(currentRoad,minPlotGap);
+        [stationPoints,tLeft,tCenter,tRight] = fcn_ParseXODR_extractFromRoad_LanesSt(currentRoad,minPlotGap);
 
         % First, find the extents of the road as the maximum t-coordinate on the
         % left side of the road and the minimum t-coordinate on the right side of
@@ -214,7 +214,7 @@ if flag_do_plots
 
         % First, extract the lane geometry in order to determine the extents of
         % the road
-        [stationPoints,tLeft,tCenter,tRight] = fcn_ParseXODR_extractLaneGeometry(currentRoad,minPlotGap);
+        [stationPoints,tLeft,tCenter,tRight] = fcn_ParseXODR_extractFromRoad_LanesSt(currentRoad,minPlotGap);
 
         if 1==flag_plot_road_geometry
             % Plot the geometry reference line by taking all the station points

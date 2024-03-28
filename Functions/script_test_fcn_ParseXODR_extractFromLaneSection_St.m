@@ -1,10 +1,9 @@
-% script_test_fcn_ParseXODR_extractLaneGeometry
+%% script_test_fcn_ParseXODR_extractFromLaneSection_St
 % Script to extract LaneGeometry in an XODR file.
-% Tests function fcn_ParseXODR_extractLaneGeometry
+% Tests function fcn_ParseXODR_extractFromLaneSection_St
 %
-% This script was written by S. Brennan from
-% "script_test_fcn_ParseXODR_plotXODRinENU" written by C. Beal Questions or comments?
-% sbrennan@psu.edu
+% This script was written by S. Brennan 
+% Questions or comments? sbrennan@psu.edu
 %
 % Revision history:
 %     2024_03_18
@@ -33,7 +32,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 assert(length(stationPoints(:,1))>1);
 assert(length(stationPoints(1,:))==1);
@@ -68,7 +67,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 assert(length(stationPoints(:,1))>1);
 assert(length(stationPoints(1,:))==1);
@@ -103,7 +102,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 assert(length(stationPoints(:,1))>1);
 assert(length(stationPoints(1,:))==1);
@@ -138,7 +137,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 assert(length(stationPoints(:,1))>1);
 assert(length(stationPoints(1,:))==1);
@@ -173,7 +172,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 assert(length(stationPoints(:,1))>1);
 assert(length(stationPoints(1,:))==1);
@@ -209,7 +208,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 
 assert(length(stationPoints(:,1))>1);
@@ -245,7 +244,7 @@ current_road = ODRStruct.OpenDRIVE.road{1};
 
 % Extract the path coordinate lane information from the XODR file for the
 % first road in the specified XODR file
-[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractLaneGeometry(current_road,0.1,fig_num*100);
+[stationPoints,tLeft,transverseCenterOffsets,tRight] = fcn_ParseXODR_extractFromLaneSection_St(current_road,0.1,fig_num*100);
 
 
 assert(length(stationPoints(:,1))>1);
