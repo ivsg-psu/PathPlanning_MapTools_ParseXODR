@@ -195,7 +195,6 @@ for laneSectionIndex = 1:NlaneSections
 
     % Make stations fixed per current laneSection, not global
     % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
-    % REWRITE SO tLEFT and tRIGHT are not passed in,
     % change laneLinksRight to use negative numbers
     % then merge both laneLinksLeft laneLinksRight side-by-side
 
@@ -205,11 +204,6 @@ for laneSectionIndex = 1:NlaneSections
     tLeftRaw(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
     tRightRaw(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
 
-    % assert(isequal(stationIndicesLeft,stationIndicesRight));
-    % 
-    % if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
-    %     assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
-    % end
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
