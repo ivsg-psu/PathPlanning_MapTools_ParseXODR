@@ -154,7 +154,7 @@ end
 % Calculate the transverse coordinates of the outside (away from
 % center) lane position for each of the lanes.
 % Left side:
-[tLeftOutputRow, stationIndicesLeft]  = ...
+[tLeftOutput, stationIndicesLeft]  = ...
     fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
     tLeft,  ...
     currentLaneSection,...
@@ -164,7 +164,7 @@ end
     stationPoints);
 
 % Right side:
-[tRightOutputRow, stationIndicesRight] = ...
+[tRightOutput, stationIndicesRight] = ...
     fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
     tRight, ...
     currentLaneSection,...
@@ -172,17 +172,6 @@ end
     laneLinksRightRow,...
     laneSectionStationLimits,...
     stationPoints);
-
-% Convert cell arrays into matricies
-tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
-for columnIndex = 1:length(laneLinksLeftRow(1,:))
-    tLeftOutput(:,columnIndex) = tLeftOutputRow{1,columnIndex};
-end
-
-tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
-for columnIndex = 1:length(laneLinksRightRow(1,:))
-    tRightOutput(:,columnIndex) = tRightOutputRow{1,columnIndex};
-end
 
 fprintf(1,'\n\ntLeft: \t\t\t\t     tRight: \n')
 disp([tLeftOutput, tRightOutput]);
@@ -269,18 +258,13 @@ end % Ends main function
 
 
 %% fcn_ParseXODR_extractFromLaneSection_LaneEdges
-function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(~, laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
+function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(tSide, laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
 % Fills the transverse location of the lane edges for the input lane
 % section, either right or left side
 
 %% FIX THIS TO TAKE BOTH RIGHT AND LEFT AT SAME TIME
 
-% Initialize the output arrays to the transverse coordinates
-tSide = cell(size(laneLinkageRow));
-for columnIndex = 1:length(laneLinkageRow(1,:))
-    tSide{1,columnIndex} = nan(size(stationPoints));
-end
-% Initialize the output arrays for the station coordinates
+% Initialize the result
 outputStationIndices = [];
 
 
@@ -310,18 +294,13 @@ if isfield(laneSection,sideString)
 
         if ~isempty(laneDataIndex)
 
-            % Grab this lane edge
-            laneEdgeToUpdate = tSide{1,laneDataIndex};
-
             % Get the current width descriptor
             current_width = current_lane.width;
 
-            [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints);
+            [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints);
 
-            % Update the matrix that stores the side data
-            laneEdgeToUpdate(outputStationIndices,:) = tLaneEdge*side_multiplier;
-
-             tSide{1,laneDataIndex} = laneEdgeToUpdate;
+            % Update the matrix that stores all the sides
+            tSide(outputStationIndices,laneDataIndex) = tLane*side_multiplier;
         end
 
     end

@@ -186,12 +186,13 @@ for laneSectionIndex = 1:NlaneSections
     laneSectionStationLimits = laneSectionStations(laneSectionIndex,:);
 
     % Gather the left and right coordinates
+    % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
     % REWRITE TO PASS CELL ARRAYS SO tLEFT and tRIGHT are not passed in,
     % then change laneLinksRight to use negative numbers
     % then merge both side-by-side
 
     [stationIndicesLeft, stationIndicesRight, tLeft, tRight ] = ...
-        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
+        fcn_ParseXODR_extractFromLaneSection_St_OLD(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     
     if ~isempty(stationIndicesLeft)
         stationIndices{laneSectionIndex}  = stationIndicesLeft;
@@ -209,17 +210,18 @@ end % Ends looping through lane sections
 tLeft = tLeft(:,any(~isnan(tLeft)));
 tRight = tRight(:,any(~isnan(tRight)));
 
+%% URHERE - push the for-loop below into sub-function
 % Do the cumulative sum in the columns, not by left to right but by
 % lane order, without including nan values (which get sorted to the end of
 % the temporary vector that is being summed anyway)
-for i = 1:length(stationIndices)
-    [~,sortInds] = sort(laneLinksLeft(i,:));
+for ith_row = 1:length(stationIndices)
+    [~,sortInds] = sort(laneLinksLeft(ith_row,:));
     if ~isempty(tLeft)
-        tLeft(stationIndices{i},sortInds) = cumsum(tLeft(stationIndices{i},sortInds),2,'includenan');
+        tLeft(stationIndices{ith_row},sortInds) = cumsum(tLeft(stationIndices{ith_row},sortInds),2,'includenan');
     end
-    [~,sortInds] = sort(laneLinksRight(i,:));
+    [~,sortInds] = sort(laneLinksRight(ith_row,:));
     if ~isempty(tRight)
-        tRight(stationIndices{i},sortInds) = cumsum(tRight(stationIndices{i},sortInds),2,'includenan');
+        tRight(stationIndices{ith_row},sortInds) = cumsum(tRight(stationIndices{ith_row},sortInds),2,'includenan');
     end
 end
 
