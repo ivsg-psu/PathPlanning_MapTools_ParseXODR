@@ -186,25 +186,30 @@ for laneSectionIndex = 1:NlaneSections
     laneSectionStationLimits = laneSectionStations(laneSectionIndex,:);
 
     % Determine which of the indices in the s-direction are affected by
-    % this offset descriptor
+    % this lane section
     currentLaneSectionStationIndicies = find(stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2));
     stationIndices{laneSectionIndex}  = currentLaneSectionStationIndicies;
+    stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
     % Gather the left and right coordinates
-    % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
-    % REWRITE TO PASS CELL ARRAYS SO tLEFT and tRIGHT are not passed in,
-    % then change laneLinksRight to use negative numbers
-    % then merge both side-by-side
+
     % Make stations fixed per current laneSection, not global
+    % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
+    % REWRITE SO tLEFT and tRIGHT are not passed in,
+    % change laneLinksRight to use negative numbers
+    % then merge both laneLinksLeft laneLinksRight side-by-side
 
-    [stationIndicesLeft, stationIndicesRight, tLeftRaw, tRightRaw ] = ...
-        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeftRaw, tRightRaw, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
-    
-    assert(isequal(stationIndicesLeft,stationIndicesRight));
 
-    if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
-        assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
-    end
+    [tLeftCurrentLaneSection, tRightCurrentLaneSection ] = ...
+        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, tLeftRaw(currentLaneSectionStationIndicies,:), tRightRaw(currentLaneSectionStationIndicies,:), laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
+    tLeftRaw(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
+    tRightRaw(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
+
+    % assert(isequal(stationIndicesLeft,stationIndicesRight));
+    % 
+    % if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
+    %     assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
+    % end
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
@@ -227,7 +232,7 @@ for ith_row = 1:length(stationIndices)
     end
 end
 
-% Add any centerline offset that exists for the lanes
+%% Add any centerline offset that exists for the lanes
 tLeft  = tLeftNoNanColumns   + transverseCenterOffsets;
 tRight = tRightNoNanColumns  + transverseCenterOffsets;
 

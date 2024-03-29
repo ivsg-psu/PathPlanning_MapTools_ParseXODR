@@ -1,4 +1,4 @@
-function [tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
+function [tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
 %% fcn_ParseXODR_extractFromLaneSection_St
 % Extracts the station and transverse coordinates for the center, left and
 % right lanes in a given road.
@@ -63,7 +63,7 @@ function [tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(
 % argument (varargin) is given a number of -1, which is not a valid figure
 % number.
 flag_max_speed = 0;
-if (nargin==8 && isequal(varargin{end},-1))
+if (nargin==6 && isequal(varargin{end},-1))
     flag_do_debug = 0; % Flag to plot the results for debugging
     flag_check_inputs = 0; % Flag to perform input checking
     flag_max_speed = 1;
@@ -105,7 +105,7 @@ end
 if 0==flag_max_speed
     if flag_check_inputs == 1
         % Are there the right number of inputs?
-        narginchk(7,8);
+        narginchk(5,6);
 
         % % Check the left_or_right_or_center input to be a string
         % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
@@ -118,7 +118,7 @@ end
 % Does user want to specify fig_num?
 fig_num = []; %#ok<NASGU> % Default is to have no figure
 flag_do_plots = 0;
-if (0==flag_max_speed) && (8<= nargin)
+if (0==flag_max_speed) && (6<= nargin)
     temp = varargin{end};
     if ~isempty(temp)
         fig_num = temp; %#ok<NASGU>
@@ -149,9 +149,6 @@ if flag_do_debug && (0==flag_good_match)
 
 end
 
-tLeftOutput = tLeft;
-tRightOutput = tRight;
-
 % Calculate the transverse coordinates of the outside (away from
 % center) lane position for each of the lanes.
 % Left side:
@@ -173,12 +170,12 @@ tRightOutput = tRight;
     stationPoints);
 
 % Convert cell arrays into matricies
-% ADD THIS ONCE GET ALL INTO STRUCTURES: tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
+tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
 for columnIndex = 1:length(laneLinksLeftRow(1,:))
     tLeftOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
 end
 
-% ADD THIS ONCE GET ALL INTO STRUCTURES: tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
+tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
 for columnIndex = 1:length(laneLinksRightRow(1,:))
     tRightOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex}(stationIndicesLeft,1);
 end
