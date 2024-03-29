@@ -149,14 +149,14 @@ if flag_do_debug && (0==flag_good_match)
 
 end
 
-
+tLeftOutput = tLeft;
+tRightOutput = tRight;
 
 % Calculate the transverse coordinates of the outside (away from
 % center) lane position for each of the lanes.
 % Left side:
-[tLeftOutput, stationIndicesLeft]  = ...
+[tLeftOutputRow, stationIndicesLeft]  = ...
     fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
-    tLeft,  ...
     currentLaneSection,...
     'left',...
     laneLinksLeftRow,...
@@ -164,17 +164,27 @@ end
     stationPoints);
 
 % Right side:
-[tRightOutput, stationIndicesRight] = ...
+[tRightOutputRow, stationIndicesRight] = ...
     fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
-    tRight, ...
     currentLaneSection,...
     'right', ...
     laneLinksRightRow,...
     laneSectionStationLimits,...
     stationPoints);
 
-fprintf(1,'\n\ntLeft: \t\t\t\t     tRight: \n')
-disp([tLeftOutput, tRightOutput]);
+% Convert cell arrays into matricies
+% ADD THIS ONCE GET ALL INTO STRUCTURES: tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
+for columnIndex = 1:length(laneLinksLeftRow(1,:))
+    tLeftOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
+end
+
+% ADD THIS ONCE GET ALL INTO STRUCTURES: tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
+for columnIndex = 1:length(laneLinksRightRow(1,:))
+    tRightOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex}(stationIndicesLeft,1);
+end
+
+% fprintf(1,'\n\ntLeft: \t\t\t\t     tRight: \n')
+% disp([tLeftOutput, tRightOutput]);
 
 if ~isequal(stationIndicesLeft,stationIndicesRight)
     warning('An unexpected error occurred - expecting stations to match on right and left side.');
@@ -258,13 +268,18 @@ end % Ends main function
 
 
 %% fcn_ParseXODR_extractFromLaneSection_LaneEdges
-function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(tSide, laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
+function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
 % Fills the transverse location of the lane edges for the input lane
 % section, either right or left side
 
 %% FIX THIS TO TAKE BOTH RIGHT AND LEFT AT SAME TIME
 
-% Initialize the result
+% Initialize the output arrays to the transverse coordinates
+tSide = cell(size(laneLinkageRow));
+for columnIndex = 1:length(laneLinkageRow(1,:))
+    tSide{1,columnIndex} = nan(size(stationPoints));
+end
+% Initialize the output arrays for the station coordinates
 outputStationIndices = [];
 
 
@@ -294,13 +309,18 @@ if isfield(laneSection,sideString)
 
         if ~isempty(laneDataIndex)
 
+            % Grab this lane edge
+            laneEdgeToUpdate = tSide{1,laneDataIndex};
+
             % Get the current width descriptor
             current_width = current_lane.width;
 
-            [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints);
+            [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromWidth_LaneEdges(current_width, laneSectionStationRange, stationPoints);
 
-            % Update the matrix that stores all the sides
-            tSide(outputStationIndices,laneDataIndex) = tLane*side_multiplier;
+            % Update the matrix that stores the side data
+            laneEdgeToUpdate(outputStationIndices,:) = tLaneEdge*side_multiplier;
+
+            tSide{1,laneDataIndex} = laneEdgeToUpdate;
         end
 
     end
@@ -310,7 +330,7 @@ end % Ends fcn_ParseXODR_extractFromLaneSection_LaneEdges
 
 
 %% fcn_ParseXODR_extractFromLane_LaneEdges
-function [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints)
+function [tLane, outputStationIndices] = fcn_ParseXODR_extractFromWidth_LaneEdges(current_width, laneSectionStationRange, stationPoints)
 laneSecStart = laneSectionStationRange(1);
 laneSecEnd   = laneSectionStationRange(2);
 

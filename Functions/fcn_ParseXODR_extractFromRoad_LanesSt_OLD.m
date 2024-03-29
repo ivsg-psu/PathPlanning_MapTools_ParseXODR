@@ -197,9 +197,14 @@ for laneSectionIndex = 1:NlaneSections
     % then merge both side-by-side
     % Make stations fixed per current laneSection, not global
 
-    [tLeft, tRight ] = ...
+    [stationIndicesLeft, stationIndicesRight, tLeft, tRight ] = ...
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     
+    assert(isequal(stationIndicesLeft,stationIndicesRight));
+
+    if ~all(isnan(tLeft),'all') && ~all(isnan(tRight),'all')
+        assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
+    end
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
