@@ -1,4 +1,4 @@
-function [stationIndicesLeft, stationIndicesRight, tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
+function [tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
 %% fcn_ParseXODR_extractFromLaneSection_St
 % Extracts the station and transverse coordinates for the center, left and
 % right lanes in a given road.

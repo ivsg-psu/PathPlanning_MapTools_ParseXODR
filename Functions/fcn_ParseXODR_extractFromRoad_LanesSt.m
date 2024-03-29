@@ -189,6 +189,7 @@ for laneSectionIndex = 1:NlaneSections
     % this offset descriptor
     currentLaneSectionStationIndicies = find(stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2));
     stationIndices{laneSectionIndex}  = currentLaneSectionStationIndicies;
+    stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
     % Gather the left and right coordinates
     % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
@@ -197,14 +198,14 @@ for laneSectionIndex = 1:NlaneSections
     % then merge both side-by-side
     % Make stations fixed per current laneSection, not global
 
-    [stationIndicesLeft, stationIndicesRight, tLeftRaw, tRightRaw ] = ...
+    [tLeftRaw, tRightRaw ] = ...
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeftRaw, tRightRaw, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     
-    assert(isequal(stationIndicesLeft,stationIndicesRight));
-
-    if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
-        assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
-    end
+    % assert(isequal(stationIndicesLeft,stationIndicesRight));
+    % 
+    % if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
+    %     assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
+    % end
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
@@ -227,7 +228,7 @@ for ith_row = 1:length(stationIndices)
     end
 end
 
-% Add any centerline offset that exists for the lanes
+%% Add any centerline offset that exists for the lanes
 tLeft  = tLeftNoNanColumns   + transverseCenterOffsets;
 tRight = tRightNoNanColumns  + transverseCenterOffsets;
 
