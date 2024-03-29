@@ -177,8 +177,8 @@ stationIndices = cell(NlaneSections,1);
 % Preallocate some left and right width matrices with NaNs. These will be
 % filled with widths of lanes (in sequence, building away from the
 % center lane)
-tLeft = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
-tRight = nan(length(stationPoints),length(laneLinksRight(1,:)) );
+tLeftRaw = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
+tRightRaw = nan(length(stationPoints),length(laneLinksRight(1,:)) );
 
 for laneSectionIndex = 1:NlaneSections
     currentLaneSection = lanesStructure.laneSection{laneSectionIndex};
@@ -197,15 +197,20 @@ for laneSectionIndex = 1:NlaneSections
     % then merge both side-by-side
     % Make stations fixed per current laneSection, not global
 
-    [tLeft, tRight ] = ...
-        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
+    [stationIndicesLeft, stationIndicesRight, tLeftRaw, tRightRaw ] = ...
+        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeftRaw, tRightRaw, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     
+    assert(isequal(stationIndicesLeft,stationIndicesRight));
+
+    if ~all(isnan(tLeftRaw),'all') && ~all(isnan(tRightRaw),'all')
+        assert(isequal(currentLaneSectionStationIndicies,stationIndicesRight));
+    end
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
 % geometry at all
-tLeft = tLeft(:,any(~isnan(tLeft)));
-tRight = tRight(:,any(~isnan(tRight)));
+tLeftNoNanColumns  = tLeftRaw(:,any(~isnan(tLeftRaw)));
+tRightNoNanColumns = tRightRaw(:,any(~isnan(tRightRaw)));
 
 %% URHERE - push the for-loop below into sub-function
 % Do the cumulative sum in the columns, not by left to right but by
@@ -213,18 +218,18 @@ tRight = tRight(:,any(~isnan(tRight)));
 % the temporary vector that is being summed anyway)
 for ith_row = 1:length(stationIndices)
     [~,sortInds] = sort(laneLinksLeft(ith_row,:));
-    if ~isempty(tLeft)
-        tLeft(stationIndices{ith_row},sortInds) = cumsum(tLeft(stationIndices{ith_row},sortInds),2,'includenan');
+    if ~isempty(tLeftNoNanColumns)
+        tLeftNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tLeftNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
     end
     [~,sortInds] = sort(laneLinksRight(ith_row,:));
-    if ~isempty(tRight)
-        tRight(stationIndices{ith_row},sortInds) = cumsum(tRight(stationIndices{ith_row},sortInds),2,'includenan');
+    if ~isempty(tRightNoNanColumns)
+        tRightNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tRightNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
     end
 end
 
 % Add any centerline offset that exists for the lanes
-tLeft = tLeft   + transverseCenterOffsets;
-tRight = tRight + transverseCenterOffsets;
+tLeft  = tLeftNoNanColumns   + transverseCenterOffsets;
+tRight = tRightNoNanColumns  + transverseCenterOffsets;
 
 % Provide some indication of completion
 if flag_do_debug
@@ -451,94 +456,4 @@ end % Ends fcn_INTERNAL_plotLaneSidesSt
 
 
 
-%% fcn_ParseXODR_extractFromLaneSection_LaneEdges
-function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(tSide, laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
 
-% Initialize the result
-outputStationIndices = [];
-
-
-% Are we solving the right or left side?
-switch lower(sideString)
-    case {'left'}
-        side_multiplier = 1;
-    case {'right'}
-        side_multiplier = -1;
-    otherwise
-error('Unrecognized sideString: %s',sideString)
-end
-
-if isfield(laneSection,sideString)
-    % Iterate through all of the side lane elements
-    NleftLanesInCurrentLaneSection = length(laneSection.(sideString).lane);
-    for sideLaneIndex = 1:NleftLanesInCurrentLaneSection
-        
-        % Get the t-coordinates of this particular lane
-        current_lane = laneSection.(sideString).lane{sideLaneIndex};
-   
-        % Get the lane index from the XODR structure
-        laneID = str2double(current_lane.Attributes.id);
-
-        % Is this laneID listed in this laneLinkageRow? If so, we need to process it
-        laneDataIndex = find(laneLinkageRow == side_multiplier*laneID);
-
-        if ~isempty(laneDataIndex)
-
-            % Get the current width descriptor
-            current_width = current_lane.width;
-
-            [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints, side_multiplier);
-
-            % Update the matrix that stores all the sides
-            tSide(outputStationIndices,laneDataIndex) = tLane;
-        end
-        
-    end
-end
-
-end % Ends fcn_ParseXODR_extractFromLaneSection_LaneEdges
-
-
-%% fcn_ParseXODR_extractFromLane_LaneEdges
-function [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLane_LaneEdges(current_width, laneSectionStationRange, stationPoints, side_multiplier)
-laneSecStart = laneSectionStationRange(1);
-laneSecEnd   = laneSectionStationRange(2);
-
-
-
-
-% Find how many lane widths are given for this side
-Nwidths = length(current_width);
-
-if ~iscell(current_width)
-    current_width = {current_width};
-end
-
-% Loop through all the widths
-for widthIndex = 1:Nwidths
-    a = str2double(current_width{widthIndex}.Attributes.a);
-    b = str2double(current_width{widthIndex}.Attributes.b);
-    c = str2double(current_width{widthIndex}.Attributes.c);
-    d = str2double(current_width{widthIndex}.Attributes.d);
-    sOffset = str2double(current_width{widthIndex}.Attributes.sOffset);
-
-
-    stationWhereWidthStarts = laneSecStart + sOffset;
-    if widthIndex == Nwidths
-        stationWhereWidthEnds = laneSecEnd;
-    else
-        stationWhereWidthEnds = str2double(current_width{widthIndex+1}.Attributes.sOffset);
-    end
-
-    % Determine which of the indices in the s-direction are affected by
-    % this offset descriptor
-    outputStationIndices = find(stationPoints >= stationWhereWidthStarts & stationPoints <= stationWhereWidthEnds);
-
-    % Now calculate the t coordinate of the left line at each of the
-    % affected points
-    ds = stationPoints(outputStationIndices)-stationWhereWidthStarts;
-    tLane = side_multiplier*(a + b*ds + c*ds.^2 + d*ds.^3);
-
-end
-
-end % ends fcn_ParseXODR_extractFromLane_LaneEdges

@@ -1,4 +1,4 @@
-function [tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
+function [stationIndicesLeft, stationIndicesRight, tLeftOutput, tRightOutput ] = fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationPoints, tLeft, tRight, laneLinksLeftRow, laneLinksRightRow,laneSectionStationLimits, varargin)
 %% fcn_ParseXODR_extractFromLaneSection_St
 % Extracts the station and transverse coordinates for the center, left and
 % right lanes in a given road.
@@ -186,6 +186,9 @@ end
 % fprintf(1,'\n\ntLeft: \t\t\t\t     tRight: \n')
 % disp([tLeftOutput, tRightOutput]);
 
+if ~isequal(stationIndicesLeft,stationIndicesRight)
+    warning('An unexpected error occurred - expecting stations to match on right and left side.');
+end
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
