@@ -341,13 +341,16 @@ end
 
 % Loop through all the widths
 for widthIndex = 1:Nwidths
+    % Grab the coefficients for poly fitting
     a = str2double(current_width{widthIndex}.Attributes.a);
     b = str2double(current_width{widthIndex}.Attributes.b);
     c = str2double(current_width{widthIndex}.Attributes.c);
     d = str2double(current_width{widthIndex}.Attributes.d);
+
+    % Grab the station offset
     sOffset = str2double(current_width{widthIndex}.Attributes.sOffset);
 
-
+    % Find stations where the width function description starts and ends
     stationWhereWidthStarts = laneSecStart + sOffset;
     if widthIndex == Nwidths
         stationWhereWidthEnds = laneSecEnd;

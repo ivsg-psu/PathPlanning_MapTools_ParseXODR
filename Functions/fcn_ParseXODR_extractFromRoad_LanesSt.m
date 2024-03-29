@@ -166,6 +166,7 @@ laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesSt
 
 % Get the lane linkages between sections. 
 [laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
+laneLinksRight = -1*laneLinksRight;
 
 % Iterate through all of the lane sections
 NlaneSections = length(laneSectionStations(:,1));
@@ -200,7 +201,7 @@ for laneSectionIndex = 1:NlaneSections
 
 
     [tLeftCurrentLaneSection, tRightCurrentLaneSection ] = ...
-        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
+        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     tLeftRaw(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
     tRightRaw(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
 
@@ -220,7 +221,15 @@ for ith_row = 1:length(stationIndices)
     if ~isempty(tLeftNoNanColumns)
         tLeftNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tLeftNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
     end
-    [~,sortInds] = sort(laneLinksRight(ith_row,:));
+
+    % Are the laneLinksRight negative? if so, sort the positive values of
+    % these
+    if ~isempty(find(laneLinksRight<0, 1))
+        [~,sortInds] = sort(-1*laneLinksRight(ith_row,:));
+    else
+        [~,sortInds] = sort(laneLinksRight(ith_row,:));
+    end    
+
     if ~isempty(tRightNoNanColumns)
         tRightNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tRightNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
     end
