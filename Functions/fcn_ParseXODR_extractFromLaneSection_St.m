@@ -148,6 +148,20 @@ if flag_do_debug && (0==flag_good_match)
 
 end
 
+% laneLinksLeftcolumns = find(sum(laneLinkages>0,1)>0);
+% laneLinksRightcolumns = find(sum(laneLinkages<0,1)>0);
+% 
+% % Make sure there is no overlap
+% bothRightLeft = intersect(laneLinksLeftcolumns,laneLinksRightcolumns);
+% if ~isempty(bothRightLeft)
+%     disp(laneLinkages);
+%     error('lane linkages found where both left and right lanes overlap!');
+% end
+% 
+% % Pull out the left and right side linkages
+% laneLinksLeft  = laneLinkages(:,laneLinksLeftcolumns);
+% laneLinksRight = laneLinkages(:,laneLinksRightcolumns);
+
 % Calculate the transverse coordinates of the outside (away from
 % center) lane position for each of the lanes.
 % Left side:
@@ -177,18 +191,6 @@ end
 for columnIndex = (1+length(laneLinksLeftRow(1,:))):(length(laneLinksRightRow(1,:))+length(laneLinksLeftRow(1,:)))
     tOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex-length(laneLinksLeftRow(1,:))}(stationIndicesLeft,1);
 end
-% 
-% tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
-% for columnIndex = 1:length(laneLinksLeftRow(1,:))
-%     tLeftOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
-% end
-% 
-% tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
-% for columnIndex = 1:length(laneLinksRightRow(1,:))
-%     tRightOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex}(stationIndicesLeft,1);
-% end
-
-% tOutput = [tLeftOutput, tRightOutput];
 
 if ~isequal(stationIndicesLeft,stationIndicesRight)
     warning('An unexpected error occurred - expecting stations to match on right and left side.');
