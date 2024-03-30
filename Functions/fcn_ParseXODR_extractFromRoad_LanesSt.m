@@ -180,8 +180,7 @@ stationIndices = cell(NlaneSections,1);
 % filled with widths of lanes (in sequence, building away from the
 % center lane). Each column represents the incremental increase in lane
 % width for that respective lane.
-tLeftRawIncrements = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
-tRightRawIncrements = nan(length(stationPoints),length(laneLinksRight(1,:)) );
+
 tRawIncrements = nan(length(stationPoints),length(laneLinkages(1,:)) );
 
 
@@ -196,23 +195,18 @@ for laneSectionIndex = 1:NlaneSections
     stationIndices{laneSectionIndex}  = currentLaneSectionStationIndicies;
     stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-    % Gather the left and right coordinates
+    % Gather the transverse coordinates for this lane section
 
-    % Make stations fixed per current laneSection, not global
     % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
     % change laneLinksRight to use negative numbers
     % then merge both laneLinksLeft laneLinksRight side-by-side
 
 
-    [tLeftCurrentLaneSection, tRightCurrentLaneSection ] = ...
+    tCurrentLaneSection = ...
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
-    tLeftRawIncrements(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
-    tRightRawIncrements(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
-    tCurrentLaneSection = [tLeftCurrentLaneSection, tRightCurrentLaneSection];
     tRawIncrements(currentLaneSectionStationIndicies,:) = tCurrentLaneSection;
 
 end % Ends looping through lane sections
-tRawIncrements = [tLeftRawIncrements, tRightRawIncrements];
 
 % Trim away any columns of the lane data matrices where there is no lane
 % geometry at all
