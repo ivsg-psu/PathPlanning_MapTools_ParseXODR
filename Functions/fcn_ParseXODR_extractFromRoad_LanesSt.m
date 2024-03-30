@@ -216,7 +216,8 @@ tRightIncrements_NoNanColumns = tRightRawIncrements(:,any(~isnan(tRightRawIncrem
 
 % Add up all the increments to determine the total tranverse distances from
 % the centerline
-[tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stationPoints, stationIndices, tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns, laneLinkages);
+tIncrements_NoNanColumns = [tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns];
+[tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stationPoints, stationIndices, tIncrements_NoNanColumns, laneLinkages);
 
 % Add any centerline offset that exists for the lanes
 % This shifts the centerline relative to the road geometric center, if necessary
@@ -350,7 +351,7 @@ end % Ends main function
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
 %% fcn_INTERNAL_addLaneIncrements
-function [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stations, stationIndices, tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns, laneLinkages)
+function [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stations, stationIndices, tIncrements_NoNanColumns, laneLinkages)
 
 laneLinksLeftcolumns = find(sum(laneLinkages>0,1)>0);
 laneLinksRightcolumns = find(sum(laneLinkages<0,1)>0);
@@ -375,6 +376,9 @@ laneLinksRight = laneLinkages(:,laneLinksRightcolumns);
 tLeftTotalOffsets  = nan(length(stations(:,1)),length(laneLinksLeft(1,:)));
 tRightTotalOffsets = nan(length(stations(:,1)),length(laneLinksRight(1,:)));
 
+% Separate out the right and left side transverse increments
+tLeftIncrements_NoNanColumns  = tIncrements_NoNanColumns(:,laneLinksLeftcolumns);
+tRightIncrements_NoNanColumns = tIncrements_NoNanColumns(:,laneLinksRightcolumns);
 
 % Loop through each lane section, sorting for each section from the inside
 % lane to the outside, adding up all the increments to find the total
