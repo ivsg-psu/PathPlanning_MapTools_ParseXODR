@@ -197,11 +197,8 @@ for laneSectionIndex = 1:NlaneSections
 
     % Gather the transverse coordinates for this lane section
 
-    % URHERE - rewrite to remove stationIndiciesLeft/Right - just use one
-    % change laneLinksRight to use negative numbers
+    % URHERE 
     % then merge both laneLinksLeft laneLinksRight side-by-side
-
-
     tCurrentLaneSection = ...
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     tRawIncrements(currentLaneSectionStationIndicies,:) = tCurrentLaneSection;

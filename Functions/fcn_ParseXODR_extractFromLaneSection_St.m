@@ -143,7 +143,6 @@ required_fields = {'left','center','right','Attributes'};
 optional_fields = {'userData'};
 flag_verbose = flag_do_debug;
 flag_good_match = fcn_ParseXODR_checkStructureFields(currentLaneSection, required_fields, optional_fields, flag_verbose);
-
 if flag_do_debug && (0==flag_good_match)
     warning('A structure field was found outside of the required or optional fields.');
 
@@ -170,17 +169,26 @@ end
     stationPoints);
 
 % Convert cell arrays into matricies
-tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
+tOutput = nan(length(stationPoints(:,1)),(length(laneLinksLeftRow(1,:)) + length(laneLinksRightRow(1,:))));
+
 for columnIndex = 1:length(laneLinksLeftRow(1,:))
-    tLeftOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
+    tOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
 end
-
-tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
-for columnIndex = 1:length(laneLinksRightRow(1,:))
-    tRightOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex}(stationIndicesLeft,1);
+for columnIndex = (1+length(laneLinksLeftRow(1,:))):(length(laneLinksRightRow(1,:))+length(laneLinksLeftRow(1,:)))
+    tOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex-length(laneLinksLeftRow(1,:))}(stationIndicesLeft,1);
 end
+% 
+% tLeftOutput = nan(length(stationPoints(:,1)),length(laneLinksLeftRow(1,:)));
+% for columnIndex = 1:length(laneLinksLeftRow(1,:))
+%     tLeftOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
+% end
+% 
+% tRightOutput = nan(length(stationPoints(:,1)),length(laneLinksRightRow(1,:)));
+% for columnIndex = 1:length(laneLinksRightRow(1,:))
+%     tRightOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex}(stationIndicesLeft,1);
+% end
 
-tOutput = [tLeftOutput, tRightOutput];
+% tOutput = [tLeftOutput, tRightOutput];
 
 if ~isequal(stationIndicesLeft,stationIndicesRight)
     warning('An unexpected error occurred - expecting stations to match on right and left side.');
