@@ -162,39 +162,25 @@ end
 % laneLinksLeft  = laneLinkages(:,laneLinksLeftcolumns);
 % laneLinksRight = laneLinkages(:,laneLinksRightcolumns);
 
+laneLinksRow = [laneLinksLeftRow, -1*laneLinksRightRow];
+
 % Calculate the transverse coordinates of the outside (away from
 % center) lane position for each of the lanes.
 % Left side:
-[tLeftOutputRow, stationIndicesLeft]  = ...
+[tOutputRow, stationIndices]  = ...
     fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
     currentLaneSection,...
-    'left',...
-    laneLinksLeftRow,...
-    laneSectionStationLimits,...
-    stationPoints);
-
-% Right side:
-[tRightOutputRow, stationIndicesRight] = ...
-    fcn_ParseXODR_extractFromLaneSection_LaneEdges(...
-    currentLaneSection,...
-    'right', ...
-    laneLinksRightRow,...
+    laneLinksRow,...
     laneSectionStationLimits,...
     stationPoints);
 
 % Convert cell arrays into matricies
 tOutput = nan(length(stationPoints(:,1)),(length(laneLinksLeftRow(1,:)) + length(laneLinksRightRow(1,:))));
 
-for columnIndex = 1:length(laneLinksLeftRow(1,:))
-    tOutput(stationIndicesLeft,columnIndex) = tLeftOutputRow{1,columnIndex}(stationIndicesLeft,1);
+for columnIndex = 1:length(laneLinksRow(1,:))
+    tOutput(stationIndices,columnIndex) = tOutputRow{1,columnIndex}(stationIndices,1);
 end
-for columnIndex = (1+length(laneLinksLeftRow(1,:))):(length(laneLinksRightRow(1,:))+length(laneLinksLeftRow(1,:)))
-    tOutput(stationIndicesLeft,columnIndex) = tRightOutputRow{1,columnIndex-length(laneLinksLeftRow(1,:))}(stationIndicesLeft,1);
-end
-
-if ~isequal(stationIndicesLeft,stationIndicesRight)
-    warning('An unexpected error occurred - expecting stations to match on right and left side.');
-end
+ 
 
 %% Plot the results (for debugging)?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -274,63 +260,72 @@ end % Ends main function
 
 
 %% fcn_ParseXODR_extractFromLaneSection_LaneEdges
-function [tSide, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(laneSection, sideString, laneLinkageRow, laneSectionStationRange, stationPoints)
+function [tRow, outputStationIndices] = fcn_ParseXODR_extractFromLaneSection_LaneEdges(laneSection, laneLinkageRow, laneSectionStationRange, stationPoints)
 % Fills the transverse location of the lane edges for the input lane
-% section, either right or left side
+% section, both right and left sides
 
-%% FIX THIS TO TAKE BOTH RIGHT AND LEFT AT SAME TIME
-
-% Initialize the output arrays to the transverse coordinates
-tSide = cell(size(laneLinkageRow));
+% Initialize the output arrays to the transverse coordinates. tRow is a
+% cell array that has 1 row (for this lane section), and N columns where N
+% is the number of lanes. The number of lanes is given by the number of
+% columns in the laneLinkageRow.
+tRow = cell(size(laneLinkageRow));
 for columnIndex = 1:length(laneLinkageRow(1,:))
-    tSide{1,columnIndex} = nan(size(stationPoints));
+    tRow{1,columnIndex} = nan(size(stationPoints));
 end
+
 % Initialize the output arrays for the station coordinates
 outputStationIndices = [];
 
+% Loop through left and right sides, getting lane edges for each
+sideStrings = {'left','right'};
+for ith_side = 1:length(sideStrings)
+    sideString = sideStrings{ith_side};
 
-% Are we solving the right or left side?
-switch lower(sideString)
-    case {'left'}
-        side_multiplier = 1;
-    case {'right'}
-        side_multiplier = -1;
-    otherwise
-        error('Unrecognized sideString: %s',sideString)
-end
+    % Does the field exist for this side?
+    if isfield(laneSection,sideString)
 
-if isfield(laneSection,sideString)
-    % Iterate through all of the side lane elements
-    NleftLanesInCurrentLaneSection = length(laneSection.(sideString).lane);
-    for sideLaneIndex = 1:NleftLanesInCurrentLaneSection
+        % Iterate through all of the side lane elements. Each element is
+        % where the geometric description of the lane width is changing.
+        NleftLanesInCurrentLaneSection = length(laneSection.(sideString).lane);
+        for sideLaneIndex = 1:NleftLanesInCurrentLaneSection
 
-        % Get the t-coordinates of this particular lane
-        current_lane = laneSection.(sideString).lane{sideLaneIndex};
+            % Get the t-coordinates of this particular lane
+            current_lane = laneSection.(sideString).lane{sideLaneIndex};
 
-        % Get the lane index from the XODR structure
-        laneID = str2double(current_lane.Attributes.id);
+            % Get the lane index from the XODR structure
+            laneID = str2double(current_lane.Attributes.id);
 
-        % Is this laneID listed in this laneLinkageRow? If so, we need to process it
-        laneDataIndex = find(laneLinkageRow == side_multiplier*laneID);
+            % Is this laneID listed in this laneLinkageRow? If so, we need to process it
+            laneDataIndex = find(laneLinkageRow == laneID);
 
-        if ~isempty(laneDataIndex)
+            if ~isempty(laneDataIndex)
 
-            % Grab this lane edge
-            laneEdgeToUpdate = tSide{1,laneDataIndex};
+                % Grab this lane edge
+                laneEdgeToUpdate = tRow{1,laneDataIndex};
 
-            % Get the current width descriptor
-            current_width = current_lane.width;
+                % Get the current width structure
+                current_width = current_lane.width;
+                
+                % Use width structure to calculate the lane edge transverse
+                % position
+                [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromWidth_LaneEdges(current_width, laneSectionStationRange, stationPoints);
 
-            [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromWidth_LaneEdges(current_width, laneSectionStationRange, stationPoints);
+                % Update the matrix that stores the side data. Be sure to
+                % correct the width sign if the lane edge is on negative
+                % transverse side
+                if laneID<0
+                    laneEdgeToUpdate(outputStationIndices,:) = tLaneEdge*(-1);
+                else
+                    laneEdgeToUpdate(outputStationIndices,:) = tLaneEdge;
+                end
 
-            % Update the matrix that stores the side data
-            laneEdgeToUpdate(outputStationIndices,:) = tLaneEdge*side_multiplier;
+                % Update the cell array column corresponding to this lane
+                tRow{1,laneDataIndex} = laneEdgeToUpdate;
+            end
 
-            tSide{1,laneDataIndex} = laneEdgeToUpdate;
         end
-
-    end
-end
+    end % Ends if statement checking if field exists
+end % ends looping through sides
 
 end % Ends fcn_ParseXODR_extractFromLaneSection_LaneEdges
 

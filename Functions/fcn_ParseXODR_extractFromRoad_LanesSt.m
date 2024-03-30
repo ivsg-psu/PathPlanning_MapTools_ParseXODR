@@ -347,7 +347,7 @@ end % Ends main function
 %% fcn_INTERNAL_addLaneIncrements
 function [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stations, stationIndices, tIncrements_NoNanColumns, laneLinkages)
 
-laneLinksLeftcolumns = find(sum(laneLinkages>0,1)>0);
+laneLinksLeftcolumns  = find(sum(laneLinkages>0,1)>0);
 laneLinksRightcolumns = find(sum(laneLinkages<0,1)>0);
 
 % Make sure there is no overlap
