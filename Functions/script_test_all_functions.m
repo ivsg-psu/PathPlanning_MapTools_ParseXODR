@@ -17,3 +17,4 @@ for i_script = 1:length(all_scripts)
         results = run(suite);
     end
 end
+diary off
