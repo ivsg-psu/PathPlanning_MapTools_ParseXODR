@@ -1,4 +1,4 @@
-function [stationPoints, tLeft, transverseCenterOffsets, tRight] = fcn_ParseXODR_extractFromRoad_LanesSt(ODRRoad, maxPlotGap, varargin)
+function [stationPoints, tLeft, transverseCenterLaneOffsets, tRight] = fcn_ParseXODR_extractFromRoad_LanesSt(ODRRoad, maxPlotGap, varargin)
 %% fcn_ParseXODR_extractFromRoad_LanesSt
 % Extracts the station and transverse coordinates for the center, left and
 % right lanes in a given road.
@@ -36,8 +36,7 @@ function [stationPoints, tLeft, transverseCenterOffsets, tRight] = fcn_ParseXODR
 %
 % DEPENDENCIES:
 %
-%      fcn_ParseXODR_extractXYfromSTandGeometries
-%      fcn_ParseXODR_extractXYfromSTCurves (second-level)
+%      fcn_ParseXODR_extractFromLaneSection_St
 %
 % EXAMPLES:
 %
@@ -151,15 +150,14 @@ if flag_do_debug
     fprintf(1,'Starting lane extraction routine for road ID: %s\n',IDofRoad);
 end
 
+% Set up the station points to calculate results
 Npts = ceil(lengthOfRoad/maxPlotGap);
 stationPoints = linspace(0,lengthOfRoad,Npts)';
-
-
 
 % Using the lane offset structure, determine whether there are any offsets
 % to the center lane in the current road
 lanesStructure = ODRRoad.lanes;
-transverseCenterOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
+transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 
 % Find the stations where each lane section starts and ends
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
@@ -180,27 +178,26 @@ stationIndices = cell(NlaneSections,1);
 % filled with widths of lanes (in sequence, building away from the
 % center lane). Each column represents the incremental increase in lane
 % width for that respective lane.
-
 tRawIncrements = nan(length(stationPoints),length(laneLinkages(1,:)) );
 
-
+% Loop through the lane sections, getting the transverse offset increments
+% for each lane edge as columns in a tRawIncrements matrix
 for laneSectionIndex = 1:NlaneSections
     currentLaneSection = lanesStructure.laneSection{laneSectionIndex};
 
+    % What are the station limits for this lane section?
     laneSectionStationLimits = laneSectionStations(laneSectionIndex,:);
 
     % Determine which of the indices in the s-direction are affected by
-    % this lane section
+    % this lane section, and update the station coordinates for this lane
+    % section
     currentLaneSectionStationIndicies = find(stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2));
     stationIndices{laneSectionIndex}  = currentLaneSectionStationIndicies;
     stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
     % Gather the transverse coordinates for this lane section
-
-    % URHERE 
-    % then merge both laneLinksLeft laneLinksRight side-by-side
     tCurrentLaneSection = ...
-        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
+        fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(laneSectionIndex,:), laneSectionStationLimits);
     tRawIncrements(currentLaneSectionStationIndicies,:) = tCurrentLaneSection;
 
 end % Ends looping through lane sections
@@ -213,10 +210,11 @@ tIncrements_NoNanColumns = tRawIncrements(:,any(~isnan(tRawIncrements)));
 % the centerline
 [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stationPoints, stationIndices, tIncrements_NoNanColumns, laneLinkages);
 
-% Add any centerline offset that exists for the lanes
-% This shifts the centerline relative to the road geometric center, if necessary
-tLeft  = tLeftTotalOffsets   + transverseCenterOffsets;
-tRight = tRightTotalOffsets  + transverseCenterOffsets;
+% Add any center lane offset that exists for the road
+% This shifts the centerline  of all lanes relative to the road geometric
+% center
+tLeft  = tLeftTotalOffsets   + transverseCenterLaneOffsets;
+tRight = tRightTotalOffsets  + transverseCenterLaneOffsets;
 
 % Provide some indication of completion
 if flag_do_debug
@@ -270,7 +268,7 @@ if flag_do_plots
 
 
     % Plot the center line using same process
-    [xCenter,yCenter] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints,transverseCenterOffsets);
+    [xCenter,yCenter] = fcn_ParseXODR_extractFromRoadPlanView_STtoXY(ODRRoad.planView.geometry, stationPoints,transverseCenterLaneOffsets);
     laneDataCenter.traversal{1} = fcn_Path_convertPathToTraversalStructure([xCenter yCenter]);
     hCenter = fcn_Path_plotTraversalsXY(laneDataCenter,fig_num);
     set(hCenter,'linewidth',2,'linestyle','-.','marker','none','color','k');
@@ -302,7 +300,7 @@ if flag_do_plots
     ylabel('t coordinate [m]')
 
     % Plot the centerline
-    hC = plot(stationPoints,transverseCenterOffsets,'k--','linewidth',1.5);
+    hC = plot(stationPoints,transverseCenterLaneOffsets,'k--','linewidth',1.5);
     plotHandles = hC;
     plotLabels = {'Center Lane'};
 
@@ -391,7 +389,7 @@ for ith_row = 1:length(stationIndices)
         tRightTotalOffsets(stationIndices{ith_row},sortInds) = cumsum(tRightIncrements_NoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
     end
 end
-end
+end % ends fcn_INTERNAL_addLaneIncrements
 
 %% fcn_INTERNAL_plotLaneSidesXY
 function fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tSide, multiplier_for_side, fig_num)

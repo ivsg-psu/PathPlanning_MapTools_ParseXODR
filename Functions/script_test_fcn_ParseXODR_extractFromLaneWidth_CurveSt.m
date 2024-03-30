@@ -1,6 +1,6 @@
-%% script_test_fcn_ParseXODR_extractFromLaneSection_St
+%% script_test_fcn_ParseXODR_extractFromLaneWidth_CurveSt
 % Script to extract LaneGeometry in an XODR file.
-% Tests function fcn_ParseXODR_extractFromLaneSection_St
+% Tests function fcn_ParseXODR_extractFromLaneWidth_CurveSt
 %
 % This script was written by S. Brennan 
 % Questions or comments? sbrennan@psu.edu
@@ -37,9 +37,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -52,19 +52,27 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
 
 %% Ex_Complex_Lane_Offset
 fig_num = 2;
@@ -90,9 +98,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -105,19 +113,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 
 %% Ex_Simple_Lane_Offset_Reversed
 fig_num = 3;
@@ -143,9 +164,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -158,19 +179,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 
 %% Ex_Simple_Lane_Offset
 fig_num = 4;
@@ -196,9 +230,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -211,20 +245,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
-
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 %% Ex_Simple_Lane_Gains
 fig_num = 5;
 figure(fig_num)
@@ -249,9 +295,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -264,19 +310,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 
 %% workzone_50m_curve_barrels
 fig_num = 6;
@@ -300,9 +359,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -315,19 +374,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));
 
 %% testTrack_outerTrack
 fig_num = 7;
@@ -353,9 +425,9 @@ stationPoints = linspace(0,lengthOfRoad,Npts)';
 lanesStructure = ODRRoad.lanes;
 % transverseCenterLaneOffsets = fcn_ParseXODR_extractFromLanes_tCenterLane(lanesStructure, lengthOfRoad, stationPoints, -1);
 laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesStructure, lengthOfRoad, -1);
-[laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
-laneLinkages = [laneLinksLeft, laneLinksRight];
+
+
+
 
 % Grab lane section info
 currentLaneSection = lanesStructure.laneSection{1};
@@ -365,19 +437,32 @@ laneSectionStationLimits = laneSectionStations(1,:);
 % Determine which of the indices in the s-direction are affected by
 % this lane section, and update the station coordinates for this lane
 % section
-currentLaneSectionStationIndicies = find(stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2));
+currentLaneSectionStationIndicies = stationPoints >= laneSectionStationLimits(1) & stationPoints <= laneSectionStationLimits(2);
 stationsInThisLaneSection = stationPoints(currentLaneSectionStationIndicies);
 
-% Gather the transverse coordinates for this lane section
-tCurrentLaneSection = ...
-    fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinkages(1,:), laneSectionStationLimits, fig_num);
+ % Get the t-coordinates of this particular lane
+ sideString = 'left';
+ current_lane = currentLaneSection.(sideString).lane{1};
+
+
+
+
+ 
+
+
+
+ % Get the current width structure
+ current_width = current_lane.width;
+
+ % Use width structure to calculate the lane edge transverse
+ % position
+ [tLaneEdge, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationsInThisLaneSection, laneSectionStations(1,:), fig_num);
 
 % Check results
 % Do the lengths make sense?
-assert(length(tCurrentLaneSection(:,1))==length(stationsInThisLaneSection));
-assert(length(tCurrentLaneSection(1,:))==length(laneLinkages(1,:)));
-
-% Call the plotting function
-flag_plot_road_geometry = [];
-fcn_ParseXODR_plotXODRinENU(ODRStruct,minPlotGap,flag_plot_road_geometry,fig_num*100);
-title(sprintf('%s',example_file),'Interpreter','none');
+assert(length(tLaneEdge(:,1))==length(stationsInThisLaneSection));
+assert(length(tLaneEdge(:,1))==length(outputStationIndices));
+assert(length(tLaneEdge(1,:))==1);
+assert(length(outputStationIndices(1,:))==1);
+assert(min(outputStationIndices)>=1);
+assert(max(outputStationIndices)<=length(stationPoints));

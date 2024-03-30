@@ -1,0 +1,682 @@
+<strong> </strong><strong>Testing script: 1 of 40, test_fcn_ParseXODR_addObjects
+
+</strong>Running script_test_fcn_ParseXODR_addObjects
+.
+Done script_test_fcn_ParseXODR_addObjects
+__________
+
+<strong> </strong><strong>Testing script: 2 of 40, test_fcn_ParseXODR_checkStructureFields
+
+</strong>Running script_test_fcn_ParseXODR_checkStructureFields
+
+
+Tested structure has all required fields.
+Tested structure has no optional fields.
+.
+
+Tested structure has all required fields.
+Tested structure has optional fields that are all within allowable optional fields.
+.
+
+Tested structure is missing one or more of the following required fields:
+Expected:
+	required_field1
+	required_field2
+	required_field3
+Missing:
+	required_field3
+Tested structure has no optional fields.
+.
+
+Tested structure has all required fields.
+Tested structure has a field that is outside both the required and the optional fields:
+Allowable optional fields:
+	extra2
+Detected outside the optional fields:
+	extra1
+.
+Done script_test_fcn_ParseXODR_checkStructureFields
+__________
+
+<strong> </strong><strong>Testing script: 3 of 40, test_fcn_ParseXODR_checkXODR
+
+</strong>Running script_test_fcn_ParseXODR_checkXODR
+..Checking XODR structure for road geometry segment order...
+   Road geometry segment order check complete.
+Checking XODR structure for road geometry segment order...
+Checking XODR road geometry segments for continuity of start/end point positions and headings...
+   Geometry segment consistency check complete.
+Checking ODR bounding box values...
+   East bounds incorrect. Updating bounding box on east edge.
+   North bounds incorrect. Updating bounding box on north edge.
+   Bounding box check complete.
+Checking XODR structure for road geometry segment order...
+   Road geometry segment order check complete.
+Checking XODR structure for road geometry segment order...
+Checking XODR road geometry segments for continuity of start/end point positions and headings...
+   Geometry segment consistency check complete.
+Checking ODR bounding box values...
+   Bounding box check complete.
+.Checking XODR structure for road geometry segment order...
+   Warning: XODR file is malformed. Road 1 has geometry segments with non-monotonically increasing stations.
+   Segments reordered. Checking downstream results recommended.
+   Road geometry segment order check complete.
+Checking XODR structure for road geometry segment order...
+Checking XODR road geometry segments for continuity of start/end point positions and headings...
+   Geometry segment consistency check complete.
+Checking ODR bounding box values...
+   East bounds incorrect. Updating bounding box on east edge.
+   South bounds incorrect. Updating bounding box on south edge.
+   Bounding box check complete.
+Checking XODR structure for road geometry segment order...
+   Road geometry segment order check complete.
+Checking XODR structure for road geometry segment order...
+Checking XODR road geometry segments for continuity of start/end point positions and headings...
+   Geometry segment consistency check complete.
+Checking ODR bounding box values...
+   Bounding box check complete.
+.
+Done script_test_fcn_ParseXODR_checkXODR
+__________
+
+<strong> </strong><strong>Testing script: 4 of 40, test_fcn_ParseXODR_checkXODRBoundBox
+
+</strong>Running script_test_fcn_ParseXODR_checkXODRBoundBox
+.Checking ODR bounding box values...
+   East bounds incorrect. Updating bounding box on east edge.
+   North bounds incorrect. Updating bounding box on north edge.
+   Bounding box check complete.
+..
+Done script_test_fcn_ParseXODR_checkXODRBoundBox
+__________
+
+<strong> </strong><strong>Testing script: 5 of 40, test_fcn_ParseXODR_checkXODRGeomOrdering
+
+</strong>Running script_test_fcn_ParseXODR_checkXODRGeomOrdering
+.Checking XODR structure for road geometry segment order...
+   Road geometry segment order check complete.
+..
+Done script_test_fcn_ParseXODR_checkXODRGeomOrdering
+__________
+
+<strong> </strong><strong>Testing script: 6 of 40, test_fcn_ParseXODR_checkXODRSegments
+
+</strong>Running script_test_fcn_ParseXODR_checkXODRSegments
+.Checking XODR structure for road geometry segment order...
+Checking XODR road geometry segments for continuity of start/end point positions and headings...
+   Geometry segment consistency check complete.
+..
+Done script_test_fcn_ParseXODR_checkXODRSegments
+__________
+
+<strong> </strong><strong>Testing script: 7 of 40, test_fcn_ParseXODR_compareTwoStructs
+
+</strong>Running script_test_fcn_ParseXODR_compareTwoStructs
+...
+
+CHECKING ENTIRE STRUCTURE: using common fields. <--Entire structure is absolutely identical.
+.
+
+CHECKING ENTIRE STRUCTURE: using common fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <--- agree
+Field: level_1_b 
+	Checking variable: level_1_b <--- agree
+Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Entire structure is absolutely identical.
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+	Field: level_2_j 
+		Checking variable: level_2_j <--- agree
+	Field: level_2_struct 
+		Checking structure: level_2_struct <--Structures are not absolutely identical.
+		Iterating through fields to find difference:
+		Field: var 
+			Checking variable: var <strong><--- DO NOT MATCH
+</strong>.
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <--- agree
+Field: level_1_b 
+	Checking variable: level_1_b <--- agree
+Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_x 
+		Checking variable: level_2_x <--- agree
+	Field: level_2_y 
+		Checking variable: level_2_y <--- agree
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+.
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <strong><--- DO NOT MATCH
+</strong>Field: level_1_b 
+	Checking variable: level_1_b <--- agree
+Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_x 
+		Checking variable: level_2_x <--- agree
+	Field: level_2_y 
+		Checking variable: level_2_y <--- agree
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+.
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <--- agree
+Field: level_1_b 
+	Checking variable: level_1_b <--- agree
+Field: level_1_c <strong><--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 1 
+</strong>Field: level_1_c <strong><--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 2 
+</strong>Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_x 
+		Checking variable: level_2_x <--- agree
+	Field: level_2_y 
+		Checking variable: level_2_y <--- agree
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+.
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <--- agree
+Field: level_1_b <strong><--- IN TEMPLATE BUT DOES NOT EXIST IN STRUCTURE 2 
+</strong>Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_x 
+		Checking variable: level_2_x <--- agree
+	Field: level_2_y 
+		Checking variable: level_2_y <--- agree
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+.
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: level_1_a 
+	Checking variable: level_1_a <--- agree
+Field: level_1_b 
+	Checking variable: level_1_b <strong><--- DO NOT MATCH
+</strong>Field: level_1_struct1 
+	Checking structure: level_1_struct1 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_x 
+		Checking variable: level_2_x <--- agree
+	Field: level_2_y 
+		Checking variable: level_2_y <--- agree
+Field: level_1_struct2 
+	Checking structure: level_1_struct2 <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: level_2_i 
+		Checking variable: level_2_i <--- agree
+. 
+
+ONE INPUT IS NOT A STRUCTURE: 
+Input 2 <strong><--- NOT A STRUCTURE
+</strong>Checking variable: first_struct versus second_struct <strong><--- DO NOT MATCH
+</strong>...
+Done script_test_fcn_ParseXODR_compareTwoStructs
+__________
+
+<strong> </strong><strong>Testing script: 8 of 40, test_fcn_ParseXODR_compareTwoXODRStructs
+
+</strong>Running script_test_fcn_ParseXODR_compareTwoXODRStructs
+
+
+CHECKING ENTIRE STRUCTURE: using template fields. <--Structures are not absolutely identical.
+Iterating through fields to find difference:
+Field: OpenDRIVE 
+	Checking structure: OpenDRIVE <--Structures are not absolutely identical.
+	Iterating through fields to find difference:
+	Field: header 
+		Checking structure: header <--Structures are not absolutely identical.
+		Iterating through fields to find difference:
+		Field: Attributes 
+			Checking structure: Attributes <--Structures are not absolutely identical.
+			Iterating through fields to find difference:
+			Field: revMajor 
+				Checking variable: revMajor <--- agree
+			Field: revMinor 
+				Checking variable: revMinor <--- agree
+	Field: road 
+		Checking structure: road <--Structures are not absolutely identical.
+		Iterating through fields to find difference:
+		Field: Attributes 
+			Checking structure: Attributes <--Structures are not absolutely identical.
+			Iterating through fields to find difference:
+			Field: id 
+				Checking variable: id <--- agree
+			Field: junction 
+				Checking variable: junction <--- agree
+			Field: length 
+				Checking variable: length <--- agree
+		Field: planView 
+			Checking structure: planView <--Structures are not absolutely identical.
+			Iterating through fields to find difference:
+			Field: geometry 
+				Checking structure: geometry <--Structures are not absolutely identical.
+				Iterating through fields to find difference:
+				Field: Attributes 
+					Checking structure: Attributes <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: hdg 
+						Checking variable: hdg <--- agree
+					Field: length 
+						Checking variable: length <--- agree
+					Field: s 
+						Checking variable: s <--- agree
+					Field: x 
+						Checking variable: x <--- agree
+					Field: y 
+						Checking variable: y <--- agree
+		Field: lanes 
+			Checking structure: lanes <--Structures are not absolutely identical.
+			Iterating through fields to find difference:
+			Field: laneSection 
+				Checking structure: laneSection <--Structures are not absolutely identical.
+				Iterating through fields to find difference:
+				Field: Attributes 
+					Checking structure: Attributes <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: s 
+						Checking variable: s <--- agree
+				Field: center 
+					Checking structure: center <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: lane 
+						Checking structure: lane <--Structures are not absolutely identical.
+						Iterating through fields to find difference:
+						Field: Attributes 
+							Checking structure: Attributes <--Structures are not absolutely identical.
+							Iterating through fields to find difference:
+							Field: id 
+								Checking variable: id <--- agree
+			Field: laneSection 
+				Checking structure: laneSection <--Structures are not absolutely identical.
+				Iterating through fields to find difference:
+				Field: Attributes 
+					Checking structure: Attributes <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: s 
+						Checking variable: s <--- agree
+				Field: center 
+					Checking structure: center <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: lane 
+						Checking structure: lane <--Structures are not absolutely identical.
+						Iterating through fields to find difference:
+						Field: Attributes 
+							Checking structure: Attributes <--Structures are not absolutely identical.
+							Iterating through fields to find difference:
+							Field: id 
+								Checking variable: id <--- agree
+			Field: laneSection 
+				Checking structure: laneSection <--Structures are not absolutely identical.
+				Iterating through fields to find difference:
+				Field: Attributes 
+					Checking structure: Attributes <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: s 
+						Checking variable: s <--- agree
+				Field: center 
+					Checking structure: center <--Structures are not absolutely identical.
+					Iterating through fields to find difference:
+					Field: lane 
+						Checking structure: lane <--Structures are not absolutely identical.
+						Iterating through fields to find difference:
+						Field: Attributes 
+							Checking structure: Attributes <--Structures are not absolutely identical.
+							Iterating through fields to find difference:
+							Field: id 
+								Checking variable: id <--- agree
+...
+Done script_test_fcn_ParseXODR_compareTwoXODRStructs
+__________
+
+<strong> </strong><strong>Testing script: 9 of 40, test_fcn_ParseXODR_convertODRstructToXODRFile
+
+</strong>Running script_test_fcn_ParseXODR_convertODRstructToXODRFile
+......
+Done script_test_fcn_ParseXODR_convertODRstructToXODRFile
+__________
+
+<strong> </strong><strong>Testing script: 10 of 40, test_fcn_ParseXODR_convertXODRObjectsToPatchObjects
+
+</strong>Running script_test_fcn_ParseXODR_convertXODRObjectsToPatchObjects
+.
+Done script_test_fcn_ParseXODR_convertXODRObjectsToPatchObjects
+__________
+
+<strong> </strong><strong>Testing script: 11 of 40, test_fcn_ParseXODR_convertXODRtoMATLABStruct
+
+</strong>Running script_test_fcn_ParseXODR_convertXODRtoMATLABStruct
+....
+Done script_test_fcn_ParseXODR_convertXODRtoMATLABStruct
+__________
+
+<strong> </strong><strong>Testing script: 12 of 40, test_fcn_ParseXODR_countLanes
+
+</strong>Running script_test_fcn_ParseXODR_countLanes
+.......
+Done script_test_fcn_ParseXODR_countLanes
+__________
+
+<strong> </strong><strong>Testing script: 13 of 40, test_fcn_ParseXODR_extractFromLaneSection_St
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLaneSection_St
+........
+Done script_test_fcn_ParseXODR_extractFromLaneSection_St
+__________
+
+<strong> </strong><strong>Testing script: 14 of 40, test_fcn_ParseXODR_extractFromLaneWidth_CurveSt
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLaneWidth_CurveSt
+........
+Done script_test_fcn_ParseXODR_extractFromLaneWidth_CurveSt
+__________
+
+<strong> </strong><strong>Testing script: 15 of 40, test_fcn_ParseXODR_extractFromLanes_LaneLinkages
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLanes_LaneLinkages
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2   NaN
+     1     2   NaN
+     1   NaN   NaN
+     1   NaN     2
+     1   NaN     2
+
+LaneLinksRight: 
+     1     2
+     1     2
+     1     2
+     1     2
+     1     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2     3     4
+     1     2     3     4
+     1   NaN     2     3
+
+LaneLinksRight: 
+     1     2     3   NaN
+     1     3     4     2
+     1     3     4     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2   NaN
+     1     3     2
+     1     3     2
+
+LaneLinksRight: 
+     1     2     3
+     1     2     3
+     1   NaN     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2     3
+     1     2     3
+     1   NaN     2
+
+LaneLinksRight: 
+     1     2   NaN
+     1     3     2
+     1     3     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2     3
+     1     2     3
+     1   NaN     2
+
+LaneLinksRight: 
+     1     2   NaN
+     1     3     2
+     1     3     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2
+
+LaneLinksRight: 
+     1     2
+
+.
+
+LANE LINKAGES: 
+LaneLinksLeft: 
+     1     2
+
+LaneLinksRight: 
+     1     2
+
+.
+Done script_test_fcn_ParseXODR_extractFromLanes_LaneLinkages
+__________
+
+<strong> </strong><strong>Testing script: 16 of 40, test_fcn_ParseXODR_extractFromLanes_LaneOffsetStations
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLanes_LaneOffsetStations
+........
+Done script_test_fcn_ParseXODR_extractFromLanes_LaneOffsetStations
+__________
+
+<strong> </strong><strong>Testing script: 17 of 40, test_fcn_ParseXODR_extractFromLanes_LaneSectionStations
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLanes_LaneSectionStations
+........
+Done script_test_fcn_ParseXODR_extractFromLanes_LaneSectionStations
+__________
+
+<strong> </strong><strong>Testing script: 18 of 40, test_fcn_ParseXODR_extractFromLanes_tCenterLane
+
+</strong>Running script_test_fcn_ParseXODR_extractFromLanes_tCenterLane
+........
+Done script_test_fcn_ParseXODR_extractFromLanes_tCenterLane
+__________
+
+<strong> </strong><strong>Testing script: 19 of 40, test_fcn_ParseXODR_extractFromOpenDRIVE_Roads
+
+</strong>Running script_test_fcn_ParseXODR_extractFromOpenDRIVE_Roads
+........
+Done script_test_fcn_ParseXODR_extractFromOpenDRIVE_Roads
+__________
+
+<strong> </strong><strong>Testing script: 20 of 40, test_fcn_ParseXODR_extractFromRoadPlanViewRdSegStations
+
+</strong>Running script_test_fcn_ParseXODR_extractFromRoadPlanViewRdSegStations
+........
+Done script_test_fcn_ParseXODR_extractFromRoadPlanViewRdSegStations
+__________
+
+<strong> </strong><strong>Testing script: 21 of 40, test_fcn_ParseXODR_extractFromRoadPlanView_STtoXY
+
+</strong>Running script_test_fcn_ParseXODR_extractFromRoadPlanView_STtoXY
+......
+Done script_test_fcn_ParseXODR_extractFromRoadPlanView_STtoXY
+__________
+
+<strong> </strong><strong>Testing script: 22 of 40, test_fcn_ParseXODR_extractFromRoad_LanesSt
+
+</strong>Running script_test_fcn_ParseXODR_extractFromRoad_LanesSt
+........
+Done script_test_fcn_ParseXODR_extractFromRoad_LanesSt
+__________
+
+<strong> </strong><strong>Testing script: 23 of 40, test_fcn_ParseXODR_extractFromRoad_LengthAndID
+
+</strong>Running script_test_fcn_ParseXODR_extractFromRoad_LengthAndID
+.Road named: 1 has a length of 100 meters.
+.Road named: 1 has a length of 100 meters.
+.Road named: 1 has a length of 100 meters.
+.Road named: 1 has a length of 100 meters.
+.Road named: 1 has a length of 200 meters.
+.Road named: 0 has a length of 50 meters.
+.Road named: 0 has a length of 2e+03 meters.
+.
+Done script_test_fcn_ParseXODR_extractFromRoad_LengthAndID
+__________
+
+<strong> </strong><strong>Testing script: 24 of 40, test_fcn_ParseXODR_extractXYfromSTArc
+
+</strong>Running script_test_fcn_ParseXODR_extractXYfromSTArc
+...
+Done script_test_fcn_ParseXODR_extractXYfromSTArc
+__________
+
+<strong> </strong><strong>Testing script: 25 of 40, test_fcn_ParseXODR_extractXYfromSTCurves
+
+</strong>Running script_test_fcn_ParseXODR_extractXYfromSTCurves
+....
+Done script_test_fcn_ParseXODR_extractXYfromSTCurves
+__________
+
+<strong> </strong><strong>Testing script: 26 of 40, test_fcn_ParseXODR_extractXYfromSTSpiral
+
+</strong>Running script_test_fcn_ParseXODR_extractXYfromSTSpiral
+...
+Done script_test_fcn_ParseXODR_extractXYfromSTSpiral
+__________
+
+<strong> </strong><strong>Testing script: 27 of 40, test_fcn_ParseXODR_extractXYfromSTandGeometries
+
+</strong>Running script_test_fcn_ParseXODR_extractXYfromSTandGeometries
+......
+Done script_test_fcn_ParseXODR_extractXYfromSTandGeometries
+__________
+
+<strong> </strong><strong>Testing script: 28 of 40, test_fcn_ParseXODR_fillBlankFieldStructure
+
+</strong>Running script_test_fcn_ParseXODR_fillBlankFieldStructure
+....
+Done script_test_fcn_ParseXODR_fillBlankFieldStructure
+__________
+
+<strong> </strong><strong>Testing script: 29 of 40, test_fcn_ParseXODR_fillDefaultHeader
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultHeader
+.....
+Done script_test_fcn_ParseXODR_fillDefaultHeader
+__________
+
+<strong> </strong><strong>Testing script: 30 of 40, test_fcn_ParseXODR_fillDefaultObject
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultObject
+....
+Done script_test_fcn_ParseXODR_fillDefaultObject
+__________
+
+<strong> </strong><strong>Testing script: 31 of 40, test_fcn_ParseXODR_fillDefaultOpenDRIVE
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultOpenDRIVE
+....
+Done script_test_fcn_ParseXODR_fillDefaultOpenDRIVE
+__________
+
+<strong> </strong><strong>Testing script: 32 of 40, test_fcn_ParseXODR_fillDefaultRoad
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoad
+.....
+Done script_test_fcn_ParseXODR_fillDefaultRoad
+__________
+
+<strong> </strong><strong>Testing script: 33 of 40, test_fcn_ParseXODR_fillDefaultRoadAttributes
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadAttributes
+.....
+Done script_test_fcn_ParseXODR_fillDefaultRoadAttributes
+__________
+
+<strong> </strong><strong>Testing script: 34 of 40, test_fcn_ParseXODR_fillDefaultRoadLane
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadLane
+.......
+Done script_test_fcn_ParseXODR_fillDefaultRoadLane
+__________
+
+<strong> </strong><strong>Testing script: 35 of 40, test_fcn_ParseXODR_fillDefaultRoadLaneSection
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadLaneSection
+.....
+Done script_test_fcn_ParseXODR_fillDefaultRoadLaneSection
+__________
+
+<strong> </strong><strong>Testing script: 36 of 40, test_fcn_ParseXODR_fillDefaultRoadLanes
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadLanes
+.....
+Done script_test_fcn_ParseXODR_fillDefaultRoadLanes
+__________
+
+<strong> </strong><strong>Testing script: 37 of 40, test_fcn_ParseXODR_fillDefaultRoadNetwork
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadNetwork
+....
+Done script_test_fcn_ParseXODR_fillDefaultRoadNetwork
+__________
+
+<strong> </strong><strong>Testing script: 38 of 40, test_fcn_ParseXODR_fillDefaultRoadPlanView
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadPlanView
+....
+Done script_test_fcn_ParseXODR_fillDefaultRoadPlanView
+__________
+
+<strong> </strong><strong>Testing script: 39 of 40, test_fcn_ParseXODR_fillDefaultRoadType
+
+</strong>Running script_test_fcn_ParseXODR_fillDefaultRoadType
+....
+Done script_test_fcn_ParseXODR_fillDefaultRoadType
+__________
+
+<strong> </strong><strong>Testing script: 40 of 40, test_fcn_ParseXODR_plotXODRinENU
+
+</strong>Running script_test_fcn_ParseXODR_plotXODRinENU
+..
+Done script_test_fcn_ParseXODR_plotXODRinENU
+__________
+

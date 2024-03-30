@@ -1,0 +1,250 @@
+function [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationPoints,  laneSectionStationLimits, varargin)
+%% fcn_ParseXODR_extractFromLaneWidth_CurveSt
+% Extracts the transverse coordinates of the curve edge associated with the
+% lane width description of a lane. Also returns the indicies that match
+% the width description which are inside the given stationPoints.
+%
+% FORMAT:
+%
+%       [tLane, outputStationIndices] = fcn_ParseXODR_extractFromLaneWidth_CurveSt(current_width, stationPoints, laneSectionStationLimits, (fig_num))
+%
+% INPUTS:
+%
+%      current_width: a width structure containing the XDOR lane
+%      width description
+%
+%      stationPoints: a [Nx1] vector of s coordinates that define the
+%      spacing for the matrices of t coordinates, where N is the number of
+%      stations. Note: stations are assumed to be increasing order.
+%
+%      laneSectionStationLimits: a [2x1] vector of the maximum and minimum
+%      stations allowed in this lane section.
+%
+%      (OPTIONAL INPUTS)
+%
+%      fig_num: a figure number to plot results. If set to -1, skips any
+%      input checking or debugging, no figures will be generated, and sets
+%      up code to maximize speed.
+%
+% OUTPUTS:
+%
+%      tOutput: a [NxM] matrix of t coordinates associated with each of the
+%      N stations and each of the M lane boundaries. Positive valued
+%      t-coordinates indicate positions to the left of the center lane line
+%      of the road. Negative valued t coordinates indicate to the right of
+%      the center lane lane of the road.
+%
+% DEPENDENCIES:
+%
+%      (none)
+%
+% EXAMPLES:
+%
+%       See the script: script_test_fcn_ParseXODR_extractFromLaneWidth_CurveSt.m for a
+%       full test suite.
+%
+% This function was by S. Brennan
+% Questions or comments? sbrennan@psu.edu
+
+% Revision history:
+% 2024_03_09 - S. Brennan
+% -- wrote the function
+
+%% Debugging and Input checks
+
+% Check if flag_max_speed set. This occurs if the fig_num variable input
+% argument (varargin) is given a number of -1, which is not a valid figure
+% number.
+flag_max_speed = 0;
+if (nargin==4 && isequal(varargin{end},-1))
+    flag_do_debug = 0; % Flag to plot the results for debugging
+    flag_check_inputs = 0; % Flag to perform input checking
+    flag_max_speed = 1;
+else
+    % Check to see if we are externally setting debug mode to be "on"
+    flag_do_debug = 0; % Flag to plot the results for debugging
+    flag_check_inputs = 1; % Flag to perform input checking
+    MATLABFLAG_PARSEXODR_FLAG_CHECK_INPUTS = getenv("MATLABFLAG_PARSEXODR_FLAG_CHECK_INPUTS");
+    MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG = getenv("MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG");
+    if ~isempty(MATLABFLAG_PARSEXODR_FLAG_CHECK_INPUTS) && ~isempty(MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG)
+        flag_do_debug = str2double(MATLABFLAG_PARSEXODR_FLAG_DO_DEBUG);
+        flag_check_inputs  = str2double(MATLABFLAG_PARSEXODR_FLAG_CHECK_INPUTS);
+    end
+end
+
+if flag_do_debug
+    st = dbstack; %#ok<*UNRCH>
+    fprintf(1,'STARTING function: %s, in file: %s\n',st(1).name,st(1).file);
+    debug_fig_num = 34838; %#ok<NASGU>
+else
+    debug_fig_num = []; %#ok<NASGU>
+end
+
+
+
+%% check input arguments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____                   _
+%  |_   _|                 | |
+%    | |  _ __  _ __  _   _| |_ ___
+%    | | | '_ \| '_ \| | | | __/ __|
+%   _| |_| | | | |_) | |_| | |_\__ \
+%  |_____|_| |_| .__/ \__,_|\__|___/
+%              | |
+%              |_|
+% See: http://patorjk.com/software/taag/#p=display&f=Big&t=Inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if 0==flag_max_speed
+    if flag_check_inputs == 1
+        % Are there the right number of inputs?
+        narginchk(3,4);
+
+        % % Check the left_or_right_or_center input to be a string
+        % if ~isstring(left_or_right_or_center) &&  ~ischar(left_or_right_or_center)
+        %     error('The left_or_right_or_center input must be a string or character type');
+        % end
+
+    end
+end
+
+% Does user want to specify fig_num?
+fig_num = []; % Default is to have no figure
+flag_do_plots = 0;
+if (0==flag_max_speed) && (4<= nargin)
+    temp = varargin{end};
+    if ~isempty(temp)
+        fig_num = temp; 
+        flag_do_plots = 1;
+    end
+end
+
+
+%% Solve for the circle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   __  __       _
+%  |  \/  |     (_)
+%  | \  / | __ _ _ _ __
+%  | |\/| |/ _` | | '_ \
+%  | |  | | (_| | | | | |
+%  |_|  |_|\__,_|_|_| |_|
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+laneSecStart = laneSectionStationLimits(1);
+laneSecEnd   = laneSectionStationLimits(2);
+
+
+% Find how many lane widths are given for this side
+Nwidths = length(current_width);
+
+if ~iscell(current_width)
+    current_width = {current_width};
+end
+
+% Loop through all the widths
+for widthIndex = 1:Nwidths
+    % Grab the coefficients for poly fitting
+    a = str2double(current_width{widthIndex}.Attributes.a);
+    b = str2double(current_width{widthIndex}.Attributes.b);
+    c = str2double(current_width{widthIndex}.Attributes.c);
+    d = str2double(current_width{widthIndex}.Attributes.d);
+
+    % Grab the station offset
+    sOffset = str2double(current_width{widthIndex}.Attributes.sOffset);
+
+    % Find stations where the width function description starts and ends
+    stationWhereWidthStarts = laneSecStart + sOffset;
+    if widthIndex == Nwidths
+        stationWhereWidthEnds = laneSecEnd;
+    else
+        stationWhereWidthEnds = str2double(current_width{widthIndex+1}.Attributes.sOffset);
+    end
+
+    % Determine which of the indices in the s-direction are affected by
+    % this offset descriptor
+    outputStationIndices = find(stationPoints >= stationWhereWidthStarts & stationPoints <= stationWhereWidthEnds);
+
+    % Now calculate the t coordinate of the line at each of the
+    % affected points
+    ds = stationPoints(outputStationIndices)-stationWhereWidthStarts;
+    tLane = a + b*ds + c*ds.^2 + d*ds.^3;
+
+end
+
+
+%% Plot the results (for debugging)?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   _____       _
+%  |  __ \     | |
+%  | |  | | ___| |__  _   _  __ _
+%  | |  | |/ _ \ '_ \| | | |/ _` |
+%  | |__| |  __/ |_) | |_| | (_| |
+%  |_____/ \___|_.__/ \__,_|\__, |
+%                            __/ |
+%                           |___/
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if flag_do_plots
+    temp_h = figure(fig_num);
+    flag_rescale_axis = 0;
+    if isempty(get(temp_h,'Children'))
+        flag_rescale_axis = 1;
+    end
+
+
+    % St coordinates plotting
+    % Plot the lane lines in (s,t) coordinates for illustrative/debugging
+    % purposes
+    figure(fig_num)
+    clf
+    hold on
+    grid on
+
+    title('St coordinate view of lane width');
+    xlabel('S coordinate [m]')
+    ylabel('t coordinate [m]')
+
+    % Plot the centerline (default at zero)
+    hC = plot(stationPoints,0*stationPoints,'k--','linewidth',1.5);
+    plotHandles = hC;
+    plotLabels = {'Center Lane'};
+
+    % Plot the width
+    hPlot = plot(stationPoints(outputStationIndices),tLane,'b--','LineWidth',3);
+    plotHandles = [plotHandles; hPlot(1)];
+    plotLabels{end+1} = 'Width';
+
+    legend(plotHandles,plotLabels)
+
+
+    % Make axis slightly larger?
+    if flag_rescale_axis
+        temp = axis;
+        %     temp = [min(points(:,1)) max(points(:,1)) min(points(:,2)) max(points(:,2))];
+        axis_range_x = temp(2)-temp(1);
+        axis_range_y = temp(4)-temp(3);
+        percent_larger = 0.3;
+        axis([temp(1)-percent_larger*axis_range_x, temp(2)+percent_larger*axis_range_x,  temp(3)-percent_larger*axis_range_y, temp(4)+percent_larger*axis_range_y]);
+    end
+
+end % Ends check if plotting
+
+if flag_do_debug
+    fprintf(1,'ENDING function: %s, in file: %s\n\n',st(1).name,st(1).file);
+end
+
+end % Ends main function
+
+%% Functions follow
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   ______                _   _
+%  |  ____|              | | (_)
+%  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___
+%  |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+%  | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+%  |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+%
+% See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+
