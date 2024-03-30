@@ -182,6 +182,8 @@ stationIndices = cell(NlaneSections,1);
 % width for that respective lane.
 tLeftRawIncrements = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
 tRightRawIncrements = nan(length(stationPoints),length(laneLinksRight(1,:)) );
+tRawIncrements = nan(length(stationPoints),length(laneLinkages(1,:)) );
+
 
 for laneSectionIndex = 1:NlaneSections
     currentLaneSection = lanesStructure.laneSection{laneSectionIndex};
@@ -206,6 +208,8 @@ for laneSectionIndex = 1:NlaneSections
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
     tLeftRawIncrements(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
     tRightRawIncrements(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
+    tCurrentLaneSection = [tLeftCurrentLaneSection, tRightCurrentLaneSection];
+    tRawIncrements(currentLaneSectionStationIndicies,:) = tCurrentLaneSection;
 
 end % Ends looping through lane sections
 tRawIncrements = [tLeftRawIncrements, tRightRawIncrements];
