@@ -208,15 +208,14 @@ for laneSectionIndex = 1:NlaneSections
     tRightRawIncrements(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
 
 end % Ends looping through lane sections
+tRawIncrements = [tLeftRawIncrements, tRightRawIncrements];
 
 % Trim away any columns of the lane data matrices where there is no lane
 % geometry at all
-tLeftIncrements_NoNanColumns  = tLeftRawIncrements(:,any(~isnan(tLeftRawIncrements)));
-tRightIncrements_NoNanColumns = tRightRawIncrements(:,any(~isnan(tRightRawIncrements)));
+tIncrements_NoNanColumns = tRawIncrements(:,any(~isnan(tRawIncrements)));
 
 % Add up all the increments to determine the total tranverse distances from
 % the centerline
-tIncrements_NoNanColumns = [tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns];
 [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stationPoints, stationIndices, tIncrements_NoNanColumns, laneLinkages);
 
 % Add any centerline offset that exists for the lanes
