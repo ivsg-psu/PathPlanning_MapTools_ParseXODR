@@ -166,7 +166,8 @@ laneSectionStations = fcn_ParseXODR_extractFromLanes_LaneSectionStations(lanesSt
 
 % Get the lane linkages between sections. 
 [laneLinksLeft, laneLinksRight] = fcn_ParseXODR_extractFromLanes_LaneLinkages(lanesStructure, -1);
-laneLinksRight = -1*laneLinksRight;
+laneLinksRight = -1*laneLinksRight; % Indicate the right side by making all the results negative
+laneLinkages = [laneLinksLeft, laneLinksRight];
 
 % Iterate through all of the lane sections
 NlaneSections = length(laneSectionStations(:,1));
@@ -177,9 +178,10 @@ stationIndices = cell(NlaneSections,1);
 
 % Preallocate some left and right width matrices with NaNs. These will be
 % filled with widths of lanes (in sequence, building away from the
-% center lane)
-tLeftRaw = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
-tRightRaw = nan(length(stationPoints),length(laneLinksRight(1,:)) );
+% center lane). Each column represents the incremental increase in lane
+% width for that respective lane.
+tLeftRawIncrements = nan(length(stationPoints), length(laneLinksLeft(1,:))  );
+tRightRawIncrements = nan(length(stationPoints),length(laneLinksRight(1,:)) );
 
 for laneSectionIndex = 1:NlaneSections
     currentLaneSection = lanesStructure.laneSection{laneSectionIndex};
@@ -202,42 +204,24 @@ for laneSectionIndex = 1:NlaneSections
 
     [tLeftCurrentLaneSection, tRightCurrentLaneSection ] = ...
         fcn_ParseXODR_extractFromLaneSection_St(currentLaneSection, stationsInThisLaneSection, laneLinksLeft(laneSectionIndex,:), -1*laneLinksRight(laneSectionIndex,:),laneSectionStationLimits);
-    tLeftRaw(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
-    tRightRaw(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
+    tLeftRawIncrements(currentLaneSectionStationIndicies,:) = tLeftCurrentLaneSection;
+    tRightRawIncrements(currentLaneSectionStationIndicies,:) = tRightCurrentLaneSection;
 
 end % Ends looping through lane sections
 
 % Trim away any columns of the lane data matrices where there is no lane
 % geometry at all
-tLeftNoNanColumns  = tLeftRaw(:,any(~isnan(tLeftRaw)));
-tRightNoNanColumns = tRightRaw(:,any(~isnan(tRightRaw)));
+tLeftIncrements_NoNanColumns  = tLeftRawIncrements(:,any(~isnan(tLeftRawIncrements)));
+tRightIncrements_NoNanColumns = tRightRawIncrements(:,any(~isnan(tRightRawIncrements)));
 
-%% URHERE - push the for-loop below into sub-function
-% Do the cumulative sum in the columns, not by left to right but by
-% lane order, without including nan values (which get sorted to the end of
-% the temporary vector that is being summed anyway)
-for ith_row = 1:length(stationIndices)
-    [~,sortInds] = sort(laneLinksLeft(ith_row,:));
-    if ~isempty(tLeftNoNanColumns)
-        tLeftNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tLeftNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
-    end
+% Add up all the increments to determine the total tranverse distances from
+% the centerline
+[tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stationPoints, stationIndices, tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns, laneLinkages);
 
-    % Are the laneLinksRight negative? if so, sort the positive values of
-    % these
-    if ~isempty(find(laneLinksRight<0, 1))
-        [~,sortInds] = sort(-1*laneLinksRight(ith_row,:));
-    else
-        [~,sortInds] = sort(laneLinksRight(ith_row,:));
-    end    
-
-    if ~isempty(tRightNoNanColumns)
-        tRightNoNanColumns(stationIndices{ith_row},sortInds) = cumsum(tRightNoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
-    end
-end
-
-%% Add any centerline offset that exists for the lanes
-tLeft  = tLeftNoNanColumns   + transverseCenterOffsets;
-tRight = tRightNoNanColumns  + transverseCenterOffsets;
+% Add any centerline offset that exists for the lanes
+% This shifts the centerline relative to the road geometric center, if necessary
+tLeft  = tLeftTotalOffsets   + transverseCenterOffsets;
+tRight = tRightTotalOffsets  + transverseCenterOffsets;
 
 % Provide some indication of completion
 if flag_do_debug
@@ -365,7 +349,51 @@ end % Ends main function
 %
 % See: https://patorjk.com/software/taag/#p=display&f=Big&t=Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%§
+%% fcn_INTERNAL_addLaneIncrements
+function [tLeftTotalOffsets, tRightTotalOffsets] = fcn_INTERNAL_addLaneIncrements(stations, stationIndices, tLeftIncrements_NoNanColumns,tRightIncrements_NoNanColumns, laneLinkages)
 
+laneLinksLeftcolumns = find(sum(laneLinkages>0,1)>0);
+laneLinksRightcolumns = find(sum(laneLinkages<0,1)>0);
+
+% Make sure there is no overlap
+bothRightLeft = intersect(laneLinksLeftcolumns,laneLinksRightcolumns);
+if ~isempty(bothRightLeft)
+    disp(laneLinkages);
+    error('lane linkages found where both left and right lanes overlap!');
+end
+
+% Pull out the left and right side linkages
+laneLinksLeft  = laneLinkages(:,laneLinksLeftcolumns);
+laneLinksRight = laneLinkages(:,laneLinksRightcolumns);
+
+%% Find cumulative transverse offsets
+% Do the cumulative sum in the columns, not by left to right but by
+% lane order, without including nan values (which get sorted to the end of
+% the temporary vector that is being summed anyway)
+
+% Initialize the output matricies
+tLeftTotalOffsets  = nan(length(stations(:,1)),length(laneLinksLeft(1,:)));
+tRightTotalOffsets = nan(length(stations(:,1)),length(laneLinksRight(1,:)));
+
+
+% Loop through each lane section, sorting for each section from the inside
+% lane to the outside, adding up all the increments to find the total
+% offsets in the transverse direction
+for ith_row = 1:length(stationIndices)
+    % Do the left side
+    [~,sortInds] = sort(laneLinksLeft(ith_row,:));
+    if ~isempty(tLeftIncrements_NoNanColumns)
+        tLeftTotalOffsets(stationIndices{ith_row},sortInds) = cumsum(tLeftIncrements_NoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
+    end
+
+    % Do the right side. Because the laneLinksRight must make them
+    % positive, so that it sorts from inside outward.
+    [~,sortInds] = sort(-1*laneLinksRight(ith_row,:));
+    if ~isempty(tRightIncrements_NoNanColumns)
+        tRightTotalOffsets(stationIndices{ith_row},sortInds) = cumsum(tRightIncrements_NoNanColumns(stationIndices{ith_row},sortInds),2,'includenan');
+    end
+end
+end
 
 %% fcn_INTERNAL_plotLaneSidesXY
 function fcn_INTERNAL_plotLaneSidesXY(ODRRoad, stationPoints, tSide, multiplier_for_side, fig_num)
