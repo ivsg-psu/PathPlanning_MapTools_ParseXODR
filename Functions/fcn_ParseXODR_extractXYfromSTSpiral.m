@@ -36,7 +36,8 @@ function [x_spiral,y_spiral] = fcn_ParseXODR_extractXYfromSTSpiral(s, l0, h0, x0
 %       y0: a scalar parameter denoting the y-coordinate of the arc at
 %         the s = 0 point 
 % 
-%       K0: a scalar parameter denoting the curvature of the arc 
+%       K0: a scalar parameter denoting the initial curvature of the arc at
+%       the s = 0 point
 % 
 %       KF: a scalar parameter denoting the curvature of the spiral at
 %         the s = l0 point
